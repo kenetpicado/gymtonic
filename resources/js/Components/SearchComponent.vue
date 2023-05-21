@@ -1,6 +1,6 @@
 <template>
-    <div class="w-1/3 mb-6">
-        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+    <div class="w-1/3">
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block w-full"
             type="search" placeholder="Search" @input="onInput($event.target.value)" />
     </div>
 </template>

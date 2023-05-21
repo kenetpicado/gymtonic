@@ -10,7 +10,10 @@ class PlanController extends Controller
 {
     public function index()
     {
-        $plans = Plan::with(['customer', 'service'])->orderBy('id')->paginate(10);
+        $plans = Plan::with(['customer', 'service'])
+            ->where('end_date', '>=', now())
+            ->orderBy('end_date')
+            ->paginate(10);
 
         return inertia('Plans/Index', [
             'plans' => $plans,

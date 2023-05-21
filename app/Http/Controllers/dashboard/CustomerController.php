@@ -7,7 +7,6 @@ use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CustomerController extends Controller
 {

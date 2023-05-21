@@ -34,7 +34,6 @@ const profileUrl = useProfileUrl();
                 <div class="flex items-center justify-end">
                     <SearchComponent :url="route('dashboard.customers.index')" :only="['customers']"></SearchComponent>
                 </div>
-
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="overflow-hidden rounded-lg m-0">
                         <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
@@ -84,8 +83,6 @@ const profileUrl = useProfileUrl();
                                         <i class="fas fa-eye mr-3" role="button"
                                             @click="$inertia.visit(route('dashboard.customers.show', customer.id))"></i>
                                         <i class="fas fa-edit mr-3" role="button"
-                                            @click="$inertia.visit(route('dashboard.customers.edit', customer.id))"></i>
-                                        <i class="fas fa-trash" role="button"
                                             @click="$inertia.visit(route('dashboard.customers.edit', customer.id))"></i>
                                     </td>
                                 </tr>
