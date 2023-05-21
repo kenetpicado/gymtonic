@@ -16,19 +16,19 @@ class CustomerController extends Controller
     {
     }
 
-    public function index(Request $request)
+    public function index(Request $request): \Inertia\Response
     {
         return inertia('Customers/Index', [
             'customers' => $this->customerService->index($request),
         ]);
     }
 
-    public function create()
+    public function create(): \Inertia\Response
     {
         return inertia('Customers/Create', $this->customerService->create());
     }
 
-    public function show(Customer $customer)
+    public function show(Customer $customer): \Inertia\Response
     {
         return inertia('Customers/Show', $this->customerService->show($customer));
     }
@@ -38,13 +38,13 @@ class CustomerController extends Controller
         $this->customerService->store($request->validated());
     }
 
-    public function edit(Customer $customer)
+    public function edit(Customer $customer): \Inertia\Response
     {
         return inertia('Customers/Create', $this->customerService->edit($customer));
     }
 
     public function update(CustomerRequest $request, Customer $customer)
     {
-        $customer->update($request->validated());
+        $this->customerService->update($request->validated(), $customer);
     }
 }

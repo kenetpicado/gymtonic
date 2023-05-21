@@ -93,6 +93,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
+import useNotify from "@/Use/notify.js";
 
 const props = defineProps({
     customer: {
@@ -108,6 +109,8 @@ const props = defineProps({
         type: Object, required: true
     }
 })
+
+const notify = useNotify();
 
 const form = useForm({
     id: props.customer?.id ?? null,
@@ -130,6 +133,7 @@ function submit() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
+                notify.success('Customer created successfully!');
                 router.get(route('dashboard.customers.index'));
             },
         });
@@ -138,6 +142,7 @@ function submit() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
+                notify.success('Customer updated successfully!');
                 router.get(route('dashboard.customers.index'));
             },
         });

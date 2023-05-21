@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Service;
-use Carbon\Carbon;
 
 class CustomerService
 {
@@ -32,7 +31,7 @@ class CustomerService
         ];
     }
 
-    public function show(Customer $customer)
+    public function show(Customer $customer): array
     {
         $customer->load('weights');
 
@@ -44,17 +43,11 @@ class CustomerService
     public function store(array $request): void
     {
         $customer = Customer::create($request);
-        $start_date = Carbon::parse($request['start_date']);
 
-        $request['end_date'] = match ($request['period']) {
-            30 => $start_date->addMonth(1),
-            default => $start_date->addDays($request['period']),
-        };
-
-        $customer->plan()->create($request);
+        $customer->plan()->create((new PlanService)->createInstance($request));
     }
 
-    public function edit($customer)
+    public function edit($customer): array
     {
         $customer->load('plan');
 
@@ -65,4 +58,12 @@ class CustomerService
             'services' => Service::all(['id', 'name']),
         ];
     }
+
+    public function update(array $request, $customer): void
+    {
+        $customer->update($request);
+
+        $customer->plan()->updateOrCreate((new PlanService)->createInstance($request));
+    }
+
 }
