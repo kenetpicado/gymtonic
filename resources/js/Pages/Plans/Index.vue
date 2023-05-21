@@ -4,7 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import useProfileUrl from '@/Composables/useProfileUrl.js';
 import SearchComponent from '@/Components/SearchComponent.vue';
-import { reactive } from 'vue';
+import { reactive, watch, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Checkbox from '@/Components/Checkbox.vue';
 
@@ -15,14 +15,28 @@ const props = defineProps({
 })
 
 const profileUrl = useProfileUrl();
+const checkBox = ref(true);
 
 const queryParams = reactive({
     search: '',
-    status: true
+    type: 'active'
+})
+
+watch(() => checkBox.value, (value) => {
+    queryParams.type = value ? 'active' : 'expired';
+    getFilteredPlans();
 })
 
 function searchPlans(value) {
     queryParams.search = value;
+    getFilteredPlans()
+}
+
+function getFilteredPlans() {
+    if (queryParams.search === '') {
+        delete queryParams.search;
+    }
+
     router.get(route('dashboard.plans.index'), queryParams, {
         preserveState: true,
         preserveScroll: true,
@@ -37,7 +51,7 @@ function searchPlans(value) {
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Plans
+                {{ checkBox ? 'Active Plans' : 'Expired Plans' }}
             </h2>
             <div>
                 <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.customers.create'))">
@@ -50,8 +64,8 @@ function searchPlans(value) {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex items-center justify-end gap-4 mb-4">
                     <div>
-                        <Checkbox v-model:checked="queryParams.status" name="status" />
-                        <span class="ml-2 text-sm text-gray-600">Active plans</span>
+                        <Checkbox v-model:checked="checkBox" name="status" />
+                        <span class="ml-2 text-sm text-gray-600">Active</span>
                     </div>
                     <SearchComponent @search="searchPlans"></SearchComponent>
                 </div>
@@ -69,9 +83,9 @@ function searchPlans(value) {
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                                <tr v-for="plan in plans.data" class="hover:bg-gray-50">
+                                <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
                                     <td>
-                                        {{ plan.id }}
+                                        {{ index + 1 }}
                                     </td>
                                     <td class="flex gap-3 font-normal text-gray-900 items-center">
                                         <div class="h-10 w-10">
@@ -97,15 +111,23 @@ function searchPlans(value) {
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge-success">
+                                        <span v-if="checkBox" class="badge-success">
                                             <span class="dot-green"></span>
                                             Active
                                         </span>
+                                        <span v-else class="badge-gray">
+                                            <span class="dot-gray"></span>
+                                            Inactive
+                                        </span>
                                     </td>
                                     <td>
-                                        <i class="fas fa-edit mr-3" role="button"
+                                        <i v-if="checkBox" class="fas fa-edit mr-3" role="button"
                                             @click="$inertia.visit(route('dashboard.customers.edit', plan.customer.id))"></i>
+                                        <span v-else role="button" class="badge-blue">Renew</span>
                                     </td>
+                                </tr>
+                                <tr v-if="plans.data.length == 0">
+                                    <td colspan="6" class="text-center">No data to display</td>
                                 </tr>
                             </tbody>
                         </table>

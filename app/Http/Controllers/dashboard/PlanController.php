@@ -8,10 +8,18 @@ use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $plans = Plan::with(['customer', 'service'])
-            ->where('end_date', '>=', now())
+            ->when(
+                $request->search,
+                fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))
+            )
+            ->when(
+                $request->type == 'expired',
+                fn ($query) => $query->where('end_date', '<=', now()),
+                fn ($query) => $query->where('end_date', '>', now())
+            )
             ->orderBy('end_date')
             ->paginate(10);
 

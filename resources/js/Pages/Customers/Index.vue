@@ -31,7 +31,7 @@ const profileUrl = useProfileUrl();
 
         <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex items-center justify-end">
+                <div class="flex items-center justify-end mb-4">
                     <SearchComponent :url="route('dashboard.customers.index')" :only="['customers']"></SearchComponent>
                 </div>
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -70,7 +70,7 @@ const profileUrl = useProfileUrl();
                                     </td>
                                     <td>{{ customer.age }}</td>
                                     <td>
-                                        <span v-if="customer.plan_count > 0" class="badge-success">
+                                        <span v-if="customer.active_plans > 0" class="badge-success">
                                             <span class="dot-green"></span>
                                             Active
                                         </span>
@@ -85,6 +85,9 @@ const profileUrl = useProfileUrl();
                                         <i class="fas fa-edit mr-3" role="button"
                                             @click="$inertia.visit(route('dashboard.customers.edit', customer.id))"></i>
                                     </td>
+                                </tr>
+                                <tr v-if="customers.data.length == 0">
+                                    <td colspan="6" class="text-center">No data to display</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -44,6 +44,18 @@
 
                 <template #description>
                     Set the plan's information.
+                    <br>
+                    <template v-if="customer">
+                        <p v-if="!customer.plan" class="mt-2 text-red-600">
+                            El usuario no tiene un plan creado, se procederá a crear uno nuevo con los datos ingresados.
+                        </p>
+                        <p v-if="customer.plan" class="mt-2 text-indigo-600">
+                            El usuario tiene un plan existente, se actualizará con los datos introducidos y también se
+                            actualizará el ingreso correspondiente.
+                            <span class="block mt-2"></span>
+                            Si en cambio desea crear un nuevo plan, haga click aqui.
+                        </p>
+                    </template>
                 </template>
 
                 <template #form>

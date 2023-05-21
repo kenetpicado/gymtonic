@@ -11,10 +11,15 @@ class CustomerService
 {
     public function index($request)
     {
-        return Customer::withCount('plan')
+        return Customer::query()
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%" . $search . "%");
             })
+            ->addSelect([
+                'active_plans' => Plan::selectRaw('count(*)')
+                    ->whereColumn('customer_id', 'customers.id')
+                    ->where('end_date', '>', now()),
+            ])
             ->orderByDesc('id')
             ->paginate(10);
     }
