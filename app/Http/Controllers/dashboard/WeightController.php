@@ -15,4 +15,18 @@ class WeightController extends Controller
 
         return redirect()->back();
     }
+
+    public function update(WeightRequest $request, Weight $weight)
+    {
+        $weight->update($request->validated());
+
+        return redirect()->back();
+    }
+
+    public function destroy(Weight $weight)
+    {
+        $weight->delete();
+
+        return redirect()->back();
+    }
 }

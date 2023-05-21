@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
+import useProfileUrl from '@/Composables/useProfileUrl.js';
 
 const props = defineProps({
     plans: {
@@ -9,9 +10,8 @@ const props = defineProps({
     }
 })
 
-function profileUrl(name) {
-    return `https://ui-avatars.com/api/?name=${name}&rounded=true&size=256&background=eef2ff&color=4f46e5`;
-}
+const profileUrl = useProfileUrl();
+
 </script>
 
 <template>
@@ -50,7 +50,7 @@ function profileUrl(name) {
                                     <td class="flex gap-3 font-normal text-gray-900 items-center">
                                         <div class="h-10 w-10">
                                             <img class="h-full w-full rounded-full object-cover object-center"
-                                                :src="profileUrl(plan.customer.name)" alt="" />
+                                                :src="profileUrl.get(plan.customer.name)" alt="" />
                                         </div>
                                         <div class="text-sm">
                                             <div class="font-medium text-gray-700">{{ plan.customer.name }}</div>

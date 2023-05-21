@@ -23,11 +23,6 @@ class ServiceController extends Controller
         Service::create($request->validated());
     }
 
-    public function edit(Service $service)
-    {
-        return response()->json($service);
-    }
-
     public function update(ServiceRequest $request, Service $service)
     {
         $service->update($request->validated());

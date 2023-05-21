@@ -31,46 +31,42 @@
         <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div>
-                        <div class="flex justify-center">
-                            <div class="w-1/2 my-6">
-                                <canvas id="myChart" style="width: 100%;"></canvas>
-                            </div>
-                        </div>
-                        <div class="overflow-hidden rounded-lg m-0">
-                            <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Weight (lbs)</th>
-                                        <th>Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                                    <tr v-for="weight in customer.weights" class="hover:bg-gray-50">
-                                        <td>
-                                            {{ weight.id }}
-                                        </td>
-                                        <td>
-                                            <span class="badge-blue">
-                                                {{ weight.value }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {{ weight.created_at }}
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-                                    <tr v-if="customer.weights.length == 0">
-                                        <td colspan="4" class="text-center">No data to display</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
+                    <div class="overflow-hidden rounded-lg m-0">
+                        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Weight (lbs)</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+                                <tr v-for="(weight, index) in customer.weights" class="hover:bg-gray-50">
+                                    <td>
+                                        {{ index + 1 }}
+                                    </td>
+                                    <td>
+                                        <span class="badge-blue">
+                                            {{ weight.value }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ weight.created_at_format }}
+                                        <div class="text-sm mt-1">
+                                            ({{ weight.created_at_humman }})
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-edit mr-3" role="button" @click="editWeight(weight)"></i>
+                                        <i class="fas fa-trash mr-3" role="button" @click="removeWeight(weight.id)"></i>
+                                    </td>
+                                </tr>
+                                <tr v-if="customer.weights.length == 0">
+                                    <td colspan="4" class="text-center">No data to display</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -84,9 +80,10 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
-import { ref, onMounted, computed } from 'vue';
-import Chart from 'chart.js/auto';
+import { router, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import useNotify from '@/Use/notify.js';
+import axios from 'axios';
 
 const props = defineProps({
     customer: {
@@ -95,6 +92,8 @@ const props = defineProps({
 })
 
 const openModal = ref(false)
+const notify = useNotify();
+const isNew = ref(true);
 
 const form = useForm({
     value: null,
@@ -102,44 +101,47 @@ const form = useForm({
 })
 
 function submit() {
-    form.post(route('dashboard.weights.store'), {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            openModal.value = false;
-            form.reset();
-        },
-    });
+    if (isNew.value) {
+        form.post(route('dashboard.weights.store'), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                openModal.value = false;
+                form.reset();
+                notify.success('Weight added successfully');
+            },
+        });
+    } else {
+        form.put(route('dashboard.weights.update', form.id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                openModal.value = false;
+                isNew.value = true;
+                form.reset();
+                notify.success('Weight updated successfully');
+            },
+        });
+    }
 }
 
-const labels = props.customer.weights.map(weight => weight.created_at).slice(0, 6).reverse();
-const data = props.customer.weights.map(weight => weight.value).slice(0, 6).reverse();
+async function editWeight(weight) {
+    form.id = weight.id;
+    form.value = weight.value;
+    isNew.value = false;
+    openModal.value = true;
+}
 
-onMounted(() => {
-    new Chart(document.getElementById('myChart'), {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                fill: false,
-                borderColor: '#4f46e5',
-                tension: 0.1,
-            }]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    display: false,
-                },
+function removeWeight(id) {
+    notify.confirm(() => {
+        router.delete(route('dashboard.weights.destroy', id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                notify.success('Weight deleted successfully');
             },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-        }
-    });
-})
+        });
+    }, 'Are you sure you want to delete this weight?');
+}
 
 </script>

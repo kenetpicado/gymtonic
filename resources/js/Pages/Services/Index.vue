@@ -64,7 +64,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <i class="fas fa-edit mr-3" role="button" @click="edit(service.id)"></i>
+                                        <i class="fas fa-edit mr-3" role="button" @click="edit(service)"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -86,7 +86,6 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import { defineProps, ref } from 'vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
-import axios from 'axios';
 import Checkbox from '@/Components/Checkbox.vue';
 import useNotify from '@/Use/notify.js';
 
@@ -110,11 +109,10 @@ const form = useForm({
     is_active: props.service?.name ?? true,
 });
 
-async function edit(id) {
-    const response = await axios.get(route('dashboard.services.edit', id))
-    form.id = response.data.id
-    form.name = response.data.name
-    form.is_active = Boolean(response.data.is_active)
+async function edit(service) {
+    form.id = service.id
+    form.name = service.name
+    form.is_active = Boolean(service.is_active)
     isNew.value = false
     openModal.value = true
 }
@@ -122,7 +120,7 @@ async function edit(id) {
 function onSuccessSubmit() {
     openModal.value = false
     form.reset()
-    isNew.value = true
+    isNew.value = trueresponse.data
 }
 
 function submit() {

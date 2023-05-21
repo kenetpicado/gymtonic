@@ -6,8 +6,9 @@
 </template>
 
 <script setup>
+import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
-// import { Inertia } from "@inertiajs/inertia";
+import { reactive } from 'vue';
 
 const props = defineProps({
     url: {
@@ -20,16 +21,25 @@ const props = defineProps({
     }
 })
 
+const queryParam = reactive({
+    search: ''
+})
+
 const emit = defineEmits(['search'])
 
 const onInput = debounce((value) => {
     if (props.url && props.only) {
-        // Inertia.get(props.url, { search: value }, {
-        //     preserveState: true,
-        //     preserveScroll: true,
-        //     only: props.only,
-        //     replace: true,
-        // });
+        if (value) {
+            queryParam.search = value
+        } else {
+            delete queryParam.search
+        }
+        router.get(props.url, queryParam, {
+            preserveState: true,
+            preserveScroll: true,
+            only: props.only,
+            replace: true,
+        });
     } else {
         emit('search', value)
     }

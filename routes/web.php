@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     ->name('dashboard.')
     ->group(function () {
         Route::resource('customers', CustomerController::class);
-        Route::resource('services', ServiceController::class);
+        Route::resource('services', ServiceController::class)->only(['index', 'store', 'update']);
         Route::resource('plans', PlanController::class);
-        Route::resource('weights', WeightController::class);
+        Route::resource('weights', WeightController::class)->only(['store', 'update', 'destroy']);
     });

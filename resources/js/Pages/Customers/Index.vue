@@ -1,11 +1,10 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import ThePaginator from '@/Components/ThePaginator.vue';
 import SearchComponent from '@/Components/SearchComponent.vue';
-import { router } from '@inertiajs/vue3';
-import { defineProps, reactive } from 'vue';
+import ThePaginator from '@/Components/ThePaginator.vue';
 import useProfileUrl from '@/Composables/useProfileUrl.js';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { defineProps } from 'vue';
 
 const props = defineProps({
     customers: {
@@ -14,28 +13,6 @@ const props = defineProps({
 })
 
 const profileUrl = useProfileUrl();
-
-const queryParams = reactive({
-    search: null,
-});
-
-function searchCustomer(value) {
-    queryParams.search = value;
-    getFilteredCustomers();
-}
-
-function getFilteredCustomers() {
-    if (!queryParams.search) {
-        delete queryParams.search;
-    }
-
-    router.get(route('dashboard.customers.index'), queryParams, {
-        preserveState: true,
-        preserveScroll: true,
-        only: ['customers'],
-        replace: true,
-    });
-}
 
 </script>
 
@@ -55,7 +32,7 @@ function getFilteredCustomers() {
         <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex items-center justify-end">
-                    <SearchComponent @search="searchCustomer"></SearchComponent>
+                    <SearchComponent :url="route('dashboard.customers.index')" :only="['customers']"></SearchComponent>
                 </div>
 
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
