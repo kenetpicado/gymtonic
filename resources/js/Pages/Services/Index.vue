@@ -17,10 +17,12 @@
             </template>
             <template #content>
                 <InputForm text="Name" v-model="form.name"></InputForm>
-                <label class="flex items-center mt-3">
+                <label class="flex items-center mt-3 mb-4">
                     <Checkbox v-model:checked="form.is_active" name="is_active" />
                     <span class="ml-2 text-sm text-gray-600">Active</span>
                 </label>
+                <h4>Prices</h4>
+                <InputForm text="Name" v-model="form.name"></InputForm>
             </template>
             <template #footer>
                 <SecondaryButton @click="openModal = false">
@@ -41,6 +43,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Prices</th>
                                     <th>State</th>
                                     <th>Actions</th>
                                 </tr>
@@ -52,6 +55,11 @@
                                     </td>
                                     <td>
                                         {{ service.name }}
+                                    </td>
+                                    <td>
+                                        <div v-for="price in service.prices">
+                                            {{ price.period }}: C$ {{ price.value }}
+                                        </div>
                                     </td>
                                     <td>
                                         <span v-if="service.is_active" class="badge-success">

@@ -5,17 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class Price extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'is_active'
+        'period',
+        'value',
+        'service_id',
     ];
-
-    public function prices()
-    {
-        return $this->hasMany(Price::class);
-    }
 }

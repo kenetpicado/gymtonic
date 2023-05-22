@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Service;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,15 +16,53 @@ class ServiceSeeder extends Seeder
     public function run()
     {
         $services = [
-            'Pesas',
-            'Zumba',
-            'Zumba + Pesas',
+            [
+                'name' => 'Pesas',
+                'prices' => [
+                    [
+                        'period' => '1',
+                        'value' => 50,
+                    ],
+                    [
+                        'period' => '7',
+                        'value' => 150,
+                    ],
+                    [
+                        'period' => '15',
+                        'value' => 200,
+                    ],
+                    [
+                        'period' => '30',
+                        'value' => 300,
+                    ],
+                ]
+            ],
+            [
+                'name' => 'Zumba',
+                'prices' => [
+                    [
+                        'period' => '30',
+                        'value' => 350,
+                    ],
+                ]
+            ],
+            [
+                'name' => 'Zumba + Pesas',
+                'prices' => [
+                    [
+                        'period' => '30',
+                        'value' => 550,
+                    ],
+                ]
+            ],
         ];
 
         foreach ($services as $service) {
-            \App\Models\Service::create([
-                'name' => $service
+            $created = Service::create([
+                'name' => $service['name']
             ]);
+
+            $created->prices()->createMany($service['prices']);
         }
     }
 }
