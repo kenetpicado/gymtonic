@@ -62,7 +62,7 @@ function getFilteredPlans() {
 
         <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex items-center justify-end gap-4 mb-4">
+                <div class="flex items-center justify-between gap-4 mb-4">
                     <div>
                         <Checkbox v-model:checked="checkBox" name="status" />
                         <span class="ml-2 text-sm text-gray-600">Active</span>

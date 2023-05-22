@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Plan;
-use App\Models\Service;
 use Carbon\Carbon;
 
 class PlanService
@@ -13,12 +12,12 @@ class PlanService
         return Plan::with(['customer', 'service'])
             ->when(
                 $request->search,
-                fn($query) => $query->whereHas('customer', fn($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))
+                fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))
             )
             ->when(
                 $request->type == 'expired',
-                fn($query) => $query->where('end_date', '<=', now()),
-                fn($query) => $query->where('end_date', '>', now())
+                fn ($query) => $query->where('end_date', '<=', now()),
+                fn ($query) => $query->where('end_date', '>', now())
             )
             ->orderBy('end_date')
             ->paginate(10);
@@ -32,6 +31,10 @@ class PlanService
             ? $start_date->addMonth()->format('Y-m-d')
             : $start_date->addDays($request['period'])->format('Y-m-d');
 
+        if ($request['discount'] > 0) {
+            $request['amount'] = $request['amount'] - $request['discount'];
+        }
+
         return [
             'period' => $request['period'],
             'start_date' => $request['start_date'],
@@ -42,5 +45,4 @@ class PlanService
             'service_id' => $request['service_id'],
         ];
     }
-
 }
