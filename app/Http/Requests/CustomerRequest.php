@@ -25,7 +25,7 @@ class CustomerRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|numeric|digits:8',
+            'phone' => 'nullable|numeric',
             'birth_date' => 'required|date',
             'gender' => 'required|in:M,F',
             'period' => 'required',

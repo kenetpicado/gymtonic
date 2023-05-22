@@ -1,5 +1,5 @@
 <template>
-    <div class="col-span-6 sm:col-span-4">
+    <div class="col-span-4">
         <label class="block font-medium text-sm text-gray-700">
             {{ text }}
         </label>

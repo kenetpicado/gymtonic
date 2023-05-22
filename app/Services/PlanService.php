@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Plan;
+use App\Models\Service;
 use Carbon\Carbon;
 
 class PlanService

@@ -25,25 +25,6 @@ class Plan extends Model
         'service_id',
     ];
 
-    public $periods = [
-        [
-            'label' => 'Mes',
-            'key' => 30,
-        ],
-        [
-            'label' => 'Quincena',
-            'key' => 15,
-        ],
-        [
-            'label' => 'Semana',
-            'key' => 7,
-        ],
-        [
-            'label' => 'Dia',
-            'key' => 1,
-        ]
-    ];
-
     public function customer()
     {
         return $this->belongsTo(Customer::class);

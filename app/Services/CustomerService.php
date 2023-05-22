@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use App\Enums\PeriodEnum;
 use App\Models\Customer;
 use App\Models\Plan;
+use App\Models\Price;
 use App\Models\Service;
 
 class CustomerService
 {
-    public function index($request)
+    public function index($request): \Illuminate\Pagination\LengthAwarePaginator
     {
         return Customer::query()
             ->when($request->search, function ($query, $search) {
@@ -26,7 +28,7 @@ class CustomerService
     public function create(): array
     {
         return [
-            'periods' => (new Plan)->periods,
+            'periods' => PeriodEnum::get(),
             'services' => Service::all(['id', 'name']),
         ];
     }
@@ -54,7 +56,7 @@ class CustomerService
         return [
             'customer' => $customer,
             'isNew' => false,
-            'periods' => (new Plan())->periods,
+            'periods' => PeriodEnum::get(),
             'services' => Service::all(['id', 'name']),
         ];
     }
@@ -65,5 +67,4 @@ class CustomerService
 
         $customer->plan()->updateOrCreate((new PlanService)->createInstance($request));
     }
-
 }

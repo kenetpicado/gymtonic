@@ -21,8 +21,14 @@
                     <Checkbox v-model:checked="form.is_active" name="is_active" />
                     <span class="ml-2 text-sm text-gray-600">Active</span>
                 </label>
+
                 <h4>Prices</h4>
-                <InputForm text="Name" v-model="form.name"></InputForm>
+                <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors['prices']">
+                    {{ $page.props.errors['prices'] }}
+                </p>
+
+                <InputForm v-for="(period, index) in savedPeriods" :name="`prices.${index}.value`" :text="period.label"
+                    v-model="period.value" class="mt-4" type="number"></InputForm>
             </template>
             <template #footer>
                 <SecondaryButton @click="openModal = false">
@@ -57,9 +63,9 @@
                                         {{ service.name }}
                                     </td>
                                     <td>
-                                        <div v-for="price in service.prices">
-                                            {{ price.period }}: C$ {{ price.value }}
-                                        </div>
+                                        <span v-for="price in service.prices" class="badge-blue mr-1">
+                                            {{ price.period_label }}: C$ {{ price.value }}
+                                        </span>
                                     </td>
                                     <td>
                                         <span v-if="service.is_active" class="badge-success">
@@ -104,17 +110,24 @@ const props = defineProps({
     service: {
         type: Object,
         required: false,
+    },
+    periods: {
+        type: Array,
+        required: true
     }
 })
 
+const notify = useNotify()
 const openModal = ref(false)
 const isNew = ref(true)
-const notify = useNotify()
+
+const savedPeriods = ref(props.periods)
 
 const form = useForm({
     id: props.service?.id ?? null,
     name: props.service?.name ?? '',
     is_active: props.service?.name ?? true,
+    prices: null,
 });
 
 async function edit(service) {
@@ -129,9 +142,17 @@ function onSuccessSubmit() {
     openModal.value = false
     form.reset()
     isNew.value = trueresponse.data
+    savedPeriods.value = props.periods
 }
 
 function submit() {
+    form.prices = savedPeriods.value.filter(period => period.value).map(period => {
+        return {
+            period: Number(period.key),
+            value: Number(period.value)
+        }
+    })
+
     if (isNew.value) {
         form.post(route('dashboard.services.store'), {
             preserveScroll: true,

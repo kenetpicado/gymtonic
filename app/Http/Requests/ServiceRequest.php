@@ -29,7 +29,16 @@ class ServiceRequest extends FormRequest
                 'required',
                 Rule::unique('services')->ignore($this->id)
             ],
-            'is_active' => 'required|boolean'
+            'is_active' => 'required|boolean',
+            'prices' => 'required|array|min:1',
+            'prices.*.value' => 'integer',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'prices.*.value' => 'value',
         ];
     }
 }
