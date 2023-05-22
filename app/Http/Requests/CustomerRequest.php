@@ -30,7 +30,7 @@ class CustomerRequest extends FormRequest
             'gender' => 'required|in:M,F',
             'period' => 'required',
             'start_date' => 'required|date',
-            'amount' => 'required|numeric',
+            'amount' => 'nullable',
             'discount' => 'nullable|numeric',
             'note' => 'nullable|string',
             'service_id' => 'required',

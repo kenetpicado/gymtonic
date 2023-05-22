@@ -19,7 +19,7 @@
                     <InputForm text="Name" v-model="form.name"></InputForm>
                     <InputForm text="Phone" v-model="form.phone" type="number"></InputForm>
                     <InputForm text="Birth Date" v-model="form.birth_date" type="date"></InputForm>
-                    <SelectForm v-model="form.gender" text="Period">
+                    <SelectForm v-model="form.gender" text="Gender">
                         <option value="F">Female</option>
                         <option value="M">Male</option>
                     </SelectForm>
@@ -66,7 +66,6 @@
                         <option v-for="period in periods" :value="period.key">{{ period.label }}</option>
                     </SelectForm>
                     <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
-                    <InputForm text="Amount" v-model="form.amount" type="number"></InputForm>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
                 </template>
@@ -121,7 +120,6 @@ const form = useForm({
 
     period: props.customer?.plan?.period ?? props.periods[0].key,
     start_date: props.customer?.plan?.start_date ?? '',
-    amount: props.customer?.plan?.amount ?? '',
     discount: props.customer?.plan?.discount ?? 0,
     note: props.customer?.plan?.note ?? '',
     service_id: props.customer?.plan?.service_id ?? props.services[0].id,

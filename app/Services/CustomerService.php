@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\PeriodEnum;
 use App\Models\Customer;
 use App\Models\Plan;
-use App\Models\Price;
 use App\Models\Service;
 
 class CustomerService
@@ -44,8 +43,10 @@ class CustomerService
 
     public function store(array $request): void
     {
-        $customer = Customer::create($request);
+        $price = (new PriceService)->findPrice($request['service_id'], $request['period']);
 
+        $request['amount'] = $price;
+        $customer = Customer::create($request);
         $customer->plan()->create((new PlanService)->createInstance($request));
     }
 
@@ -63,8 +64,10 @@ class CustomerService
 
     public function update(array $request, $customer): void
     {
-        $customer->update($request);
+        $price = (new PriceService)->findPrice($request['service_id'], $request['period']);
 
+        $request['amount'] = $price;
+        $customer->update($request);
         $customer->plan()->updateOrCreate((new PlanService)->createInstance($request));
     }
 }
