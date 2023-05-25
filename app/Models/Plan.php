@@ -25,6 +25,11 @@ class Plan extends Model
         'service_id',
     ];
 
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);

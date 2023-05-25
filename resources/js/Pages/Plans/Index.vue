@@ -4,9 +4,12 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import useProfileUrl from '@/Composables/useProfileUrl.js';
 import SearchComponent from '@/Components/SearchComponent.vue';
-import { reactive, watch, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Checkbox from '@/Components/Checkbox.vue';
+import DialogModal from '@/Components/DialogModal.vue';
+import InputForm from '@/Components/Form/InputForm.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 const props = defineProps({
     plans: {
@@ -16,11 +19,19 @@ const props = defineProps({
 
 const profileUrl = useProfileUrl();
 const checkBox = ref(true);
+const openModal = ref(false);
 
 const queryParams = reactive({
     search: '',
     type: 'active'
 })
+
+const formExtendPlan = reactive({
+    days: '',
+    plan_ids: [],
+})
+
+const selectedPlans = ref([]);
 
 watch(() => checkBox.value, (value) => {
     queryParams.type = value ? 'active' : 'expired';
@@ -30,6 +41,20 @@ watch(() => checkBox.value, (value) => {
 function searchPlans(value) {
     queryParams.search = value;
     getFilteredPlans()
+}
+
+function addDays(id) {
+    selectedPlans.value = props.plans.data.filter((plan) => plan.selected).map((plan) => plan.id);
+
+    if (selectedPlans.value.length > 0) {
+        formExtendPlan.plan_ids = selectedPlans.value;
+    } else {
+        formExtendPlan.plan_ids = [id];
+    }
+
+    console.log(formExtendPlan.plan_ids);
+
+    openModal.value = true;
 }
 
 function getFilteredPlans() {
@@ -42,6 +67,19 @@ function getFilteredPlans() {
         preserveScroll: true,
         only: ['plans'],
         replace: true,
+    });
+}
+
+function submitAddDays() {
+    router.put(route('dashboard.extend-plan'), formExtendPlan, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            formExtendPlan.days = '';
+            formExtendPlan.plan_ids = [];
+            selectedPlans.value = [];
+            openModal.value = false;
+        },
     });
 }
 
@@ -58,6 +96,23 @@ function getFilteredPlans() {
                     New
                 </PrimaryButton>
             </div>
+
+            <DialogModal :show="openModal">
+                <template #title>
+                    Extend Plan
+                </template>
+                <template #content>
+                    <InputForm text="Days" v-model="formExtendPlan.days"></InputForm>
+                </template>
+                <template #footer>
+                    <SecondaryButton @click="openModal = false">
+                        Cancel
+                    </SecondaryButton>
+                    <PrimaryButton type="button" @click="submitAddDays">
+                        Save
+                    </PrimaryButton>
+                </template>
+            </DialogModal>
         </template>
 
         <div class="py-4">
@@ -74,6 +129,7 @@ function getFilteredPlans() {
                         <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
                             <thead class="bg-gray-50">
                                 <tr>
+                                    <th></th>
                                     <th>ID</th>
                                     <th>Customer</th>
                                     <th>Service</th>
@@ -84,6 +140,9 @@ function getFilteredPlans() {
                             </thead>
                             <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                                 <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
+                                    <th>
+                                         <Checkbox v-model:checked="plan.selected" name="status" />
+                                    </th>
                                     <td>
                                         {{ index + 1 }}
                                     </td>
@@ -93,7 +152,7 @@ function getFilteredPlans() {
                                                 :src="profileUrl.get(plan.customer.name)" alt="" />
                                         </div>
                                         <div class="text-sm">
-                                            <div class="font-medium text-gray-700">{{ plan.customer.name }}</div>
+                                            <div class="font-medium text-gray-700">{{ plan.customer.name }} ({{ plan.id }})</div>
                                         </div>
                                     </td>
                                     <td>
@@ -106,7 +165,7 @@ function getFilteredPlans() {
                                         <span class="badge-gray">
                                             {{ plan.start_date_formated }}
                                         </span>
-                                        <span class="badge-blue">
+                                        <span class="badge-blue" @click="addDays(plan.id)" role="button">
                                             {{ plan.end_date_formated }}
                                         </span>
                                     </td>
@@ -123,7 +182,7 @@ function getFilteredPlans() {
                                     <td>
                                         <i v-if="checkBox" class="fas fa-edit mr-3" role="button"
                                             @click="$inertia.visit(route('dashboard.customers.edit', plan.customer.id))"></i>
-                                        <span v-else role="button" class="badge-blue">Renew</span>
+                                        <span role="button" class="badge-blue">Renew Plan</span>
                                     </td>
                                 </tr>
                                 <tr v-if="plans.data.length == 0">
