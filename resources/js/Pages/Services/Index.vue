@@ -21,14 +21,13 @@
                     <Checkbox v-model:checked="form.is_active" name="is_active" />
                     <span class="ml-2 text-sm text-gray-600">Active</span>
                 </label>
-
                 <h4>Prices</h4>
                 <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors['prices']">
                     {{ $page.props.errors['prices'] }}
                 </p>
 
-                <InputForm v-for="(period, index) in savedPeriods" :name="`prices.${index}.value`" :text="period.label"
-                    v-model="period.value" class="mt-4" type="number"></InputForm>
+                <InputForm v-for="(period, index) in form.prices" :name="`prices.${index}.value`"
+                    :text="period.period_label" v-model="period.value" class="mt-4" type="number"></InputForm>
             </template>
             <template #footer>
                 <SecondaryButton @click="openModal = false">
@@ -107,10 +106,6 @@ const props = defineProps({
     services: {
         type: Object, required: true
     },
-    service: {
-        type: Object,
-        required: false,
-    },
     periods: {
         type: Array,
         required: true
@@ -121,13 +116,11 @@ const notify = useNotify()
 const openModal = ref(false)
 const isNew = ref(true)
 
-const savedPeriods = ref(props.periods)
-
 const form = useForm({
-    id: props.service?.id ?? null,
-    name: props.service?.name ?? '',
-    is_active: props.service?.name ?? true,
-    prices: null,
+    id: null,
+    name: '',
+    is_active: true,
+    prices: props.periods,
 });
 
 async function edit(service) {
@@ -135,23 +128,22 @@ async function edit(service) {
     form.name = service.name
     form.is_active = Boolean(service.is_active)
     isNew.value = false
+
+    form.prices = props.periods.map(({ period_label, period }) => ({
+        period_label, period, value: service.prices.find(price => price.period == period)?.value || null
+    }));
+
     openModal.value = true
 }
 
 function onSuccessSubmit() {
-    openModal.value = false
     form.reset()
-    isNew.value = trueresponse.data
-    savedPeriods.value = props.periods
+    isNew.value = true
+    openModal.value = false
 }
 
 function submit() {
-    form.prices = savedPeriods.value.filter(period => period.value).map(period => {
-        return {
-            period: Number(period.key),
-            value: Number(period.value)
-        }
-    })
+    form.prices = form.prices.filter(period => period.value)
 
     if (isNew.value) {
         form.post(route('dashboard.services.store'), {

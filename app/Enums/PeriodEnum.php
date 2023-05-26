@@ -15,20 +15,20 @@ class PeriodEnum extends Enum
     {
         return [
             [
-                'label' => 'Mes',
-                'key' => self::MONTH,
+                'period_label' => 'Mes',
+                'period' => self::MONTH,
             ],
             [
-                'label' => 'Quincena',
-                'key' => self::FORTNIGHT,
+                'period_label' => 'Quincena',
+                'period' => self::FORTNIGHT,
             ],
             [
-                'label' => 'Semana',
-                'key' => self::WEEK,
+                'period_label' => 'Semana',
+                'period' => self::WEEK,
             ],
             [
-                'label' => 'Dia',
-                'key' => self::DAY,
+                'period_label' => 'Dia',
+                'period' => self::DAY,
             ]
         ];
     }
@@ -38,8 +38,8 @@ class PeriodEnum extends Enum
         $periods = self::get();
 
         foreach ($periods as $period) {
-            if ($period['key'] === $key) {
-                return $period['label'];
+            if ($period['period'] == $key) {
+                return $period['period_label'];
             }
         }
 

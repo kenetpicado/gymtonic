@@ -83,6 +83,12 @@ function submitAddDays() {
     });
 }
 
+function cancelAddDays() {
+    formExtendPlan.days = '';
+    formExtendPlan.plan_ids = [];
+    openModal.value = false;
+}
+
 </script>
 
 <template>
@@ -105,7 +111,7 @@ function submitAddDays() {
                     <InputForm text="Days" v-model="formExtendPlan.days"></InputForm>
                 </template>
                 <template #footer>
-                    <SecondaryButton @click="openModal = false">
+                    <SecondaryButton @click="cancelAddDays">
                         Cancel
                     </SecondaryButton>
                     <PrimaryButton type="button" @click="submitAddDays">
