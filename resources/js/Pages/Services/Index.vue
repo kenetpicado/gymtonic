@@ -137,7 +137,10 @@ async function edit(service) {
 }
 
 function onSuccessSubmit() {
-    form.reset()
+    form.id = null
+    form.name = ''
+    form.is_active = true
+    form.prices = props.periods
     isNew.value = true
     openModal.value = false
 }

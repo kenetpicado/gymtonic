@@ -32,6 +32,7 @@ class ServiceRequest extends FormRequest
             'is_active' => 'required|boolean',
             'prices' => 'required|array|min:1',
             'prices.*.value' => 'integer',
+            'prices.*.period' => 'nullable',
         ];
     }
 
