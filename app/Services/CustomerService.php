@@ -58,10 +58,11 @@ class CustomerService
 
     public function update(array $request, $customer): void
     {
-        $price = (new PriceService)->findPrice($request['service_id'], $request['period']);
-
-        $request['amount'] = $price;
         $customer->update($request);
-        $customer->plan()->updateOrCreate((new PlanService)->createInstance($request));
+
+        Plan::updateOrCreate(
+            ['customer_id' => $customer->id],
+            (new PlanService)->createInstance($request)
+        );
     }
 }
