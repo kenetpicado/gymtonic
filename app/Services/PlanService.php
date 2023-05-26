@@ -31,10 +31,6 @@ class PlanService
             ? $start_date->addMonth()->format('Y-m-d')
             : $start_date->addDays($request['period'])->format('Y-m-d');
 
-        if ($request['discount'] > 0) {
-            $request['amount'] = $request['amount'] - $request['discount'];
-        }
-
         return [
             'period' => $request['period'],
             'start_date' => $request['start_date'],

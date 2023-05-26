@@ -136,7 +136,7 @@ const form = useForm({
 
     amount: props.customer?.plan?.amount ?? 0,
     period: props.customer?.plan?.period ?? null,
-    start_date: props.customer?.plan?.start_date ?? '',
+    start_date: props.customer?.plan?.start_date ?? null,
     discount: props.customer?.plan?.discount ?? 0,
     note: props.customer?.plan?.note ?? '',
     service_id: props.customer?.plan?.service_id ?? props.services[0].id,

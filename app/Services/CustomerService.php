@@ -41,9 +41,6 @@ class CustomerService
 
     public function store(array $request): void
     {
-        $price = (new PriceService)->findPrice($request['service_id'], $request['period']);
-
-        $request['amount'] = $price;
         $customer = Customer::create($request);
         $customer->plan()->create((new PlanService)->createInstance($request));
     }
