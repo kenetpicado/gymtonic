@@ -63,11 +63,20 @@
                         <option v-for="service in services" :value="service.id">{{ service.name }}</option>
                     </SelectForm>
                     <SelectForm v-model="form.period" text="Period">
-                        <option v-for="period in periods" :value="period.key">{{ period.label }}</option>
+                        <option value="" disabled selected>Select a option</option>
+                        <option v-for="price in prices" :value="price.period">
+                            {{ price.period_label }} - {{ price.value }} C$
+                        </option>
                     </SelectForm>
                     <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
+
+                    <div class="col-span-4 text-lg font-medium text-gray-900">
+                        <h3 v-if="form.period && prices.length > 0">
+                            Total: {{ total }} C$
+                        </h3>
+                    </div>
                 </template>
 
                 <template #actions>
@@ -93,6 +102,7 @@ import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import useNotify from "@/Use/notify.js";
+import { defineProps, watch, ref, computed } from 'vue';
 
 const props = defineProps({
     customer: {
@@ -101,15 +111,21 @@ const props = defineProps({
     isNew: {
         type: Boolean, default: true
     },
-    periods: {
-        type: Array, required: true
-    },
     services: {
         type: Object, required: true
     }
 })
 
 const notify = useNotify();
+const prices = ref([])
+
+const total = computed(() => {
+    if (form.period && prices.value.length > 0) {
+        const price = prices.value.find(price => price.period == form.period);
+        return price.value - form.discount;
+    }
+    return 0;
+});
 
 const form = useForm({
     id: props.customer?.id ?? null,
@@ -118,14 +134,21 @@ const form = useForm({
     birth_date: props.customer?.birth_date ?? '',
     gender: props.customer?.gender ?? 'F',
 
-    period: props.customer?.plan?.period ?? props.periods[0].key,
+    amount: props.customer?.plan?.amount ?? 0,
+    period: props.customer?.plan?.period ?? null,
     start_date: props.customer?.plan?.start_date ?? '',
     discount: props.customer?.plan?.discount ?? 0,
     note: props.customer?.plan?.note ?? '',
     service_id: props.customer?.plan?.service_id ?? props.services[0].id,
 });
 
+watch(() => form.service_id, (value) => {
+    prices.value = props.services.find(service => service.id == value).prices;
+}, { immediate: true });
+
 function submit() {
+    form.amount = total.value;
+
     if (props.isNew) {
         form.post(route('dashboard.customers.store'), {
             preserveScroll: true,

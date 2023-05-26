@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\PeriodEnum;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Service;
@@ -27,8 +26,7 @@ class CustomerService
     public function create(): array
     {
         return [
-            'periods' => PeriodEnum::get(),
-            'services' => Service::all(['id', 'name']),
+            'services' => Service::with('prices')->get(['id', 'name']),
         ];
     }
 
@@ -57,8 +55,7 @@ class CustomerService
         return [
             'customer' => $customer,
             'isNew' => false,
-            'periods' => PeriodEnum::get(),
-            'services' => Service::all(['id', 'name']),
+            'services' => Service::with('prices')->get(['id', 'name']),
         ];
     }
 
