@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Income;
 use App\Models\Plan;
 use App\Models\Service;
 use Carbon\Carbon;
@@ -30,6 +31,20 @@ class PlanService
             'plan' => $plan->load('customer'),
             'isCurrentActive' => $plan->end_date >= now()->format('Y-m-d'),
         ];
+    }
+
+    public function update(array $request, Plan $plan)
+    {
+        $plan->update($request);
+
+        Income::create([
+            'amount' => $plan->amount,
+            'discount' => $plan->discount,
+            'concept' => 'Pago de plan',
+            'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+            'incomeable_id' => $plan->customer_id,
+            'incomeable_type' => 'App\Models\Customer',
+        ]);
     }
 
     public function createInstance($request): array

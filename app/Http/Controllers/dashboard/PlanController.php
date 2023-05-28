@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PlanRequest;
 use App\Models\Plan;
 use App\Services\PlanService;
 use Illuminate\Http\Request;
@@ -25,5 +26,12 @@ class PlanController extends Controller
     public function edit(Plan $plan)
     {
         return inertia('Plans/Edit', $this->planService->edit($plan));
+    }
+
+    public function update(PlanRequest $request, Plan $plan)
+    {
+        $this->planService->update($request->validated(), $plan);
+
+        return redirect()->route('dashboard.plans.index');
     }
 }

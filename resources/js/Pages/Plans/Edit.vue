@@ -33,11 +33,18 @@
                             seleccionado ({{ periodLabelSelected }})
                         </div>
                         <div class="col-span-4  font-medium text-gray-900">
-                            Nueva fecha de fin: {{ newEndDateLabel }}
+                            End date: <span class="badge-blue text-sm">{{ newEndDateLabel }}</span>
                         </div>
                     </template>
-                    <InputForm v-else text="Start Date" v-model="form.start_date" type="date"></InputForm>
-                    <pre>{{ newEndDate }}</pre>
+                    <template v-else>
+                        <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
+                        <div class="col-span-4  font-medium text-gray-900">
+                            Last Day: <span class="badge-danger text-sm">{{ newEndDateLabel }}</span>
+                        </div>
+                        <div class="col-span-4  font-medium text-gray-900">
+                            Next Payment: <span class="badge-blue text-sm">{{ nextPayment }}</span>
+                        </div>
+                    </template>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
@@ -87,6 +94,7 @@ const props = defineProps({
 
 const notify = useNotify();
 const prices = ref([])
+const today = new Datep().format('Y-m-d');
 
 const total = computed(() => {
     if (form.period && prices.value.length > 0) {
@@ -109,14 +117,12 @@ const periodLabelSelected = computed(() => {
 });
 
 const newEndDate = computed(() => {
-    if (props.isCurrentActive) {
-        var date = new Datep(form.end_date);
-    } else {
-        var date = new Datep(form.start_date);
-    }
+    const date = new Datep(props.isCurrentActive ? form.end_date : form.start_date);
+    date.addPeriod(parseInt(form.period));
 
-    //const date = new Datep(form.end_date);
-    date.addPeriod(parseInt(form.period)).addDays();
+    if (props.isCurrentActive) {
+        date.addDays();
+    }
 
     return date.format('Y-m-d');
 });
@@ -126,11 +132,16 @@ const newEndDateLabel = computed(() => {
     return `${day}/${month}/${year}`;
 });
 
+const nextPayment = computed(() => {
+    const [year, month, day] = newEndDate.value.split('-');
+    return `${Number(day) + 1}/${month}/${year}`;
+});
+
 const form = useForm({
     id: props.plan?.id ?? null,
     amount: props.plan?.amount ?? 0,
     period: props.plan?.period ?? null,
-    start_date: props.plan?.start_date ?? null,
+    start_date: props.isCurrentActive ? props.plan?.start_date : today,
     end_date: props.plan?.end_date ?? null,
     discount: props.plan?.discount ?? 0,
     note: props.plan?.note ?? '',
@@ -144,6 +155,7 @@ watch(() => form.service_id, (value) => {
 
 function submit() {
     form.amount = total.value;
+    form.end_date = newEndDate.value;
 
     form.put(route('dashboard.plans.update', form.id), {
         preserveScroll: true,

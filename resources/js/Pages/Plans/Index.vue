@@ -56,8 +56,6 @@ function addDays(id) {
         formExtendPlan.plan_ids = [id];
     }
 
-    console.log(formExtendPlan.plan_ids);
-
     openModal.value = true;
 }
 
@@ -206,11 +204,6 @@ function isPaymentToday(planDate) {
                                         </div>
                                     </td>
                                     <td>
-                                        <span v-if="checkBox" role="button" class="mr-3"
-                                            @click="$inertia.visit(route('dashboard.customers.edit', plan.customer.id))">
-                                            <i class="fas fa-edit"></i>
-                                        </span>
-
                                         <span role="button" class="badge-blue" @click="editPlan(plan.id)">
                                             {{ checkBox ? 'Pay $' : 'Renew $' }}
                                         </span>
