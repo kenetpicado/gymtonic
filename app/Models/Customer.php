@@ -34,4 +34,9 @@ class Customer extends Model
     {
         return $this->hasMany(Weight::class)->orderBy('id','desc');
     }
+
+    public function incomes()
+    {
+        return $this->morphMany(Income::class, 'incomeable');
+    }
 }

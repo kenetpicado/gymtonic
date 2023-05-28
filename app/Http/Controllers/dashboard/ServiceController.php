@@ -24,10 +24,16 @@ class ServiceController extends Controller
     {
         $created = Service::create($request->validated());
         $created->prices()->createMany($request->prices);
+
+        return redirect()->route('dashboard.services.index');
     }
 
     public function update(ServiceRequest $request, Service $service)
     {
         $service->update($request->validated());
+        $service->prices()->delete();
+        $service->prices()->createMany($request->prices);
+
+        return redirect()->route('dashboard.services.index');
     }
 }

@@ -144,6 +144,7 @@ const form = useForm({
 
 watch(() => form.service_id, (value) => {
     prices.value = props.services.find(service => service.id == value).prices;
+    form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[0].period;
 }, { immediate: true });
 
 function submit() {

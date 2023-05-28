@@ -50,7 +50,7 @@ const profileUrl = useProfileUrl();
                             <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                                 <tr v-for="(customer, index) in customers.data" class="hover:bg-gray-50">
                                     <td>
-                                        {{ index + 1 }}
+                                        {{ customer.id }}
                                     </td>
                                     <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
                                         <div class="h-10 w-10">

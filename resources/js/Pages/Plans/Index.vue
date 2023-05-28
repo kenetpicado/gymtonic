@@ -192,7 +192,7 @@ function cancelAddDays() {
                                     </td>
                                 </tr>
                                 <tr v-if="plans.data.length == 0">
-                                    <td colspan="6" class="text-center">No data to display</td>
+                                    <td colspan="7" class="text-center">No data to display</td>
                                 </tr>
                             </tbody>
                         </table>

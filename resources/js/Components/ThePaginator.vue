@@ -39,7 +39,10 @@ const pageList = computed(() => {
 });
 
 function getThisPage(url) {
-    router.get(url);
+    router.get(url, {}, {
+        preserveState: true,
+        preserveScroll: true
+    });
 }
 
 </script>

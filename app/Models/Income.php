@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class Income extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'is_active'
+        'amount',
+        'discount',
+        'concept',
+        'description',
+        'incomeable_id',
+        'incomeable_type',
     ];
-
-    public function prices()
-    {
-        return $this->hasMany(Price::class)->orderBy('period');
-    }
 }

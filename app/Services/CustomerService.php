@@ -20,7 +20,7 @@ class CustomerService
                     ->where('end_date', '>', now()),
             ])
             ->orderByDesc('id')
-            ->paginate(10);
+            ->paginate(20);
     }
 
     public function create(): array
@@ -42,7 +42,7 @@ class CustomerService
     public function store(array $request): void
     {
         $customer = Customer::create($request);
-        $customer->plan()->create((new PlanService)->createInstance($request));
+        $plan = $customer->plan()->create((new PlanService)->createInstance($request));
     }
 
     public function edit($customer): array
@@ -60,9 +60,6 @@ class CustomerService
     {
         $customer->update($request);
 
-        Plan::updateOrCreate(
-            ['customer_id' => $customer->id],
-            (new PlanService)->createInstance($request)
-        );
+        $customer->plan()->updateOrCreate((new PlanService)->createInstance($request));
     }
 }

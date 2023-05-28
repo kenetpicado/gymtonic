@@ -83,7 +83,6 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import useNotify from '@/Use/notify.js';
-import axios from 'axios';
 
 const props = defineProps({
     customer: {

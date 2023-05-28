@@ -15,21 +15,21 @@ class PeriodEnum extends Enum
     {
         return [
             [
-                'period_label' => 'Mes',
-                'period' => self::MONTH,
-            ],
-            [
-                'period_label' => 'Quincena',
-                'period' => self::FORTNIGHT,
+                'period_label' => 'Dia',
+                'period' => self::DAY,
             ],
             [
                 'period_label' => 'Semana',
                 'period' => self::WEEK,
             ],
             [
-                'period_label' => 'Dia',
-                'period' => self::DAY,
-            ]
+                'period_label' => 'Quincena',
+                'period' => self::FORTNIGHT,
+            ],
+            [
+                'period_label' => 'Mes',
+                'period' => self::MONTH,
+            ],
         ];
     }
 
