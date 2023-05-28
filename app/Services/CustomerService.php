@@ -42,7 +42,7 @@ class CustomerService
     public function store(array $request): void
     {
         $customer = Customer::create($request);
-        $plan = $customer->plan()->create((new PlanService)->createInstance($request));
+        $customer->plan()->create((new PlanService)->createInstance($request));
     }
 
     public function edit($customer): array
@@ -60,6 +60,9 @@ class CustomerService
     {
         $customer->update($request);
 
-        $customer->plan()->updateOrCreate((new PlanService)->createInstance($request));
+        Plan::updateOrCreate(
+            ['customer_id' => $customer->id],
+            (new PlanService)->createInstance($request)
+        );
     }
 }

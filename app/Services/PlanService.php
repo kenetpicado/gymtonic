@@ -17,8 +17,8 @@ class PlanService
             )
             ->when(
                 $request->type == 'expired',
-                fn ($query) => $query->where('end_date', '<=', now()),
-                fn ($query) => $query->where('end_date', '>', now())
+                fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d')),
+                fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))
             )
             ->orderBy('end_date')
             ->paginate(10);
@@ -34,12 +34,6 @@ class PlanService
 
     public function createInstance($request): array
     {
-        $start_date = Carbon::create($request['start_date']);
-
-        $request['end_date'] = $request['period'] == '30'
-            ? $start_date->addMonth()->format('Y-m-d')
-            : $start_date->addDays($request['period'])->format('Y-m-d');
-
         return [
             'period' => $request['period'],
             'start_date' => $request['start_date'],

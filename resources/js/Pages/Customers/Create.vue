@@ -69,6 +69,12 @@
                         </option>
                     </SelectForm>
                     <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
+                    <div class="col-span-4  font-medium text-gray-900">
+                        Last Day: {{ endDateLabel }}
+                    </div>
+                    <div class="col-span-4  font-medium text-gray-900">
+                        Next Payment: {{ nextPayment }}
+                    </div>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
@@ -102,7 +108,7 @@ import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import useNotify from "@/Use/notify.js";
-import { defineProps, watch, ref, computed } from 'vue';
+import { watch, ref, computed } from 'vue';
 
 const props = defineProps({
     customer: {
@@ -137,6 +143,7 @@ const form = useForm({
     amount: props.customer?.plan?.amount ?? 0,
     period: props.customer?.plan?.period ?? null,
     start_date: props.customer?.plan?.start_date ?? null,
+    end_date: props.customer?.plan?.end_date ?? null,
     discount: props.customer?.plan?.discount ?? 0,
     note: props.customer?.plan?.note ?? '',
     service_id: props.customer?.plan?.service_id ?? props.services[0].id,
@@ -147,8 +154,35 @@ watch(() => form.service_id, (value) => {
     form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[0].period;
 }, { immediate: true });
 
+const end_date = computed(() => {
+    if (!form.start_date || !form.period) return;
+
+    const date = new Date(form.start_date);
+
+    if (form.period == '30') {
+        date.setMonth(date.getMonth() + 1);
+    } else {
+        date.setDate(date.getDate() + parseInt(form.period));
+    }
+
+    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+});
+
+const endDateLabel = computed(() => {
+    if (!end_date.value) return;
+    const [year, month, day] = end_date.value.split('-');
+    return `${day}/${month}/${year}`;
+});
+
+const nextPayment = computed(() => {
+    if (!end_date.value) return;
+    const [year, month, day] = end_date.value.split('-');
+    return `${Number(day) + 1}/${month}/${year}`;
+});
+
 function submit() {
     form.amount = total.value;
+    form.end_date = end_date.value;
 
     if (props.isNew) {
         form.post(route('dashboard.customers.store'), {

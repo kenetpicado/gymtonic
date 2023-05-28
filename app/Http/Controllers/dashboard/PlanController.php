@@ -18,6 +18,7 @@ class PlanController extends Controller
     {
         return inertia('Plans/Index', [
             'plans' => $this->planService->index($request),
+            'today' => now()->format('Y-m-d'),
         ]);
     }
 

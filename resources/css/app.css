@@ -32,6 +32,10 @@
         @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold bg-indigo-50 text-indigo-600
     }
 
+    .badge-danger {
+        @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold bg-pink-50 text-pink-600
+    }
+
     .badge-pink {
         @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold bg-pink-50 text-pink-600
     }

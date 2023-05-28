@@ -14,7 +14,10 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 const props = defineProps({
     plans: {
         type: Object, required: true
-    }
+    },
+    today: {
+        type: String, required: true
+    },
 })
 
 const profileUrl = useProfileUrl();
@@ -151,7 +154,7 @@ function editPlan(id) {
                             <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                                 <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
                                     <th>
-                                         <Checkbox v-model:checked="plan.selected" name="status" />
+                                        <Checkbox v-model:checked="plan.selected" name="status" />
                                     </th>
                                     <td>
                                         {{ index + 1 }}
@@ -180,19 +183,27 @@ function editPlan(id) {
                                         </span>
                                     </td>
                                     <td>
-                                        <span v-if="checkBox" class="badge-success">
+                                        <span v-if="plan.end_date == today" class="badge-danger">
+                                            Last Day
+                                        </span>
+                                        <span v-else-if="checkBox" class="badge-success">
                                             <span class="dot-green"></span>
                                             Active
                                         </span>
                                         <span v-else class="badge-gray">
                                             <span class="dot-gray"></span>
-                                            Inactive
+                                            Expired
                                         </span>
                                     </td>
                                     <td>
-                                        <i v-if="checkBox" class="fas fa-edit mr-3" role="button"
-                                            @click="$inertia.visit(route('dashboard.customers.edit', plan.customer.id))"></i>
-                                        <span role="button" class="badge-blue" @click="editPlan(plan.id)">Renew Plan</span>
+                                        <span v-if="checkBox" role="button" class="mr-3"
+                                            @click="$inertia.visit(route('dashboard.customers.edit', plan.customer.id))">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+
+                                        <span role="button" class="badge-blue" @click="editPlan(plan.id)">
+                                            {{ checkBox ? 'Pay $' : 'Renew $' }}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr v-if="plans.data.length == 0">

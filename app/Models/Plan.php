@@ -23,12 +23,13 @@ class Plan extends Model
         'discount',
         'note',
         'service_id',
+        'customer_id',
     ];
 
-    protected $casts = [
-        'start_date' => 'date:Y-m-d',
-        'end_date' => 'date:Y-m-d',
-    ];
+    // protected $casts = [
+    //     'start_date' => 'date:Y-m-d',
+    //     'end_date' => 'date:Y-m-d',
+    // ];
 
     public function customer()
     {
