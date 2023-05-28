@@ -89,6 +89,10 @@ function cancelAddDays() {
     openModal.value = false;
 }
 
+function editPlan(id) {
+    router.visit(route('dashboard.plans.edit', id));
+}
+
 </script>
 
 <template>
@@ -158,7 +162,7 @@ function cancelAddDays() {
                                                 :src="profileUrl.get(plan.customer.name)" alt="" />
                                         </div>
                                         <div class="text-sm">
-                                            <div class="font-medium text-gray-700">{{ plan.customer.name }} ({{ plan.id }})</div>
+                                            <div class="font-medium text-gray-700">{{ plan.customer.name }}</div>
                                         </div>
                                     </td>
                                     <td>
@@ -188,7 +192,7 @@ function cancelAddDays() {
                                     <td>
                                         <i v-if="checkBox" class="fas fa-edit mr-3" role="button"
                                             @click="$inertia.visit(route('dashboard.customers.edit', plan.customer.id))"></i>
-                                        <span role="button" class="badge-blue">Renew Plan</span>
+                                        <span role="button" class="badge-blue" @click="editPlan(plan.id)">Renew Plan</span>
                                     </td>
                                 </tr>
                                 <tr v-if="plans.data.length == 0">

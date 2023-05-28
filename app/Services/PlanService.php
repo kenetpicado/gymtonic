@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Plan;
+use App\Models\Service;
 use Carbon\Carbon;
 
 class PlanService
@@ -21,6 +22,14 @@ class PlanService
             )
             ->orderBy('end_date')
             ->paginate(10);
+    }
+
+    public function edit($plan)
+    {
+        return [
+            'services' => Service::with('prices')->get(['id', 'name']),
+            'plan' => $plan->load('customer'),
+        ];
     }
 
     public function createInstance($request): array
