@@ -10,6 +10,7 @@ import Checkbox from '@/Components/Checkbox.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { Datep } from '@/Classes/Datep.js';
 
 const props = defineProps({
     plans: {
@@ -94,6 +95,10 @@ function cancelAddDays() {
 
 function editPlan(id) {
     router.visit(route('dashboard.plans.edit', id));
+}
+
+function isPaymentToday(planDate) {
+    return props.today == new Datep(planDate).addDays(2).format('Y-m-d');
 }
 
 </script>
@@ -183,17 +188,22 @@ function editPlan(id) {
                                         </span>
                                     </td>
                                     <td>
-                                        <span v-if="plan.end_date == today" class="badge-danger">
-                                            Last Day
-                                        </span>
-                                        <span v-else-if="checkBox" class="badge-success">
-                                            <span class="dot-green"></span>
-                                            Active
-                                        </span>
-                                        <span v-else class="badge-gray">
-                                            <span class="dot-gray"></span>
-                                            Expired
-                                        </span>
+                                        <div class="flex items-center">
+                                            <span v-if="plan.end_date == today" class="badge-danger">
+                                                Last Day
+                                            </span>
+                                            <span v-else-if="checkBox" class="badge-success">
+                                                <span class="dot-green"></span>
+                                                Active
+                                            </span>
+                                            <span v-else-if="isPaymentToday(plan.end_date)" class="badge-pink">
+                                                Payment today
+                                            </span>
+                                            <span v-else class="badge-gray">
+                                                <span class="dot-gray"></span>
+                                                Expired
+                                            </span>
+                                        </div>
                                     </td>
                                     <td>
                                         <span v-if="checkBox" role="button" class="mr-3"

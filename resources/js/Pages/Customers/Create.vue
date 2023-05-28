@@ -69,6 +69,7 @@
                         </option>
                     </SelectForm>
                     <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
+
                     <div class="col-span-4  font-medium text-gray-900">
                         Last Day: {{ endDateLabel }}
                     </div>
@@ -109,6 +110,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import useNotify from "@/Use/notify.js";
 import { watch, ref, computed } from 'vue';
+import { Datep } from '@/Classes/Datep.js';
 
 const props = defineProps({
     customer: {
@@ -124,6 +126,7 @@ const props = defineProps({
 
 const notify = useNotify();
 const prices = ref([])
+const today = new Datep().format('Y-m-d');
 
 const total = computed(() => {
     if (form.period && prices.value.length > 0) {
@@ -142,7 +145,7 @@ const form = useForm({
 
     amount: props.customer?.plan?.amount ?? 0,
     period: props.customer?.plan?.period ?? null,
-    start_date: props.customer?.plan?.start_date ?? null,
+    start_date: props.customer?.plan?.start_date ?? today,
     end_date: props.customer?.plan?.end_date ?? null,
     discount: props.customer?.plan?.discount ?? 0,
     note: props.customer?.plan?.note ?? '',
@@ -151,31 +154,22 @@ const form = useForm({
 
 watch(() => form.service_id, (value) => {
     prices.value = props.services.find(service => service.id == value).prices;
-    form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[0].period;
+    form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[prices.value.length - 1].period;
 }, { immediate: true });
 
 const end_date = computed(() => {
-    if (!form.start_date || !form.period) return;
+    const date = new Datep(form.start_date);
+    date.addPeriod(parseInt(form.period));
 
-    const date = new Date(form.start_date);
-
-    if (form.period == '30') {
-        date.setMonth(date.getMonth() + 1);
-    } else {
-        date.setDate(date.getDate() + parseInt(form.period));
-    }
-
-    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    return date.format('Y-m-d');
 });
 
 const endDateLabel = computed(() => {
-    if (!end_date.value) return;
     const [year, month, day] = end_date.value.split('-');
     return `${day}/${month}/${year}`;
 });
 
 const nextPayment = computed(() => {
-    if (!end_date.value) return;
     const [year, month, day] = end_date.value.split('-');
     return `${Number(day) + 1}/${month}/${year}`;
 });

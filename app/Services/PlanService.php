@@ -17,10 +17,9 @@ class PlanService
             )
             ->when(
                 $request->type == 'expired',
-                fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d')),
-                fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))
+                fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d'))->orderBy('end_date', 'desc'),
+                fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))->orderBy('end_date')
             )
-            ->orderBy('end_date')
             ->paginate(10);
     }
 
