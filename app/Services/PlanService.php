@@ -28,6 +28,7 @@ class PlanService
         return [
             'services' => Service::with('prices')->get(['id', 'name']),
             'plan' => $plan->load('customer'),
+            'isCurrentActive' => $plan->end_date >= now()->format('Y-m-d'),
         ];
     }
 

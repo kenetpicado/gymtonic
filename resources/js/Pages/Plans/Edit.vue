@@ -13,18 +13,6 @@
 
                 <template #description>
                     Set the plan's information.
-                    <br>
-                    <template v-if="plan.customer">
-                        <!-- <p v-if="!plan.customer.plan" class="mt-2 text-red-600">
-                            El usuario no tiene un plan creado, se procederá a crear uno nuevo con los datos ingresados.
-                        </p>
-                        <p v-if="customer.plan" class="mt-2 text-indigo-600">
-                            El usuario tiene un plan existente, se actualizará con los datos introducidos y también se
-                            actualizará el ingreso correspondiente.
-                            <span class="block mt-2"></span>
-                            Si en cambio desea crear un nuevo plan, haga click aqui.
-                        </p> -->
-                    </template>
                 </template>
 
                 <template #form>
@@ -37,7 +25,19 @@
                             {{ price.period_label }} - {{ price.value }} C$
                         </option>
                     </SelectForm>
-                    <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
+                    <template v-if="isCurrentActive">
+                        <div class="col-span-4">
+                            El plan se encuentra activo, por lo que se asume un pago adelantado.
+                            La fecha de fin del plan se actualizara en funcion de la fecha anterior
+                            ({{ plan.end_date_formated }}) y el periodo
+                            seleccionado ({{ periodLabelSelected }})
+                        </div>
+                        <div class="col-span-4  font-medium text-gray-900">
+                            Nueva fecha de fin: {{ newEndDateLabel }}
+                        </div>
+                    </template>
+                    <InputForm v-else text="Start Date" v-model="form.start_date" type="date"></InputForm>
+                    <pre>{{ newEndDate }}</pre>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
@@ -71,6 +71,7 @@ import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import useNotify from "@/Use/notify.js";
 import { defineProps, watch, ref, computed } from 'vue';
+import { Datep } from '@/Classes/Datep.js';
 
 const props = defineProps({
     services: {
@@ -79,6 +80,9 @@ const props = defineProps({
     plan: {
         type: Boolean, default: true
     },
+    isCurrentActive: {
+        type: Boolean, required: true
+    }
 })
 
 const notify = useNotify();
@@ -92,11 +96,42 @@ const total = computed(() => {
     return 0;
 });
 
+const periodLabelSelected = computed(() => {
+    if (form.period && prices.value.length > 0) {
+        const price = prices.value.find(price => price.period == form.period);
+        if (price.period == 30) {
+            return '1 mes';
+        } else {
+            return `${price.period} dia(s)`;
+        }
+    }
+    return 'No hay periodo seleccionado';
+});
+
+const newEndDate = computed(() => {
+    if (props.isCurrentActive) {
+        var date = new Datep(form.end_date);
+    } else {
+        var date = new Datep(form.start_date);
+    }
+
+    //const date = new Datep(form.end_date);
+    date.addPeriod(parseInt(form.period)).addDays();
+
+    return date.format('Y-m-d');
+});
+
+const newEndDateLabel = computed(() => {
+    const [year, month, day] = newEndDate.value.split('-');
+    return `${day}/${month}/${year}`;
+});
+
 const form = useForm({
     id: props.plan?.id ?? null,
     amount: props.plan?.amount ?? 0,
     period: props.plan?.period ?? null,
     start_date: props.plan?.start_date ?? null,
+    end_date: props.plan?.end_date ?? null,
     discount: props.plan?.discount ?? 0,
     note: props.plan?.note ?? '',
     service_id: props.plan?.service_id ?? props.services[0].id,
@@ -104,7 +139,7 @@ const form = useForm({
 
 watch(() => form.service_id, (value) => {
     prices.value = props.services.find(service => service.id == value).prices;
-    form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[0].period;
+    form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[prices.value.length - 1].period;
 }, { immediate: true });
 
 function submit() {
