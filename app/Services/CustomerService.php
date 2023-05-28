@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Customer;
+use App\Models\Income;
 use App\Models\Plan;
 use App\Models\Service;
 
@@ -60,9 +61,21 @@ class CustomerService
     {
         $customer->update($request);
 
-        Plan::updateOrCreate(
-            ['customer_id' => $customer->id],
-            (new PlanService)->createInstance($request)
-        );
+        $plan = Plan::where('customer_id', $customer->id)->first();
+
+        if (!$plan) {
+            Plan::create((new PlanService)->createInstance($request) + ['customer_id' => $customer->id]);
+        } else {
+            $plan->update((new PlanService)->createInstance($request));
+            $income = $customer->incomes()->latest()->first();
+
+            if ($income) {
+                $income->update([
+                    'amount' => $plan->amount,
+                    'discount' => $plan->discount,
+                    'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+                ]);
+            }
+        }
     }
 }
