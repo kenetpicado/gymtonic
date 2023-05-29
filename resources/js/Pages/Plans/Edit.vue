@@ -39,10 +39,10 @@
                     <template v-else>
                         <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
                         <div class="col-span-4  font-medium text-gray-900">
-                            Last Day: <span class="badge-danger text-sm">{{ newEndDateLabel }}</span>
+                            Last day: <span class="badge-danger text-sm">{{ newEndDateLabel }}</span>
                         </div>
                         <div class="col-span-4  font-medium text-gray-900">
-                            Next Payment: <span class="badge-blue text-sm">{{ nextPayment }}</span>
+                            Next payment: <span class="badge-blue text-sm">{{ nextPayment }}</span>
                         </div>
                     </template>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>

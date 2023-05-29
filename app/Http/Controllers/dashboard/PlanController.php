@@ -7,6 +7,7 @@ use App\Http\Requests\PlanRequest;
 use App\Models\Plan;
 use App\Services\PlanService;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class PlanController extends Controller
 {
@@ -15,7 +16,7 @@ class PlanController extends Controller
     ) {
     }
 
-    public function index(Request $request): \Inertia\Response
+    public function index(Request $request): Response
     {
         return inertia('Plans/Index', [
             'plans' => $this->planService->index($request),

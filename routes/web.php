@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\dashboard\CustomerController;
+use App\Http\Controllers\dashboard\EmployeeController;
 use App\Http\Controllers\dashboard\ExtendPlanController;
 use App\Http\Controllers\dashboard\PlanController;
 use App\Http\Controllers\dashboard\ServiceController;
@@ -30,4 +31,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::resource('plans', PlanController::class);
         Route::resource('weights', WeightController::class)->only(['store', 'update', 'destroy']);
         Route::put('extend-plan', ExtendPlanController::class)->name('extend-plan');
+        Route::resource('employees', EmployeeController::class);
     });

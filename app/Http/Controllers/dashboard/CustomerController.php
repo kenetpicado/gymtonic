@@ -7,6 +7,7 @@ use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class CustomerController extends Controller
 {
@@ -15,19 +16,19 @@ class CustomerController extends Controller
     ) {
     }
 
-    public function index(Request $request): \Inertia\Response
+    public function index(Request $request): Response
     {
         return inertia('Customers/Index', [
             'customers' => $this->customerService->index($request),
         ]);
     }
 
-    public function create(): \Inertia\Response
+    public function create(): Response
     {
         return inertia('Customers/Create', $this->customerService->create());
     }
 
-    public function show(Customer $customer): \Inertia\Response
+    public function show(Customer $customer): Response
     {
         return inertia('Customers/Show', $this->customerService->show($customer));
     }
@@ -37,7 +38,7 @@ class CustomerController extends Controller
         $this->customerService->store($request->validated());
     }
 
-    public function edit(Customer $customer): \Inertia\Response
+    public function edit(Customer $customer): Response
     {
         return inertia('Customers/Create', $this->customerService->edit($customer));
     }

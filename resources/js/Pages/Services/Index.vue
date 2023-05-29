@@ -30,7 +30,7 @@
                     :text="period.period_label" v-model="period.value" class="mt-4" type="number"></InputForm>
             </template>
             <template #footer>
-                <SecondaryButton @click="openModal = false">
+                <SecondaryButton @click="closeModal">
                     Cancel
                 </SecondaryButton>
                 <PrimaryButton type="button" @click="submit">
@@ -96,7 +96,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import Checkbox from '@/Components/Checkbox.vue';
@@ -143,6 +143,10 @@ function onSuccessSubmit() {
     form.prices = props.periods
     isNew.value = true
     openModal.value = false
+}
+
+function closeModal() {
+    onSuccessSubmit()
 }
 
 function submit() {

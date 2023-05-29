@@ -40,6 +40,9 @@ const logout = () => {
                             <NavLink routeName="dashboard.plans.index">
                                 Plans
                             </NavLink>
+                            <NavLink routeName="dashboard.employees.index">
+                                Employees
+                            </NavLink>
                             <NavLink routeName="dashboard.services.index">
                                 Services
                             </NavLink>
