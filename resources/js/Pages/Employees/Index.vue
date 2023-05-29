@@ -21,6 +21,7 @@ const profileUrl = useProfileUrl();
 const notify = useNotify();
 
 const form = useForm({
+    id: null,
     name: '',
     phone: '',
     schedule: '',
@@ -51,6 +52,15 @@ function saveEmployee() {
 function resetValues() {
     form.reset();
     openModal.value = false;
+}
+
+function editEmployee(employee) {
+    form.id = employee.id;
+    form.name = employee.name;
+    form.phone = employee.phone;
+    form.schedule = employee.schedule;
+    isNew.value = false;
+    openModal.value = true;
 }
 
 </script>
@@ -123,8 +133,9 @@ function resetValues() {
                                     <td>
                                         <i class="fas fa-eye mr-3" role="button"
                                             @click="$inertia.visit(route('dashboard.customers.show', customer.id))"></i>
+
                                         <i class="fas fa-edit mr-3" role="button"
-                                            @click="$inertia.visit(route('dashboard.customers.edit', customer.id))"></i>
+                                            @click="editEmployee(employee)"></i>
                                     </td>
                                 </tr>
                                 <tr v-if="employees.length == 0">
