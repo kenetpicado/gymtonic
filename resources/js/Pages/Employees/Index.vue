@@ -132,7 +132,7 @@ function editEmployee(employee) {
                                     </td>
                                     <td>
                                         <i class="fas fa-eye mr-3" role="button"
-                                            @click="$inertia.visit(route('dashboard.customers.show', customer.id))"></i>
+                                            @click="$inertia.visit(route('dashboard.employee.show', employee.id))"></i>
 
                                         <i class="fas fa-edit mr-3" role="button"
                                             @click="editEmployee(employee)"></i>
