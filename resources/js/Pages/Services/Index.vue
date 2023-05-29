@@ -30,10 +30,10 @@
                     :text="period.period_label" v-model="period.value" class="mt-4" type="number"></InputForm>
             </template>
             <template #footer>
-                <SecondaryButton @click="closeModal">
+                <SecondaryButton @click="resetValues">
                     Cancel
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="submit">
+                <PrimaryButton type="button" @click="saveService">
                     Save
                 </PrimaryButton>
             </template>
@@ -136,20 +136,13 @@ async function edit(service) {
     openModal.value = true
 }
 
-function onSuccessSubmit() {
-    form.id = null
-    form.name = ''
-    form.is_active = true
-    form.prices = props.periods
+function resetValues() {
+    form.reset()
     isNew.value = true
     openModal.value = false
 }
 
-function closeModal() {
-    onSuccessSubmit()
-}
-
-function submit() {
+function saveService() {
     form.prices = form.prices.filter(period => period.value)
 
     if (isNew.value) {
@@ -158,7 +151,7 @@ function submit() {
             preserveState: true,
             onSuccess: () => {
                 notify.success('Service created successfully')
-                onSuccessSubmit()
+                resetValues()
             },
         });
     } else {
@@ -167,7 +160,7 @@ function submit() {
             preserveState: true,
             onSuccess: () => {
                 notify.success('Service updated successfully')
-                onSuccessSubmit()
+                resetValues()
             },
         });
     }
