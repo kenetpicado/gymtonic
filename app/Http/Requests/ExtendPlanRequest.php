@@ -24,7 +24,6 @@ class ExtendPlanRequest extends FormRequest
     public function rules()
     {
         return [
-            'days' => 'required|integer',
             'plan_ids' => 'required|array',
             'plan_ids.*' => 'required|integer',
         ];

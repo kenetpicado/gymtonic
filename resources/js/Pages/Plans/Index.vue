@@ -2,7 +2,6 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
-import useProfileUrl from '@/Composables/useProfileUrl.js';
 import SearchComponent from '@/Components/SearchComponent.vue';
 import { reactive, ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -11,6 +10,9 @@ import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Datep } from '@/Classes/Datep.js';
+import TableSection from '@/Components/TableSection.vue';
+import UserInformation from '@/Components/UserInformation.vue';
+import useNotify from '@/Use/notify.js';
 
 const props = defineProps({
     plans: {
@@ -21,21 +23,16 @@ const props = defineProps({
     },
 })
 
-const profileUrl = useProfileUrl();
 const checkBox = ref(true);
 const openModal = ref(false);
+const days = ref(null);
+const notify = useNotify();
+const selectedPlans = ref([]);
 
 const queryParams = reactive({
     search: '',
     type: 'active'
 })
-
-const formExtendPlan = reactive({
-    days: '',
-    plan_ids: [],
-})
-
-const selectedPlans = ref([]);
 
 watch(() => checkBox.value, (value) => {
     queryParams.type = value ? 'active' : 'expired';
@@ -45,18 +42,6 @@ watch(() => checkBox.value, (value) => {
 function searchPlans(value) {
     queryParams.search = value;
     getFilteredPlans()
-}
-
-function addDays(id) {
-    selectedPlans.value = props.plans.data.filter((plan) => plan.selected).map((plan) => plan.id);
-
-    if (selectedPlans.value.length > 0) {
-        formExtendPlan.plan_ids = selectedPlans.value;
-    } else {
-        formExtendPlan.plan_ids = [id];
-    }
-
-    openModal.value = true;
 }
 
 function getFilteredPlans() {
@@ -72,27 +57,61 @@ function getFilteredPlans() {
     });
 }
 
+function firstSelectedPlans() {
+    selectedPlans.value = props.plans.data
+        .filter((plan) => plan.selected)
+        .map(function (plan) {
+            return {
+                id: plan.id,
+                customer: plan.customer.name,
+                end_date: plan.end_date
+            }
+        })
+}
+
+function openModalToAddDays() {
+    firstSelectedPlans()
+
+    if (selectedPlans.value.length == 0) {
+        notify.error('Select at least one plan');
+        return;
+    }
+
+    openModal.value = true;
+}
+
+watch(() => days.value, (value) => {
+    if (!value) {
+        firstSelectedPlans()
+        return;
+    };
+
+    selectedPlans.value.forEach((plan) => {
+        const date = new Datep(plan.end_date);
+        plan.end_date = date.addPeriod(parseInt(value) + 1).format('Y-m-d');
+    })
+})
+
 function submitAddDays() {
-    router.put(route('dashboard.extend-plan'), formExtendPlan, {
+    if (!days.value || days.value == 0 || days.value < 1) {
+        notify.error('Days must be greater than 0');
+        return;
+    };
+
+    router.put(route('dashboard.extend-plan'), selectedPlans.value, {
         preserveState: true,
         preserveScroll: true,
         onSuccess: () => {
-            formExtendPlan.days = '';
-            formExtendPlan.plan_ids = [];
-            selectedPlans.value = [];
-            openModal.value = false;
+            resetValues();
+            notify.success('Days added successfully');
         },
     });
 }
 
-function cancelAddDays() {
-    formExtendPlan.days = '';
-    formExtendPlan.plan_ids = [];
+function resetValues() {
+    days.value = null;
+    selectedPlans.value = [];
     openModal.value = false;
-}
-
-function editPlan(id) {
-    router.visit(route('dashboard.plans.edit', id));
 }
 
 function isPaymentToday(planDate) {
@@ -118,10 +137,24 @@ function isPaymentToday(planDate) {
                     Extend Plan
                 </template>
                 <template #content>
-                    <InputForm text="Days" v-model="formExtendPlan.days"></InputForm>
+                    <InputForm text="Days" v-model="days" type="number"></InputForm>
+                    <table class="w-full border-collapse bg-white text-left text-sm text-gray-500 mt-4">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th>Customer</th>
+                                <th>End date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+                            <tr v-for="plan in selectedPlans">
+                                <td>{{ plan.customer }}</td>
+                                <td>{{ plan.end_date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </template>
                 <template #footer>
-                    <SecondaryButton @click="cancelAddDays">
+                    <SecondaryButton @click="resetValues">
                         Cancel
                     </SecondaryButton>
                     <PrimaryButton type="button" @click="submitAddDays">
@@ -131,93 +164,84 @@ function isPaymentToday(planDate) {
             </DialogModal>
         </template>
 
-        <div class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between gap-4 mb-4">
-                    <div>
-                        <Checkbox v-model:checked="checkBox" name="status" />
-                        <span class="ml-2 text-sm text-gray-600">Active</span>
-                    </div>
-                    <SearchComponent @search="searchPlans"></SearchComponent>
+        <TableSection>
+            <template #topbar>
+                <div>
+                    <Checkbox v-model:checked="checkBox" name="status" />
+                    <span class="ml-2 text-sm text-gray-600">Active</span>
                 </div>
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="overflow-hidden rounded-lg m-0">
-                        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th></th>
-                                    <th>ID</th>
-                                    <th>Customer</th>
-                                    <th>Service</th>
-                                    <th>Period</th>
-                                    <th>State</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                                <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
-                                    <th>
-                                        <Checkbox v-model:checked="plan.selected" name="status" />
-                                    </th>
-                                    <td>
-                                        {{ index + 1 }}
-                                    </td>
-                                    <td class="flex gap-3 font-normal text-gray-900 items-center">
-                                        <div class="h-10 w-10">
-                                            <img class="h-full w-full rounded-full object-cover object-center"
-                                                :src="profileUrl.get(plan.customer.name)" alt="" />
-                                        </div>
-                                        <div class="text-sm">
-                                            <div class="font-medium text-gray-700">{{ plan.customer.name }}</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {{ plan.service.name }}
-                                        <div class="text-sm mt-1">
-                                            ({{ plan.period }} days)
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge-gray">
-                                            {{ plan.start_date_formated }}
-                                        </span>
-                                        <span class="badge-blue" @click="addDays(plan.id)" role="button">
-                                            {{ plan.end_date_formated }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <span v-if="plan.end_date == today" class="badge-danger">
-                                                Last Day
-                                            </span>
-                                            <span v-else-if="checkBox" class="badge-success">
-                                                <span class="dot-green"></span>
-                                                Active
-                                            </span>
-                                            <span v-else-if="isPaymentToday(plan.end_date)" class="badge-pink">
-                                                Payment today
-                                            </span>
-                                            <span v-else class="badge-gray">
-                                                <span class="dot-gray"></span>
-                                                Expired
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span role="button" class="badge-blue" @click="editPlan(plan.id)">
-                                            {{ checkBox ? 'Pay $' : 'Renew $' }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr v-if="plans.data.length == 0">
-                                    <td colspan="7" class="text-center">No data to display</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <ThePaginator :links="plans.links"></ThePaginator>
-                </div>
-            </div>
-        </div>
+                <SearchComponent @search="searchPlans"></SearchComponent>
+            </template>
+
+            <template #header>
+                <th></th>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Service</th>
+                <th>Period</th>
+                <th>State</th>
+                <th>Actions</th>
+            </template>
+
+            <template #body>
+                <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
+                    <th>
+                        <Checkbox v-model:checked="plan.selected" name="status" />
+                    </th>
+                    <td>
+                        {{ index + 1 }}
+                    </td>
+                    <td>
+                        <UserInformation :user="plan.customer" />
+                    </td>
+                    <td>
+                        {{ plan.service.name }}
+                        <div class="text-sm mt-1">
+                            ({{ plan.period }} days)
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge-gray">
+                            {{ plan.start_date_formated }}
+                        </span>
+                        <span class="badge-blue" @click="openModalToAddDays(plan)" role="button">
+                            {{ plan.end_date_formated }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <span v-if="plan.end_date == today" class="badge-danger">
+                                Last Day
+                            </span>
+                            <span v-else-if="checkBox" class="badge-success">
+                                <span class="dot-green"></span>
+                                Active
+                            </span>
+                            <span v-else-if="isPaymentToday(plan.end_date)" class="badge-pink">
+                                Payment today
+                            </span>
+                            <span v-else class="badge-gray">
+                                <span class="dot-gray"></span>
+                                Expired
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <span role="button" class="badge-blue"
+                            @click="$inertia.visit(route('dashboard.plans.edit', plan.id))">
+                            {{ checkBox ? 'Pay $' : 'Renew $' }}
+                        </span>
+                    </td>
+                </tr>
+                <tr v-if="plans.data.length == 0">
+                    <td colspan="7" class="text-center">No data to display</td>
+                </tr>
+            </template>
+
+            <template #paginator>
+                <ThePaginator :links="plans.links"></ThePaginator>
+            </template>
+        </TableSection>
+
     </AppLayout>
 </template>

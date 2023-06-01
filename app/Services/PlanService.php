@@ -11,7 +11,7 @@ class PlanService
 {
     public function index($request)
     {
-        return Plan::with(['customer', 'service'])
+        return Plan::with(['customer:id,name', 'service'])
             ->when(
                 $request->search,
                 fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))
