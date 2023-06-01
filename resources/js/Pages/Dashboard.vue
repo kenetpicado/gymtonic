@@ -19,8 +19,13 @@
                     <!-- <pre>{{ customers }}</pre> -->
                 </div>
                 <div class="grid grid-cols-2 gap-6">
-                    <div class="bg-white shadow-lg p-4 rounded-lg">
+                    <div class="bg-white shadow-lg py-2 px-4 rounded-xl">
+                        <div class="text-lg mb-4 font-bold tracking-wider">Gender</div>
                         <canvas id="genderChart"></canvas>
+                    </div>
+                    <div class="bg-white shadow-lg py-2 px-4 rounded-xl">
+                        <div class="text-lg mb-4 font-bold tracking-wider">Services</div>
+                        <canvas id="serviceChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -91,7 +96,8 @@ onMounted(() => {
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    //display: false
                 }
             },
         }

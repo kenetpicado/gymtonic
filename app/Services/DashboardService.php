@@ -23,7 +23,7 @@ class DashboardService
                 ->select(DB::raw('SUM(amount * quantity) as total'))
                 ->value('total'),
 
-            'customers' => DB::table('customers')->groupBy('gender')->orderBy('total', 'desc')->get(['gender', DB::raw('count(*) as total')])
+            'customers' => DB::table('customers')->groupBy('gender')->get(['gender', DB::raw('count(*) as total')])
         ];
     }
 }

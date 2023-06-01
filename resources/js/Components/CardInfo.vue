@@ -1,5 +1,5 @@
 <template>
-    <div :class="`bg-white shadow-lg h-28 border-s-4 border-${color} rounded-lg`">
+    <div :class="`bg-white shadow-lg h-28 border-s-4 border-${color} rounded-xl`">
         <div class="flex items-center h-full">
             <div class="p-4">
                 <div :class="`text-sm uppercase text-${color} font-bold tracking-wider mb-2`">
