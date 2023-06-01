@@ -8,6 +8,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import useNotify from '@/Use/notify.js';
 import UserInformation from '@/Components/UserInformation.vue';
+import TableSection from '@/Components/TableSection.vue';
 
 const props = defineProps({
     employees: {
@@ -99,46 +100,35 @@ function editEmployee(employee) {
             </template>
         </DialogModal>
 
-        <div class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="overflow-hidden rounded-lg m-0">
-                        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Schedule</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                                <tr v-for="(employee, index) in employees" class="hover:bg-gray-50">
-                                    <td>
-                                        {{ employee.id }}
-                                    </td>
-                                    <th>
-                                        <UserInformation :user="employee"></UserInformation>
-                                    </th>
-                                    <td>
-                                        {{ employee.schedule }}
-                                    </td>
-                                    <td>
-                                        <i class="fas fa-eye mr-3" role="button"
-                                            @click="$inertia.visit(route('dashboard.employee.show', employee.id))"></i>
+        <TableSection>
+            <template #header>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Schedule</th>
+                <th>Actions</th>
+            </template>
+            <template #body>
+                <tr v-for="(employee, index) in employees" class="hover:bg-gray-50">
+                    <td>
+                        {{ employee.id }}
+                    </td>
+                    <th>
+                        <UserInformation :user="employee" />
+                    </th>
+                    <td>
+                        {{ employee.schedule }}
+                    </td>
+                    <td>
+                        <i class="fas fa-eye mr-3" role="button"
+                            @click="$inertia.visit(route('dashboard.employee.show', employee.id))"></i>
 
-                                        <i class="fas fa-edit mr-3" role="button"
-                                            @click="editEmployee(employee)"></i>
-                                    </td>
-                                </tr>
-                                <tr v-if="employees.length == 0">
-                                    <td colspan="4" class="text-center">No data to display</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <i class="fas fa-edit mr-3" role="button" @click="editEmployee(employee)"></i>
+                    </td>
+                </tr>
+                <tr v-if="employees.length == 0">
+                    <td colspan="4" class="text-center">No data to display</td>
+                </tr>
+            </template>
+        </TableSection>
     </AppLayout>
 </template>

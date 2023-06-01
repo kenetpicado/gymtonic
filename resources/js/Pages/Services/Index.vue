@@ -39,54 +39,49 @@
             </template>
         </DialogModal>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="overflow-hidden rounded-lg m-0">
-                        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Prices</th>
-                                    <th>State</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                                <tr v-for="service in services.data" class="hover:bg-gray-50">
-                                    <td>
-                                        {{ service.id }}
-                                    </td>
-                                    <td>
-                                        {{ service.name }}
-                                    </td>
-                                    <td>
-                                        <span v-for="price in service.prices" class="badge-blue mr-1">
-                                            {{ price.period_label }}: C$ {{ price.value }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span v-if="service.is_active" class="badge-success">
-                                            <span class="dot-green"></span>
-                                            Active
-                                        </span>
-                                        <span v-else class="badge-gray">
-                                            <span class="dot-gray"></span>
-                                            Inactive
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <i class="fas fa-edit mr-3" role="button" @click="edit(service)"></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <ThePaginator :links="services.links"></ThePaginator>
-                </div>
-            </div>
-        </div>
+        <TableSection>
+            <template #header>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Prices</th>
+                <th>State</th>
+                <th>Actions</th>
+            </template>
+
+            <template #body>
+                <tr v-for="service in services.data" class="hover:bg-gray-50">
+                    <td>
+                        {{ service.id }}
+                    </td>
+                    <td>
+                        {{ service.name }}
+                    </td>
+                    <td>
+                        <span v-for="price in service.prices" class="badge-blue mr-1">
+                            {{ price.period_label }}: C$ {{ price.value }}
+                        </span>
+                    </td>
+                    <td>
+                        <span v-if="service.is_active" class="badge-success">
+                            <span class="dot-green"></span>
+                            Active
+                        </span>
+                        <span v-else class="badge-gray">
+                            <span class="dot-gray"></span>
+                            Inactive
+                        </span>
+                    </td>
+                    <td>
+                        <i class="fas fa-edit mr-3" role="button" @click="edit(service)"></i>
+                    </td>
+                </tr>
+            </template>
+
+            <template #paginator>
+                <ThePaginator :links="services.links"></ThePaginator>
+            </template>
+        </TableSection>
+
     </AppLayout>
 </template>
 
@@ -101,6 +96,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import Checkbox from '@/Components/Checkbox.vue';
 import useNotify from '@/Use/notify.js';
+import TableSection from '@/Components/TableSection.vue';
 
 const props = defineProps({
     services: {
