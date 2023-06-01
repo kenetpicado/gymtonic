@@ -19,10 +19,10 @@
                 <InputForm text="Value" v-model="form.value"></InputForm>
             </template>
             <template #footer>
-                <SecondaryButton @click="openModal = false">
+                <SecondaryButton @click="resetValues">
                     Cancel
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="submit">
+                <PrimaryButton type="button" @click="saveWeight">
                     Save
                 </PrimaryButton>
             </template>
@@ -99,14 +99,13 @@ const form = useForm({
     customer_id: props.customer.id,
 })
 
-function submit() {
+function saveWeight() {
     if (isNew.value) {
         form.post(route('dashboard.weights.store'), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                openModal.value = false;
-                form.reset();
+                resetValues();
                 notify.success('Weight added successfully');
             },
         });
@@ -115,9 +114,7 @@ function submit() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                openModal.value = false;
-                isNew.value = true;
-                form.reset();
+                resetValues();
                 notify.success('Weight updated successfully');
             },
         });
@@ -141,6 +138,12 @@ function removeWeight(id) {
             },
         });
     }, 'Are you sure you want to delete this weight?');
+}
+
+function resetValues() {
+    form.reset();
+    openModal.value = false;
+    isNew.value = true;
 }
 
 </script>

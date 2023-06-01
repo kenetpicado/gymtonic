@@ -41,9 +41,6 @@
                         <div class="col-span-4  font-medium text-gray-900">
                             Last day: <span class="badge-danger text-sm">{{ newEndDateLabel }}</span>
                         </div>
-                        <div class="col-span-4  font-medium text-gray-900">
-                            Next payment: <span class="badge-blue text-sm">{{ nextPayment }}</span>
-                        </div>
                     </template>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
@@ -130,11 +127,6 @@ const newEndDate = computed(() => {
 const newEndDateLabel = computed(() => {
     const [year, month, day] = newEndDate.value.split('-');
     return `${day}/${month}/${year}`;
-});
-
-const nextPayment = computed(() => {
-    const [year, month, day] = newEndDate.value.split('-');
-    return `${Number(day) + 1}/${month}/${year}`;
 });
 
 const form = useForm({

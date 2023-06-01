@@ -6,7 +6,7 @@
             </h2>
         </template>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-            <FormSection @submitted="submit">
+            <FormSection @submitted="saveCustomer">
                 <template #title>
                     Customer Information
                 </template>
@@ -37,7 +37,7 @@
 
             <SectionBorder />
 
-            <FormSection @submitted="submit">
+            <FormSection @submitted="saveCustomer">
                 <template #title>
                     Plan Information
                 </template>
@@ -49,11 +49,16 @@
                         <p v-if="!customer.plan" class="mt-2 text-red-600">
                             El usuario no tiene un plan creado, se procederá a crear uno nuevo con los datos ingresados.
                         </p>
-                        <p v-if="customer.plan" class="mt-2 text-indigo-600">
+                        <p v-if="customer.plan" class="mt-2">
                             El usuario tiene un plan existente, se actualizará con los datos introducidos y también se
                             actualizará el ingreso correspondiente.
                             <span class="block mt-2"></span>
-                            Si en cambio desea crear un nuevo plan, haga click aqui.
+                            Si en cambio desea crear un nuevo plan
+                            <br>
+                            <PrimaryButton class="mt-2"
+                                @click="$inertia.visit(route('dashboard.plans.edit', customer.plan.id))">
+                                Haga click aqui
+                            </PrimaryButton>
                         </p>
                     </template>
                 </template>
@@ -72,9 +77,6 @@
 
                     <div class="col-span-4  font-medium text-gray-900">
                         Last day: <span class="badge-danger text-sm">{{ endDateLabel }}</span>
-                    </div>
-                    <div class="col-span-4  font-medium text-gray-900">
-                        Next payment: <span class="badge-blue text-sm">{{ nextPayment }}</span>
                     </div>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
@@ -169,12 +171,7 @@ const endDateLabel = computed(() => {
     return `${day}/${month}/${year}`;
 });
 
-const nextPayment = computed(() => {
-    const [year, month, day] = end_date.value.split('-');
-    return `${Number(day) + 1}/${month}/${year}`;
-});
-
-function submit() {
+function saveCustomer() {
     form.amount = total.value;
     form.end_date = end_date.value;
 

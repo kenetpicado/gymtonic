@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->nullableMorphs('incomeable');
             $table->double('amount');
+            $table->integer('quantity')->default(1);
             $table->double('discount')->default(0);
             $table->string('concept');
             $table->string('description')->nullable();

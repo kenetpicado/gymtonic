@@ -1,6 +1,5 @@
 <script setup>
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import useProfileUrl from '@/Composables/useProfileUrl.js';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref } from 'vue';
 import DialogModal from '@/Components/DialogModal.vue';
@@ -8,6 +7,7 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import useNotify from '@/Use/notify.js';
+import UserInformation from '@/Components/UserInformation.vue';
 
 const props = defineProps({
     employees: {
@@ -17,7 +17,6 @@ const props = defineProps({
 
 const openModal = ref(false)
 const isNew = ref(true);
-const profileUrl = useProfileUrl();
 const notify = useNotify();
 
 const form = useForm({
@@ -51,6 +50,7 @@ function saveEmployee() {
 
 function resetValues() {
     form.reset();
+    isNew.value = true;
     openModal.value = false;
 }
 
@@ -117,15 +117,8 @@ function editEmployee(employee) {
                                     <td>
                                         {{ employee.id }}
                                     </td>
-                                    <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                                        <div class="h-10 w-10">
-                                            <img class="h-full w-full rounded-full object-cover object-center"
-                                                :src="profileUrl.get(employee.name)" alt="" />
-                                        </div>
-                                        <div class="text-sm">
-                                            <div class="font-medium text-gray-700">{{ employee.name }}</div>
-                                            <div class="text-gray-400">{{ employee.phone ?? 'No phone' }}</div>
-                                        </div>
+                                    <th>
+                                        <UserInformation :user="employee"></UserInformation>
                                     </th>
                                     <td>
                                         {{ employee.schedule }}

@@ -17,4 +17,14 @@ class Income extends Model
         'incomeable_id',
         'incomeable_type',
     ];
+
+    public function incomeable()
+    {
+        return $this->morphTo();
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date('d/m/Y', strtotime($value));
+    }
 }
