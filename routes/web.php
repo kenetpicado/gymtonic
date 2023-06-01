@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\dashboard\CustomerController;
+use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\dashboard\EmployeeController;
 use App\Http\Controllers\dashboard\ExtendPlanController;
 use App\Http\Controllers\dashboard\IncomeController;
@@ -21,12 +22,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/dashboard/customers');
+Route::redirect('/', '/dashboard');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
+        Route::get('', DashboardController::class)->name('index');
         Route::resource('customers', CustomerController::class);
         Route::resource('services', ServiceController::class)->only(['index', 'store', 'update']);
         Route::resource('plans', PlanController::class);
