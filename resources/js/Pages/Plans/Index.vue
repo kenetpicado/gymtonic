@@ -141,12 +141,14 @@ function isPaymentToday(planDate) {
                     <table class="w-full border-collapse bg-white text-left text-sm text-gray-500 mt-4">
                         <thead class="bg-gray-50">
                             <tr>
+                                <th>Plan ID</th>
                                 <th>Customer</th>
                                 <th>End date</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                             <tr v-for="plan in selectedPlans">
+                                <td>{{ plan.id }}</td>
                                 <td>{{ plan.customer }}</td>
                                 <td>{{ plan.end_date }}</td>
                             </tr>
@@ -189,7 +191,7 @@ function isPaymentToday(planDate) {
                         <Checkbox v-model:checked="plan.selected" name="status" />
                     </th>
                     <td>
-                        {{ index + 1 }}
+                        {{ plan.id }}
                     </td>
                     <td>
                         <UserInformation :user="plan.customer" />
