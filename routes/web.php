@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboard\CustomerController;
 use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\dashboard\EmployeeController;
+use App\Http\Controllers\dashboard\ExpenditureController;
 use App\Http\Controllers\dashboard\ExtendPlanController;
 use App\Http\Controllers\dashboard\IncomeHistoryController;
 use App\Http\Controllers\dashboard\IncomeController;
@@ -46,4 +47,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::resource('employees', EmployeeController::class);
 
         Route::resource('incomes', IncomeController::class);
+
+        Route::resource('expenditures', ExpenditureController::class);
     });

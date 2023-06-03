@@ -12,22 +12,25 @@
         </template>
 
         <DialogModal :show="openModal">
-            <!-- <template #title>
+            <template #title>
                 New Payment
             </template>
             <template #content>
-                <InputForm text="Value" v-model="form.value"></InputForm>
+                <div class="grid gap-6">
+                    <InputForm text="Amount" v-model="form.amount"></InputForm>
+                    <InputForm text="Description (optional)" v-model="form.description"></InputForm>
+                    <InputForm text="Date" v-model="form.created_at" type="date"></InputForm>
+                </div>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancel
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveWeight">
+                <PrimaryButton type="button" @click="savePayment">
                     Save
                 </PrimaryButton>
-            </template> -->
+            </template>
         </DialogModal>
-
 
         <TableSection>
             <template #header>
@@ -78,6 +81,7 @@ import { ref } from 'vue';
 import useNotify from '@/Use/notify.js';
 import TableSection from '@/Components/TableSection.vue';
 import useHumanDate from '@/Composables/useHumanDate';
+import { Datep } from '@/Classes/Datep.js';
 
 const props = defineProps({
     employee: {
@@ -91,18 +95,22 @@ const isNew = ref(true);
 const { diffForHumans } = useHumanDate();
 
 const form = useForm({
-    value: null,
-    employee_id: props.employee.id,
+    amount: 0,
+    description: '',
+    concept: 'Pago de salario',
+    expenditureable_type: 'App\\Models\\Employee',
+    expenditureable_id: props.employee.id,
+    created_at: new Datep().format('Y-m-d'),
 })
 
-function saveWeight() {
+function savePayment() {
     if (isNew.value) {
-        form.post(route('dashboard.weights.store'), {
+        form.post(route('dashboard.expenditures.store'), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
                 resetValues();
-                notify.success('Weight added successfully');
+                notify.success('Payment added successfully');
             },
         });
     } else {
@@ -124,22 +132,10 @@ async function editWeight(weight) {
     openModal.value = true;
 }
 
-function removeWeight(id) {
-    notify.confirm(() => {
-        router.delete(route('dashboard.weights.destroy', id), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                notify.success('Weight deleted successfully');
-            },
-        });
-    }, 'Are you sure you want to delete this weight?');
-}
-
 function resetValues() {
     form.reset();
-    openModal.value = false;
     isNew.value = true;
+    openModal.value = false;
 }
 
 </script>

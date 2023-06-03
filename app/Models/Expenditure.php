@@ -9,6 +9,16 @@ class Expenditure extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'amount',
+        'quantity',
+        'concept',
+        'description',
+        'expenditureable_id',
+        'expenditureable_type',
+    ];
+
+
     protected $appends = ['created_at_formatted'];
 
     public function getCreatedAtFormattedAttribute()
