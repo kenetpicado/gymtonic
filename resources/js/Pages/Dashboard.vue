@@ -13,8 +13,7 @@
                     <CardInfo title="Plans" :value="plans_total" />
                     <CardInfo :title="`Incomes ${month}`" :value="`C$ ${incomes_month.total ?? 0}`" />
                     <CardInfo :title="`Expenditures ${month}`" :value="`C$ ${expenditures_month ?? 0}`" />
-                    <CardInfo :title="`Revenue ${month}`"
-                        :value="`C$ ${incomes_month.total ?? 0 - expenditures_month ?? 0}`" />
+                    <CardInfo :title="`Revenue ${month}`" :value="`C$ ${incomes_month.total - expenditures_month}`" />
                     <CardInfo :title="`Discount ${month}`" :value="`C$ ${incomes_month.discount ?? 0}`" />
                 </div>
                 <div class="grid grid-cols-2 gap-6">

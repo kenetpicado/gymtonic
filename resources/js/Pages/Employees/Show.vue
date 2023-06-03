@@ -40,31 +40,24 @@
             </template>
 
             <template #body>
-                <tr v-for="(payment, index) in employee.payments" class="hover:bg-gray-50">
+                <tr v-for="(payment, index) in payments.data" class="hover:bg-gray-50">
                     <td>
                         {{ index + 1 }}
                     </td>
                     <td>
-                        <div class="font-medium mb-1">
-                            <span class="text-gray-700">{{ payment.created_at_formatted }}</span>
-                            <span class="text-gray-400"> ({{ diffForHumans(payment.created_at) }})</span>
-                        </div>
-                        <div class="text-sm">
-                            <div class="font-medium text-gray-700 mb-1">
-                                {{ payment.concept }}
-                            </div>
-                            <div class="text-gray-400" v-if="payment.description">
-                                {{ payment.description }}
-                            </div>
-                        </div>
+                        <ConceptInfo :type="payment" />
                     </td>
                     <td>
                         C$ {{ payment.amount.toLocaleString('en-US') }}
                     </td>
                 </tr>
-                <tr v-if="employee.payments.length == 0">
+                <tr v-if="payments.data.length == 0">
                     <td colspan="4" class="text-center">No data to display</td>
                 </tr>
+            </template>
+
+            <template #paginator>
+                <ThePaginator :links="payments.links"></ThePaginator>
             </template>
         </TableSection>
     </AppLayout>
@@ -76,15 +69,19 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import useNotify from '@/Use/notify.js';
 import TableSection from '@/Components/TableSection.vue';
-import useHumanDate from '@/Composables/useHumanDate';
 import { Datep } from '@/Classes/Datep.js';
+import ConceptInfo from '@/Components/ConceptInfo.vue';
+import ThePaginator from '@/Components/ThePaginator.vue';
 
 const props = defineProps({
     employee: {
+        type: Object, required: true
+    },
+    payments: {
         type: Object, required: true
     }
 })
@@ -92,7 +89,6 @@ const props = defineProps({
 const openModal = ref(false)
 const notify = useNotify();
 const isNew = ref(true);
-const { diffForHumans } = useHumanDate();
 
 const form = useForm({
     amount: 0,

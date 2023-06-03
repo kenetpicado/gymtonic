@@ -34,20 +34,7 @@
                             :user="income.incomeable" />
                     </td>
                     <td>
-                        <div class="text-sm">
-                            <div class="font-medium mb-1">
-                                <span class="text-gray-700">{{ income.created_at_formatted }}</span>
-                                <span class="text-gray-400"> ({{ diffForHumans(income.created_at) }})</span>
-                            </div>
-                            <div class="text-sm">
-                                <div class="font-medium text-gray-700 mb-1">
-                                    {{ income.concept }}
-                                </div>
-                                <div class="text-gray-400" v-if="income.description">
-                                    {{ income.description }}
-                                </div>
-                            </div>
-                        </div>
+                        <ConceptInfo :type="income" />
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">C$ {{ income.amount.toLocaleString('en-US') }}</div>
@@ -83,14 +70,12 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { defineProps } from 'vue';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
-import useHumanDate from '@/Composables/useHumanDate';
+import ConceptInfo from '@/Components/ConceptInfo.vue';
 
 const props = defineProps({
     incomes: {
         type: Object, required: true
     }
 })
-
-const { diffForHumans } = useHumanDate();
 
 </script>

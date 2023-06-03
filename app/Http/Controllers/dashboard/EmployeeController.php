@@ -19,7 +19,8 @@ class EmployeeController extends Controller
     public function show(Employee $employee)
     {
         return inertia('Employees/Show', [
-            'employee' => $employee->load('payments'),
+            'employee' => $employee,
+            'payments' => $employee->payments()->paginate(10),
         ]);
     }
 
