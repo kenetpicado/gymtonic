@@ -71,6 +71,8 @@ const props = defineProps({
                             @click="$inertia.visit(route('dashboard.customers.show', customer.id))"></i>
                         <i class="fas fa-edit mr-3" role="button"
                             @click="$inertia.visit(route('dashboard.customers.edit', customer.id))"></i>
+                        <i class="fas fa-history mr-3" role="button"
+                            @click="$inertia.visit(route('dashboard.customers.history', customer.id))"></i>
                     </td>
                 </tr>
                 <tr v-if="customers.data.length == 0">

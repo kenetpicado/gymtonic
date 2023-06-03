@@ -37,6 +37,6 @@ class Customer extends Model
 
     public function incomes()
     {
-        return $this->morphMany(Income::class, 'incomeable');
+        return $this->morphMany(Income::class, 'incomeable')->orderBy('id','desc');
     }
 }

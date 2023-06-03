@@ -11,12 +11,15 @@ class DashboardService
         $firstDayOfMonth = now()->firstOfMonth()->format('Y-m-d');
 
         return [
-            'plans_count' => DB::table('plans')->where('end_date', '>=', now()->format('Y-m-d'))->count(),
-
             'incomes_month' => DB::table('incomes')
                 ->where('created_at', '>=', $firstDayOfMonth)
                 ->select(DB::raw('SUM(amount * quantity) as total, SUM(discount) as discount'))
                 ->first(),
+
+            'plans' => DB::table('plans')
+                ->where('end_date', '>=', now()->format('Y-m-d'))
+                ->groupBy('service_id')
+                ->get(['service_id', DB::raw('count(*) as total')]),
 
             'expenditures_month' => DB::table('expenditures')
                 ->where('created_at', '>=', $firstDayOfMonth)

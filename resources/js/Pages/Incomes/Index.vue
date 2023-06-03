@@ -21,9 +21,7 @@
                 <th>Model</th>
                 <th>Concept</th>
                 <th>Amount</th>
-                <th>Quantity</th>
                 <th>Total</th>
-                <th>Created</th>
             </template>
 
             <template #body>
@@ -37,24 +35,21 @@
                     </td>
                     <td>
                         <div class="text-sm">
-                            <div class="font-medium text-gray-700">{{ income.concept }}</div>
-                            <div class="text-gray-400">{{ income.description ?? '-' }}</div>
+                            <div class="font-medium text-gray-700 mb-1">{{ income.created_at }} - {{ income.concept }}</div>
+                            <div class="text-gray-400" v-if="income.description">{{ income.description }}</div>
                         </div>
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">C$ {{ income.amount }}</div>
-                        <div class="text-gray-400" v-if="income.discount">
+                        <div class="text-red-400 mt-1" v-if="income.discount">
                             Discount: C$ {{ income.discount }}
+                        </div>
+                        <div class="text-gray-400" v-if="income.quantity > 1">
+                            Quantity: {{ income.quantity }}
                         </div>
                     </td>
                     <td>
-                        {{ income.quantity }}
-                    </td>
-                    <td>
-                        C$ {{ income.amount * income.quantity - income.discount }}
-                    </td>
-                    <td>
-                        {{ income.created_at }}
+                        C$ {{ income.amount * income.quantity }}
                     </td>
                 </tr>
                 <tr v-if="incomes.data.length == 0">

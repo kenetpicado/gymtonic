@@ -13,6 +13,7 @@ class Income extends Model
         'amount',
         'discount',
         'concept',
+        'quantity',
         'description',
         'incomeable_id',
         'incomeable_type',
