@@ -35,21 +35,31 @@
                     </td>
                     <td>
                         <div class="text-sm">
-                            <div class="font-medium text-gray-700 mb-1">{{ income.created_at }} - {{ income.concept }}</div>
-                            <div class="text-gray-400" v-if="income.description">{{ income.description }}</div>
+                            <div class="font-medium mb-1">
+                                <span class="text-gray-700">{{ income.created_at_formatted }}</span>
+                                <span class="text-gray-400"> ({{ diffForHumans(income.created_at) }})</span>
+                            </div>
+                            <div class="text-sm">
+                                <div class="font-medium text-gray-700 mb-1">
+                                    {{ income.concept }}
+                                </div>
+                                <div class="text-gray-400" v-if="income.description">
+                                    {{ income.description }}
+                                </div>
+                            </div>
                         </div>
                     </td>
                     <td>
-                        <div class="font-medium text-gray-700">C$ {{ income.amount }}</div>
+                        <div class="font-medium text-gray-700">C$ {{ income.amount.toLocaleString('en-US') }}</div>
                         <div class="text-red-400 mt-1" v-if="income.discount">
-                            Discount: C$ {{ income.discount }}
+                            Discount: C$ {{ income.discount.toLocaleString('en-US') }}
                         </div>
                         <div class="text-gray-400" v-if="income.quantity > 1">
                             Quantity: {{ income.quantity }}
                         </div>
                     </td>
                     <td>
-                        C$ {{ income.amount * income.quantity }}
+                        C$ {{ (income.amount * income.quantity).toLocaleString('en-US') }}
                     </td>
                 </tr>
                 <tr v-if="incomes.data.length == 0">
@@ -73,11 +83,14 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { defineProps } from 'vue';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
+import useHumanDate from '@/Composables/useHumanDate';
 
 const props = defineProps({
     incomes: {
         type: Object, required: true
     }
 })
+
+const { diffForHumans } = useHumanDate();
 
 </script>

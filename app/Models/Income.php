@@ -9,6 +9,10 @@ class Income extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'created_at_formatted',
+    ];
+
     protected $fillable = [
         'amount',
         'discount',
@@ -24,8 +28,8 @@ class Income extends Model
         return $this->morphTo();
     }
 
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAtFormattedAttribute()
     {
-        return date('d/m/Y', strtotime($value));
+        return $this->created_at->format('d/m/Y');
     }
 }

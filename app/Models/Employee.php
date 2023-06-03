@@ -14,4 +14,9 @@ class Employee extends Model
         'phone',
         'schedule',
     ];
+
+    public function payments()
+    {
+        return $this->morphMany(Expenditure::class, 'expenditureable')->orderBy('created_at', 'desc');
+    }
 }
