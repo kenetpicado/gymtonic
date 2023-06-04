@@ -91,7 +91,18 @@ const props = defineProps({
 
 const notify = useNotify();
 const prices = ref([])
-const today = new Datep().format('Y-m-d');
+const TODAY = new Datep().format('Y-m-d');
+
+const form = useForm({
+    id: props.plan?.id ?? null,
+    amount: props.plan?.amount ?? 0,
+    period: props.plan?.period ?? null,
+    start_date: props.isCurrentActive ? props.plan?.start_date : TODAY,
+    end_date: props.plan?.end_date ?? null,
+    discount: props.plan?.discount ?? 0,
+    note: props.plan?.note ?? '',
+    service_id: props.plan?.service_id ?? props.services[0].id,
+});
 
 const total = computed(() => {
     if (form.period && prices.value.length > 0) {
@@ -127,17 +138,6 @@ const newEndDate = computed(() => {
 const newEndDateLabel = computed(() => {
     const [year, month, day] = newEndDate.value.split('-');
     return `${day}/${month}/${year}`;
-});
-
-const form = useForm({
-    id: props.plan?.id ?? null,
-    amount: props.plan?.amount ?? 0,
-    period: props.plan?.period ?? null,
-    start_date: props.isCurrentActive ? props.plan?.start_date : today,
-    end_date: props.plan?.end_date ?? null,
-    discount: props.plan?.discount ?? 0,
-    note: props.plan?.note ?? '',
-    service_id: props.plan?.service_id ?? props.services[0].id,
 });
 
 watch(() => form.service_id, (value) => {

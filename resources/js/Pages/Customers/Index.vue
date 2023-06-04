@@ -1,20 +1,3 @@
-<script setup>
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SearchComponent from '@/Components/SearchComponent.vue';
-import ThePaginator from '@/Components/ThePaginator.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { defineProps } from 'vue';
-import UserInformation from '@/Components/UserInformation.vue';
-import TableSection from '@/Components/TableSection.vue';
-
-const props = defineProps({
-    customers: {
-        type: Object, required: true
-    }
-})
-
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -51,7 +34,7 @@ const props = defineProps({
                         <UserInformation :user="customer" />
                     </th>
                     <td>
-                        <span :class="{ 'badge-blue': customer.gender == 'M', 'badge-pink': customer.gender == 'F' }">
+                        <span :class="[customer.gender == 'F' ? 'badge-pink' : 'badge-blue']">
                             {{ customer.gender }}
                         </span>
                     </td>
@@ -62,17 +45,23 @@ const props = defineProps({
                             Active
                         </span>
                         <span v-else class="badge-gray">
-                            <span class="dot-gray"></span>
                             Inactive
                         </span>
                     </td>
                     <td>
-                        <i class="fas fa-eye mr-3" role="button"
-                            @click="$inertia.visit(route('dashboard.customers.show', customer.id))"></i>
-                        <i class="fas fa-edit mr-3" role="button"
-                            @click="$inertia.visit(route('dashboard.customers.edit', customer.id))"></i>
-                        <i class="fas fa-history mr-3" role="button"
-                            @click="$inertia.visit(route('dashboard.customers.history', customer.id))"></i>
+                        <div class="flex gap-2">
+                            <Link :href="route('dashboard.customers.show', customer.id)">
+                            <IconEye />
+                            </Link>
+
+                            <Link :href="route('dashboard.customers.edit', customer.id)">
+                            <IconPencil />
+                            </Link>
+
+                            <Link :href="route('dashboard.customers.history', customer.id)">
+                            <IconHistory />
+                            </Link>
+                        </div>
                     </td>
                 </tr>
                 <tr v-if="customers.data.length == 0">
@@ -87,3 +76,22 @@ const props = defineProps({
 
     </AppLayout>
 </template>
+
+<script setup>
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SearchComponent from '@/Components/SearchComponent.vue';
+import ThePaginator from '@/Components/ThePaginator.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { defineProps } from 'vue';
+import UserInformation from '@/Components/UserInformation.vue';
+import TableSection from '@/Components/TableSection.vue';
+import { IconPencil, IconEye, IconHistory } from '@tabler/icons-vue';
+import { Link } from '@inertiajs/vue3';
+
+const props = defineProps({
+    customers: {
+        type: Object, required: true
+    }
+})
+
+</script>

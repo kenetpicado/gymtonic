@@ -1,71 +1,3 @@
-<script setup>
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
-import DialogModal from '@/Components/DialogModal.vue';
-import InputForm from '@/Components/Form/InputForm.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
-import useNotify from '@/Use/notify.js';
-import UserInformation from '@/Components/UserInformation.vue';
-import TableSection from '@/Components/TableSection.vue';
-
-const props = defineProps({
-    employees: {
-        type: Object, required: true
-    }
-})
-
-const openModal = ref(false)
-const isNew = ref(true);
-const notify = useNotify();
-
-const form = useForm({
-    id: null,
-    name: '',
-    phone: '',
-    schedule: '',
-})
-
-function saveEmployee() {
-    if (isNew.value) {
-        form.post(route('dashboard.employees.store'), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                notify.success('Employee created successfully')
-                resetValues()
-            },
-        });
-    } else {
-        form.put(route('dashboard.employees.update', form.id), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                notify.success('Employee updated successfully')
-                resetValues()
-            },
-        });
-    }
-}
-
-function resetValues() {
-    form.reset();
-    isNew.value = true;
-    openModal.value = false;
-}
-
-function editEmployee(employee) {
-    form.id = employee.id;
-    form.name = employee.name;
-    form.phone = employee.phone;
-    form.schedule = employee.schedule;
-    isNew.value = false;
-    openModal.value = true;
-}
-
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -119,10 +51,13 @@ function editEmployee(employee) {
                         {{ employee.schedule }}
                     </td>
                     <td>
-                        <i class="fas fa-eye mr-3" role="button"
-                            @click="$inertia.visit(route('dashboard.employees.show', employee.id))"></i>
+                        <div class="flex gap-2">
+                            <Link :href="route('dashboard.employees.show', employee.id)">
+                            <IconEye />
+                            </Link>
 
-                        <i class="fas fa-edit mr-3" role="button" @click="editEmployee(employee)"></i>
+                            <IconPencil @click="editEmployee(employee)" role="button" />
+                        </div>
                     </td>
                 </tr>
                 <tr v-if="employees.length == 0">
@@ -132,3 +67,73 @@ function editEmployee(employee) {
         </TableSection>
     </AppLayout>
 </template>
+
+<script setup>
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { ref } from 'vue';
+import DialogModal from '@/Components/DialogModal.vue';
+import InputForm from '@/Components/Form/InputForm.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { useForm } from '@inertiajs/vue3';
+import useNotify from '@/Use/notify.js';
+import UserInformation from '@/Components/UserInformation.vue';
+import TableSection from '@/Components/TableSection.vue';
+import { IconPencil, IconEye } from '@tabler/icons-vue';
+import { Link } from '@inertiajs/vue3';
+
+const props = defineProps({
+    employees: {
+        type: Object, required: true
+    }
+})
+
+const openModal = ref(false)
+const isNew = ref(true);
+const notify = useNotify();
+
+const form = useForm({
+    id: null,
+    name: '',
+    phone: '',
+    schedule: '',
+})
+
+function editEmployee(employee) {
+    form.id = employee.id;
+    form.name = employee.name;
+    form.phone = employee.phone;
+    form.schedule = employee.schedule;
+    isNew.value = false;
+    openModal.value = true;
+}
+
+function saveEmployee() {
+    if (isNew.value) {
+        form.post(route('dashboard.employees.store'), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                notify.success('Employee created successfully')
+                resetValues()
+            },
+        });
+    } else {
+        form.put(route('dashboard.employees.update', form.id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                notify.success('Employee updated successfully')
+                resetValues()
+            },
+        });
+    }
+}
+
+function resetValues() {
+    form.reset();
+    isNew.value = true;
+    openModal.value = false;
+}
+
+</script>

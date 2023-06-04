@@ -2,7 +2,7 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ customer.name }} | Income History
+                {{ customer.name }} | History
             </h2>
         </template>
 
@@ -26,9 +26,7 @@
                         {{ income.description }}
                     </td>
                     <td>
-                        <div class="badge-blue">
-                            {{ income.created_at }}
-                        </div>
+                        <DateColumn :date="income.created_at" />
                     </td>
                 </tr>
                 <tr v-if="customer.incomes.length == 0">
@@ -43,6 +41,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
+import DateColumn from '@/Components/DateColumn.vue';
 
 const props = defineProps({
     customer: {

@@ -18,9 +18,6 @@ const props = defineProps({
     plans: {
         type: Object, required: true
     },
-    today: {
-        type: String, required: true
-    },
 })
 
 const checkBox = ref(true);
@@ -28,6 +25,7 @@ const openModal = ref(false);
 const days = ref(null);
 const notify = useNotify();
 const selectedPlans = ref([]);
+const TODAY = new Datep().format('Y-m-d');
 
 const queryParams = reactive({
     search: '',
@@ -115,7 +113,11 @@ function resetValues() {
 }
 
 function isPaymentToday(planDate) {
-    return props.today == new Datep(planDate).addDays(2).format('Y-m-d');
+    return TODAY == new Datep(planDate).addDays(2).format('Y-m-d');
+}
+
+function formatDate(date) {
+    return new Datep(date).format('d/m/Y');
 }
 
 </script>
@@ -177,7 +179,6 @@ function isPaymentToday(planDate) {
 
             <template #header>
                 <th></th>
-                <th>ID</th>
                 <th>Customer</th>
                 <th>Service</th>
                 <th>Period</th>
@@ -191,9 +192,6 @@ function isPaymentToday(planDate) {
                         <Checkbox v-model:checked="plan.selected" name="status" />
                     </th>
                     <td>
-                        {{ plan.id }}
-                    </td>
-                    <td>
                         <UserInformation :user="plan.customer" />
                     </td>
                     <td>
@@ -204,15 +202,15 @@ function isPaymentToday(planDate) {
                     </td>
                     <td>
                         <span class="badge-gray">
-                            {{ plan.start_date_formated }}
+                            {{ formatDate(plan.start_date) }}
                         </span>
                         <span class="badge-blue" @click="openModalToAddDays(plan)" role="button">
-                            {{ plan.end_date_formated }}
+                            {{ formatDate(plan.end_date) }}
                         </span>
                     </td>
                     <td>
                         <div class="flex items-center">
-                            <span v-if="plan.end_date == today" class="badge-danger">
+                            <span v-if="plan.end_date == TODAY" class="badge-danger">
                                 Last Day
                             </span>
                             <span v-else-if="checkBox" class="badge-success">

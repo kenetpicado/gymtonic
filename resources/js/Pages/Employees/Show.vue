@@ -5,7 +5,7 @@
                 {{ employee.name }} | Payments
             </h2>
             <div>
-                <PrimaryButton type="button" @click="openModal = true">
+                <PrimaryButton payment="button" @click="openModal = true">
                     New
                 </PrimaryButton>
             </div>
@@ -19,14 +19,14 @@
                 <div class="grid gap-6">
                     <InputForm text="Amount" v-model="form.amount"></InputForm>
                     <InputForm text="Description (optional)" v-model="form.description"></InputForm>
-                    <InputForm text="Date" v-model="form.created_at" type="date"></InputForm>
+                    <InputForm text="Date" v-model="form.created_at" payment="date"></InputForm>
                 </div>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancel
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="savePayment">
+                <PrimaryButton payment="button" @click="savePayment">
                     Save
                 </PrimaryButton>
             </template>
@@ -35,6 +35,7 @@
         <TableSection>
             <template #header>
                 <th>ID</th>
+                <th>Date</th>
                 <th>Concept</th>
                 <th>Amount</th>
             </template>
@@ -45,10 +46,20 @@
                         {{ index + 1 }}
                     </td>
                     <td>
-                        <ConceptInfo :type="payment" />
+                        <DateColumn :date="payment.created_at"/>
                     </td>
+                    <th>
+                        <div class="text-sm">
+                            <div class="font-medium text-gray-700 mb-1">
+                                {{ payment.concept }}
+                            </div>
+                            <div class="text-gray-400" v-if="payment.description">
+                                {{ payment.description }}
+                            </div>
+                        </div>
+                    </th>
                     <td>
-                        C$ {{ payment.amount.toLocaleString('en-US') }}
+                        <span class="badge-blue">C$ {{ payment.amount.toLocaleString('en-US') }}</span>
                     </td>
                 </tr>
                 <tr v-if="payments.data.length == 0">
@@ -74,15 +85,15 @@ import { ref } from 'vue';
 import useNotify from '@/Use/notify.js';
 import TableSection from '@/Components/TableSection.vue';
 import { Datep } from '@/Classes/Datep.js';
-import ConceptInfo from '@/Components/ConceptInfo.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
+import DateColumn from '@/Components/DateColumn.vue';
 
 const props = defineProps({
     employee: {
-        type: Object, required: true
+        payment: Object, required: true
     },
     payments: {
-        type: Object, required: true
+        payment: Object, required: true
     }
 })
 
@@ -94,7 +105,7 @@ const form = useForm({
     amount: 0,
     description: '',
     concept: 'Pago de salario',
-    expenditureable_type: 'App\\Models\\Employee',
+    expenditureable_payment: 'App\\Models\\Employee',
     expenditureable_id: props.employee.id,
     created_at: new Datep().format('Y-m-d'),
 })
@@ -119,13 +130,6 @@ function savePayment() {
             },
         });
     }
-}
-
-async function editWeight(weight) {
-    form.id = weight.id;
-    form.value = weight.value;
-    isNew.value = false;
-    openModal.value = true;
 }
 
 function resetValues() {

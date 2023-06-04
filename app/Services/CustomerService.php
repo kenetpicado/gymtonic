@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Models\Customer;
-use App\Models\Income;
 use App\Models\Plan;
 use App\Models\Service;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class CustomerService
 {
-    public function index($request): \Illuminate\Pagination\LengthAwarePaginator
+    public function index($request): LengthAwarePaginator
     {
         return Customer::query()
             ->when($request->search, function ($query, $search) {
@@ -21,7 +21,7 @@ class CustomerService
                     ->where('end_date', '>', now()),
             ])
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate(10);
     }
 
     public function create(): array

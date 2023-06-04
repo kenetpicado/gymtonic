@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardService
 {
-    public function index()
+    public function index(): array
     {
         $firstDayOfMonth = now()->firstOfMonth()->format('Y-m-d');
 

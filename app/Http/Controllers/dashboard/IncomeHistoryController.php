@@ -10,7 +10,7 @@ class IncomeHistoryController extends Controller
 {
     public function __invoke(Customer $customer)
     {
-    return inertia('Customers/History', [
+        return inertia('Customers/History', [
             'customer' => $customer->load('incomes'),
         ]);
     }

@@ -28,61 +28,55 @@
             </template>
         </DialogModal>
 
-        <div class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="overflow-hidden rounded-lg m-0">
-                        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Weight (lbs)</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                                <tr v-for="(weight, index) in customer.weights" class="hover:bg-gray-50">
-                                    <td>
-                                        {{ index + 1 }}
-                                    </td>
-                                    <td>
-                                        <span class="badge-blue">
-                                            {{ weight.value }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {{ weight.created_at_format }}
-                                        <div class="text-sm mt-1">
-                                            ({{ weight.created_at_humman }})
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <i class="fas fa-edit mr-3" role="button" @click="editWeight(weight)"></i>
-                                        <i class="fas fa-trash mr-3" role="button" @click="removeWeight(weight.id)"></i>
-                                    </td>
-                                </tr>
-                                <tr v-if="customer.weights.length == 0">
-                                    <td colspan="4" class="text-center">No data to display</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <TableSection>
+            <template #header>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Weight (lbs)</th>
+                <th>Actions</th>
+            </template>
+
+            <template #body>
+                <tr v-for="(weight, index) in customer.weights" class="hover:bg-gray-50">
+                    <td>
+                        {{ index + 1 }}
+                    </td>
+                    <td>
+                        <DateColumn :date="weight.created_at" />
+                    </td>
+                    <td>
+                        <span class="badge-blue">
+                            {{ weight.value }} lbs
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <IconPencil @click="editWeight(weight)" role="button"/>
+
+                            <IconTrash @click="removeWeight(weight.id)" role="button"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr v-if="customer.weights.length == 0">
+                    <td colspan="4" class="text-center">No data to display</td>
+                </tr>
+            </template>
+        </TableSection>
     </AppLayout>
 </template>
 
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { router, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import TableSection from '@/Components/TableSection.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 import useNotify from '@/Use/notify.js';
+import { router, useForm } from '@inertiajs/vue3';
+import { IconPencil, IconTrash } from '@tabler/icons-vue';
+import { ref } from 'vue';
+import DateColumn from '@/Components/DateColumn.vue';
 
 const props = defineProps({
     customer: {

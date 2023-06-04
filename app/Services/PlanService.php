@@ -6,10 +6,11 @@ use App\Models\Income;
 use App\Models\Plan;
 use App\Models\Service;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlanService
 {
-    public function index($request)
+    public function index($request): LengthAwarePaginator
     {
         return Plan::with(['customer:id,name', 'service'])
             ->when(
@@ -24,7 +25,7 @@ class PlanService
             ->paginate(10);
     }
 
-    public function edit($plan)
+    public function edit($plan): array
     {
         return [
             'services' => Service::with('prices')->get(['id', 'name']),
@@ -33,7 +34,7 @@ class PlanService
         ];
     }
 
-    public function update(array $request, Plan $plan)
+    public function update(array $request, Plan $plan): void
     {
         $plan->update($request);
 

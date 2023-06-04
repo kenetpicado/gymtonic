@@ -58,6 +58,10 @@ const form = useForm({
 })
 
 const total = computed(() => {
+    if (isNaN(form.amount) || isNaN(form.quantity)) {
+        return 0
+    }
+
     return form.amount * form.quantity - form.discount
 })
 

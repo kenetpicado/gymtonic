@@ -17,19 +17,19 @@
             </template>
 
             <template #header>
-                <th>ID</th>
                 <th>Model</th>
                 <th>Concept</th>
                 <th>Amount</th>
                 <th>Total</th>
+                <th>Date</th>
             </template>
 
             <template #body>
                 <tr v-for="(income, index) in incomes.data" class="hover:bg-gray-50">
                     <td>
-                        {{ income.id }}
-                    </td>
-                    <td>
+                        <span v-if="!income.incomeable_type" class="text-sm text-gray-400 italic">
+                            None
+                        </span>
                         <UserInformation v-if="income.incomeable_type == 'App\\Models\\Customer'"
                             :user="income.incomeable" />
                     </td>
@@ -37,16 +37,23 @@
                         <ConceptInfo :type="income" />
                     </td>
                     <td>
-                        <div class="font-medium text-gray-700">C$ {{ income.amount.toLocaleString('en-US') }}</div>
-                        <div class="text-red-400 mt-1" v-if="income.discount">
-                            Discount: C$ {{ income.discount.toLocaleString('en-US') }}
+                        <div class="font-medium text-gray-700">
+                            C$ {{ income.amount.toLocaleString('en-US') }}
+                        </div>
+                        <div class="text-red-400 mt-1 text-xs" v-if="income.discount">
+                            -C$ {{ income.discount.toLocaleString('en-US') }}
                         </div>
                         <div class="text-gray-400" v-if="income.quantity > 1">
-                            Quantity: {{ income.quantity }}
+                            Qty: {{ income.quantity }}
                         </div>
                     </td>
                     <td>
-                        C$ {{ (income.amount * income.quantity).toLocaleString('en-US') }}
+                        <span class="badge-blue">
+                            C$ {{ (income.amount * income.quantity).toLocaleString('en-US') }}
+                        </span>
+                    </td>
+                    <td>
+                        <DateColumn :date="income.created_at" />
                     </td>
                 </tr>
                 <tr v-if="incomes.data.length == 0">
@@ -71,6 +78,7 @@ import { defineProps } from 'vue';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInfo from '@/Components/ConceptInfo.vue';
+import DateColumn from '@/Components/DateColumn.vue';
 
 const props = defineProps({
     incomes: {
