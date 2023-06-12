@@ -76,11 +76,11 @@ import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
-import useNotify from '@/Use/notify.js';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
 import { IconPencil, IconEye } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
+import { toast } from "@/Use/toast.js";
 
 const props = defineProps({
     employees: {
@@ -90,7 +90,6 @@ const props = defineProps({
 
 const openModal = ref(false)
 const isNew = ref(true);
-const notify = useNotify();
 
 const form = useForm({
     id: null,
@@ -114,7 +113,7 @@ function saveEmployee() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                notify.success('Employee created successfully')
+                toast.success('Employee created successfully')
                 resetValues()
             },
         });
@@ -123,7 +122,7 @@ function saveEmployee() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                notify.success('Employee updated successfully')
+                toast.success('Employee updated successfully')
                 resetValues()
             },
         });
@@ -132,6 +131,7 @@ function saveEmployee() {
 
 function resetValues() {
     form.reset();
+    form.clearErrors();
     isNew.value = true;
     openModal.value = false;
 }

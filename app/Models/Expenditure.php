@@ -16,13 +16,6 @@ class Expenditure extends Model
         'description',
         'expenditureable_id',
         'expenditureable_type',
+        'created_at'
     ];
-
-
-    protected $appends = ['created_at_formatted'];
-
-    public function getCreatedAtFormattedAttribute()
-    {
-        return $this->created_at->format('d/m/Y');
-    }
 }

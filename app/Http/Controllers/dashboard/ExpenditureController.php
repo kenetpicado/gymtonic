@@ -22,4 +22,11 @@ class ExpenditureController extends Controller
 
         return back();
     }
+
+    public function update(ExpenditureRequest $request, $expenditure_id)
+    {
+        Expenditure::where('id', $expenditure_id)->update($request->validated());
+
+        return back();
+    }
 }

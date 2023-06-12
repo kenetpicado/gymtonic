@@ -19,7 +19,7 @@
                 <div class="grid gap-6">
                     <InputForm text="Amount" v-model="form.amount"></InputForm>
                     <InputForm text="Description (optional)" v-model="form.description"></InputForm>
-                    <InputForm text="Date" v-model="form.created_at" payment="date"></InputForm>
+                    <InputForm text="Date" v-model="form.created_at" type="date"></InputForm>
                 </div>
             </template>
             <template #footer>
@@ -38,6 +38,7 @@
                 <th>Date</th>
                 <th>Concept</th>
                 <th>Amount</th>
+                <th>Actions</th>
             </template>
 
             <template #body>
@@ -61,6 +62,9 @@
                     <td>
                         <span class="badge-blue">C$ {{ payment.amount.toLocaleString('en-US') }}</span>
                     </td>
+                    <td>
+                        <IconPencil @click="editPayment(payment)" role="button"/>
+                    </td>
                 </tr>
                 <tr v-if="payments.data.length == 0">
                     <td colspan="4" class="text-center">No data to display</td>
@@ -82,11 +86,12 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import useNotify from '@/Use/notify.js';
+import { toast } from "@/Use/toast.js";
 import TableSection from '@/Components/TableSection.vue';
 import { Datep } from '@/Classes/Datep.js';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import DateColumn from '@/Components/DateColumn.vue';
+import { IconPencil } from '@tabler/icons-vue';
 
 const props = defineProps({
     employee: {
@@ -98,17 +103,26 @@ const props = defineProps({
 })
 
 const openModal = ref(false)
-const notify = useNotify();
 const isNew = ref(true);
 
 const form = useForm({
     amount: 0,
     description: '',
     concept: 'Pago de salario',
-    expenditureable_payment: 'App\\Models\\Employee',
+    expenditureable_type: 'App\\Models\\Employee',
     expenditureable_id: props.employee.id,
     created_at: new Datep().format('Y-m-d'),
 })
+
+function editPayment(payment) {
+    isNew.value = false;
+    form.id = payment.id;
+    form.amount = payment.amount;
+    form.description = payment.description;
+    form.concept = payment.concept;
+    form.created_at = new Datep(payment.created_at).format('Y-m-d');
+    openModal.value = true;
+}
 
 function savePayment() {
     if (isNew.value) {
@@ -117,16 +131,16 @@ function savePayment() {
             preserveState: true,
             onSuccess: () => {
                 resetValues();
-                notify.success('Payment added successfully');
-            },
+                toast.success('Payment added successfully');
+            }
         });
     } else {
-        form.put(route('dashboard.weights.update', form.id), {
+        form.put(route('dashboard.expenditures.update', form.id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
                 resetValues();
-                notify.success('Weight updated successfully');
+                toast.success('Payment updated successfully');
             },
         });
     }
@@ -134,6 +148,7 @@ function savePayment() {
 
 function resetValues() {
     form.reset();
+    form.clearErrors();
     isNew.value = true;
     openModal.value = false;
 }

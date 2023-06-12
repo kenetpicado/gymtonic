@@ -12,7 +12,7 @@ class EmployeeController extends Controller
     public function index()
     {
         return inertia('Employees/Index', [
-            'employees' => Employee::all(),
+            'employees' => Employee::all(['id', 'name', 'phone', 'schedule']),
         ]);
     }
 
