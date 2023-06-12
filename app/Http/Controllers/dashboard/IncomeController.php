@@ -12,7 +12,7 @@ class IncomeController extends Controller
     public function index()
     {
         return inertia('Incomes/Index', [
-            'incomes' => Income::orderBy('id','desc')->with('incomeable')->paginate(10)
+            'incomes' => Income::orderBy('id','desc')->with('incomeable:id,name')->paginate(10)
         ]);
     }
 

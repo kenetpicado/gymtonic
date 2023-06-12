@@ -72,7 +72,7 @@
                         </span>
                     </td>
                     <td>
-                        <i class="fas fa-edit mr-3" role="button" @click="edit(service)"></i>
+                        <IconPencil role="button" @click="editService(service)" />
                     </td>
                 </tr>
             </template>
@@ -95,8 +95,9 @@ import { ref } from 'vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import Checkbox from '@/Components/Checkbox.vue';
-import useNotify from '@/Use/notify.js';
+import { toast } from '@/Use/toast.js';
 import TableSection from '@/Components/TableSection.vue';
+import { IconPencil } from '@tabler/icons-vue';
 
 const props = defineProps({
     services: {
@@ -108,7 +109,6 @@ const props = defineProps({
     }
 })
 
-const notify = useNotify()
 const openModal = ref(false)
 const isNew = ref(true)
 
@@ -119,7 +119,7 @@ const form = useForm({
     prices: props.periods,
 });
 
-async function edit(service) {
+async function editService(service) {
     form.id = service.id
     form.name = service.name
     form.is_active = Boolean(service.is_active)
@@ -134,6 +134,7 @@ async function edit(service) {
 
 function resetValues() {
     form.reset()
+    form.clearErrors()
     isNew.value = true
     openModal.value = false
 }
@@ -146,7 +147,7 @@ function saveService() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                notify.success('Service created successfully')
+                toast.success('Service created successfully')
                 resetValues()
             },
         });
@@ -155,7 +156,7 @@ function saveService() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                notify.success('Service updated successfully')
+                toast.success('Service updated successfully')
                 resetValues()
             },
         });

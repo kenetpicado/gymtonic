@@ -17,7 +17,7 @@
             </template>
 
             <template #header>
-                <th>Model</th>
+                <th>Type</th>
                 <th>Concept</th>
                 <th>Amount</th>
                 <th>Total</th>
@@ -38,7 +38,7 @@
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
-                            C$ {{ income.amount.toLocaleString('en-US') }}
+                            C$ {{ (income.amount + income.discount).toLocaleString('en-US') }}
                         </div>
                         <div class="text-red-400 mt-1 text-xs" v-if="income.discount">
                             -C$ {{ income.discount.toLocaleString('en-US') }}

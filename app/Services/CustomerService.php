@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Customer;
-use App\Models\Plan;
 use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 
@@ -48,7 +47,7 @@ class CustomerService
     {
         $customer = Customer::create($request);
 
-        (new PlanService)->updateOrCreate($request + ['customer_id' => $customer->id]);
+        PlanService::updateOrCreate($request + ['customer_id' => $customer->id]);
     }
 
     public function edit($customer): array
@@ -64,7 +63,7 @@ class CustomerService
     {
         $customer->update($request);
 
-        $plan = (new PlanService)->updateOrCreate($request + ['customer_id' => $customer->id]);
+        $plan = PlanService::updateOrCreate($request + ['customer_id' => $customer->id]);
 
         $income = $customer->incomes()->latest()->first();
 

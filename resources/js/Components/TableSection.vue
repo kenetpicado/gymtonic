@@ -5,6 +5,7 @@
                 <slot name="topbar" />
             </div>
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <slot name="options" />
                 <div class="overflow-hidden rounded-lg m-0">
                     <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
                         <thead class="bg-gray-50">

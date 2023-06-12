@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Income;
 use App\Models\Plan;
 use App\Models\Service;
-use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlanService
@@ -48,7 +47,7 @@ class PlanService
         ]);
     }
 
-    public function updateOrCreate($request): Plan
+    public static function updateOrCreate($request): Plan
     {
         return Plan::updateOrCreate([
             'customer_id' => $request['customer_id']

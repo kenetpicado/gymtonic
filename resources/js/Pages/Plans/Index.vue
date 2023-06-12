@@ -3,7 +3,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import SearchComponent from '@/Components/SearchComponent.vue';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Checkbox from '@/Components/Checkbox.vue';
 import DialogModal from '@/Components/DialogModal.vue';
@@ -67,6 +67,10 @@ function firstSelectedPlans() {
         })
 }
 
+const atLeastOnePlanSelected = computed(() => {
+    return props.plans.data.some((plan) => plan.selected);
+})
+
 function openModalToAddDays() {
     firstSelectedPlans()
 
@@ -128,7 +132,13 @@ function formatDate(date) {
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
                 {{ checkBox ? 'Active Plans' : 'Expired Plans' }}
             </h2>
-            <div>
+
+            <div class="flex gap-2 items-center">
+                <div v-show="atLeastOnePlanSelected">
+                    <PrimaryButton type="button" @click="openModalToAddDays()">
+                        Add Days
+                    </PrimaryButton>
+                </div>
                 <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.customers.create'))">
                     New
                 </PrimaryButton>
@@ -204,7 +214,7 @@ function formatDate(date) {
                         <span class="badge-gray">
                             {{ formatDate(plan.start_date) }}
                         </span>
-                        <span class="badge-blue" @click="openModalToAddDays(plan)" role="button">
+                        <span class="badge-blue">
                             {{ formatDate(plan.end_date) }}
                         </span>
                     </td>
