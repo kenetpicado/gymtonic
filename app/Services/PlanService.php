@@ -48,16 +48,18 @@ class PlanService
         ]);
     }
 
-    public function createInstance($request): array
+    public function updateOrCreate($request): Plan
     {
-        return [
+        return Plan::updateOrCreate([
+            'customer_id' => $request['customer_id']
+        ], [
             'period' => $request['period'],
             'start_date' => $request['start_date'],
             'end_date' => $request['end_date'],
             'amount' => $request['amount'],
             'discount' => $request['discount'],
             'note' => $request['note'],
-            'service_id' => $request['service_id'],
-        ];
+            'service_id' => $request['service_id']
+        ]);
     }
 }

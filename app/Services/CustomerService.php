@@ -5,23 +5,27 @@ namespace App\Services;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Service;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class CustomerService
 {
-    public function index($request): LengthAwarePaginator
+    public function index($request): array
     {
-        return Customer::query()
-            ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', "%" . $search . "%");
-            })
-            ->addSelect([
-                'active_plans' => Plan::selectRaw('count(*)')
-                    ->whereColumn('customer_id', 'customers.id')
-                    ->where('end_date', '>', now()),
-            ])
-            ->orderByDesc('id')
-            ->paginate(10);
+        return [
+            'customers' => DB::table('customers')
+                ->when($request->search, function ($query, $search) {
+                    $query->where('name', 'like', "%" . $search . "%");
+                })
+                ->select(
+                    'id',
+                    'name',
+                    'phone',
+                    'gender',
+                    DB::raw('(SELECT COUNT(*) FROM plans WHERE customer_id = customers.id AND end_date >= NOW()) as active_plans')
+                )
+                ->orderByDesc('id')
+                ->paginate(10),
+        ];
     }
 
     public function create(): array
@@ -43,15 +47,14 @@ class CustomerService
     public function store(array $request): void
     {
         $customer = Customer::create($request);
-        $customer->plan()->create((new PlanService)->createInstance($request));
+
+        (new PlanService)->updateOrCreate($request + ['customer_id' => $customer->id]);
     }
 
     public function edit($customer): array
     {
-        $customer->load('plan');
-
         return [
-            'customer' => $customer,
+            'customer' => $customer->load('plan'),
             'isNew' => false,
             'services' => Service::with('prices')->get(['id', 'name']),
         ];
@@ -61,21 +64,16 @@ class CustomerService
     {
         $customer->update($request);
 
-        $plan = Plan::where('customer_id', $customer->id)->first();
+        $plan = (new PlanService)->updateOrCreate($request + ['customer_id' => $customer->id]);
 
-        if (!$plan) {
-            Plan::create((new PlanService)->createInstance($request) + ['customer_id' => $customer->id]);
-        } else {
-            $plan->update((new PlanService)->createInstance($request));
-            $income = $customer->incomes()->latest()->first();
+        $income = $customer->incomes()->latest()->first();
 
-            if ($income) {
-                $income->update([
-                    'amount' => $plan->amount,
-                    'discount' => $plan->discount,
-                    'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
-                ]);
-            }
+        if ($income) {
+            $income->update([
+                'amount' => $plan->amount,
+                'discount' => $plan->discount,
+                'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+            ]);
         }
     }
 }

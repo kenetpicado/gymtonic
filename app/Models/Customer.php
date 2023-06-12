@@ -16,15 +16,6 @@ class Customer extends Model
         'gender'
     ];
 
-    protected $appends = [
-        'age'
-    ];
-
-    public function getAgeattribute()
-    {
-        return now()->diffInYears($this->birth_date);
-    }
-
     public function plan()
     {
         return $this->hasOne(Plan::class);

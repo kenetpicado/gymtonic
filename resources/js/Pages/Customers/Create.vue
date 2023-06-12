@@ -70,20 +70,20 @@
                     <SelectForm v-model="form.period" text="Period">
                         <option value="" disabled selected>Select a option</option>
                         <option v-for="price in prices" :value="price.period">
-                            {{ price.period_label }} - {{ price.value }} C$
+                            {{ price.period_label }} - C$ {{ price.value }}
                         </option>
                     </SelectForm>
                     <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
 
                     <div class="col-span-4  font-medium text-gray-900">
-                        Last day: <span class="badge-danger text-sm">{{ endDateLabel }}</span>
+                        Last day: <span class="badge-danger text-sm">{{ end_date_label }}</span>
                     </div>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
                     <div class="col-span-4 text-lg font-medium text-gray-900">
                         <h3 v-if="form.period && prices.length > 0">
-                            Total: {{ total }} C$
+                            Total: C$ {{ total }}
                         </h3>
                     </div>
                 </template>
@@ -103,16 +103,16 @@
 
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import FormSection from '../../Components/FormSection.vue';
+import FormSection from '@/Components/FormSection.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import InputForm from '@/Components/Form/InputForm.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
-import useNotify from "@/Use/notify.js";
 import { watch, ref, computed } from 'vue';
 import { Datep } from '@/Classes/Datep.js';
+import { toast } from '@/Use/toast.js';
 
 const props = defineProps({
     customer: {
@@ -126,17 +126,8 @@ const props = defineProps({
     }
 })
 
-const notify = useNotify();
 const prices = ref([])
 const today = new Datep().format('Y-m-d');
-
-const total = computed(() => {
-    if (form.period && prices.value.length > 0) {
-        const price = prices.value.find(price => price.period == form.period);
-        return price.value - form.discount;
-    }
-    return 0;
-});
 
 const form = useForm({
     id: props.customer?.id ?? null,
@@ -154,6 +145,18 @@ const form = useForm({
     service_id: props.customer?.plan?.service_id ?? props.services[0].id,
 });
 
+const total = computed(() => {
+    if (form.period && prices.value.length > 0) {
+        const price = prices.value.find(price => price.period == form.period);
+        return price.value - form.discount;
+    }
+    return 0;
+});
+
+//Get the prices of the selected service
+//If the current period is not in the new prices selected
+//Set the period to the last price
+
 watch(() => form.service_id, (value) => {
     prices.value = props.services.find(service => service.id == value).prices;
     form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[prices.value.length - 1].period;
@@ -166,7 +169,7 @@ const end_date = computed(() => {
     return date.format('Y-m-d');
 });
 
-const endDateLabel = computed(() => {
+const end_date_label = computed(() => {
     const [year, month, day] = end_date.value.split('-');
     return `${day}/${month}/${year}`;
 });
@@ -180,7 +183,7 @@ function saveCustomer() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                notify.success('Customer created successfully!');
+                toast.success('Customer created successfully!');
                 router.get(route('dashboard.customers.index'));
             },
         });
@@ -189,7 +192,7 @@ function saveCustomer() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                notify.success('Customer updated successfully!');
+                toast.success('Customer updated successfully!');
                 router.get(route('dashboard.customers.index'));
             },
         });

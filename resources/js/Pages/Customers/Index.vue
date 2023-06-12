@@ -20,7 +20,6 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Gender</th>
-                <th>Age</th>
                 <th>State</th>
                 <th>Actions</th>
             </template>
@@ -38,7 +37,6 @@
                             {{ customer.gender }}
                         </span>
                     </td>
-                    <td>{{ customer.age }}</td>
                     <td>
                         <span v-if="customer.active_plans > 0" class="badge-success">
                             <span class="dot-green"></span>
@@ -58,7 +56,7 @@
                             <IconPencil />
                             </Link>
 
-                            <Link :href="route('dashboard.customers.history', customer.id)">
+                            <Link :href="route('dashboard.customers.history', customer.id)" tooltip="History" >
                             <IconHistory />
                             </Link>
                         </div>

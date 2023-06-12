@@ -72,11 +72,12 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TableSection from '@/Components/TableSection.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import useNotify from '@/Use/notify.js';
 import { router, useForm } from '@inertiajs/vue3';
 import { IconPencil, IconTrash } from '@tabler/icons-vue';
 import { ref } from 'vue';
 import DateColumn from '@/Components/DateColumn.vue';
+import { toast } from '@/Use/toast.js';
+import { confirmAlert } from "@/Use/alert.js";
 
 const props = defineProps({
     customer: {
@@ -85,7 +86,6 @@ const props = defineProps({
 })
 
 const openModal = ref(false)
-const notify = useNotify();
 const isNew = ref(true);
 
 const form = useForm({
@@ -100,7 +100,7 @@ function saveWeight() {
             preserveState: true,
             onSuccess: () => {
                 resetValues();
-                notify.success('Weight added successfully');
+                toast.success('Weight added successfully');
             },
         });
     } else {
@@ -109,7 +109,7 @@ function saveWeight() {
             preserveState: true,
             onSuccess: () => {
                 resetValues();
-                notify.success('Weight updated successfully');
+                toast.success('Weight updated successfully');
             },
         });
     }
@@ -123,12 +123,12 @@ async function editWeight(weight) {
 }
 
 function removeWeight(id) {
-    notify.confirm(() => {
+    confirmAlert(() => {
         router.delete(route('dashboard.weights.destroy', id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                notify.success('Weight deleted successfully');
+                toast.success('Weight deleted successfully');
             },
         });
     }, 'Are you sure you want to delete this weight?');
@@ -136,6 +136,7 @@ function removeWeight(id) {
 
 function resetValues() {
     form.reset();
+    form.clearErrors();
     openModal.value = false;
     isNew.value = true;
 }
