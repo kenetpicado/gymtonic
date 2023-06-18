@@ -60,7 +60,6 @@
             </template>
 
             <template #header>
-                <th></th>
                 <th>Customer</th>
                 <th>Service</th>
                 <th>Period</th>
@@ -70,11 +69,11 @@
 
             <template #body>
                 <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
-                    <th>
-                        <Checkbox v-model:checked="plan.selected" name="status" />
-                    </th>
                     <td>
-                        <UserInformation :user="plan.customer" />
+                        <div class="flex items-center gap-4">
+                            <Checkbox v-model:checked="plan.selected" name="status" />
+                            <UserInformation :user="plan.customer" />
+                        </div>
                     </td>
                     <td>
                         {{ plan.service.name }}
