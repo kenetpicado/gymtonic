@@ -12,10 +12,8 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $services = Service::with('prices')->paginate(10);
-
         return inertia('Services/Index', [
-            'services' => $services,
+            'services' => Service::with('prices')->paginate(10),
             'periods' => PeriodEnum::get()
         ]);
     }

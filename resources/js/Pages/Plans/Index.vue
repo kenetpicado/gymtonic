@@ -1,131 +1,3 @@
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import ThePaginator from '@/Components/ThePaginator.vue';
-import SearchComponent from '@/Components/SearchComponent.vue';
-import { reactive, ref, watch, computed } from 'vue';
-import { router } from '@inertiajs/vue3';
-import Checkbox from '@/Components/Checkbox.vue';
-import DialogModal from '@/Components/DialogModal.vue';
-import InputForm from '@/Components/Form/InputForm.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { Carbon } from '@/Classes/Carbon.js';
-import TableSection from '@/Components/TableSection.vue';
-import UserInformation from '@/Components/UserInformation.vue';
-import useNotify from '@/Use/notify.js';
-
-const props = defineProps({
-    plans: {
-        type: Object, required: true
-    },
-})
-
-const checkBox = ref(true);
-const openModal = ref(false);
-const days = ref(null);
-const notify = useNotify();
-const selectedPlans = ref([]);
-const TODAY = new Carbon().format('Y-m-d');
-
-const queryParams = reactive({
-    search: '',
-    type: 'active'
-})
-
-watch(() => checkBox.value, (value) => {
-    queryParams.type = value ? 'active' : 'expired';
-    getFilteredPlans();
-})
-
-function searchPlans(value) {
-    queryParams.search = value;
-    getFilteredPlans()
-}
-
-function getFilteredPlans() {
-    if (queryParams.search === '') {
-        delete queryParams.search;
-    }
-
-    router.get(route('dashboard.plans.index'), queryParams, {
-        preserveState: true,
-        preserveScroll: true,
-        only: ['plans'],
-        replace: true,
-    });
-}
-
-function firstSelectedPlans() {
-    selectedPlans.value = props.plans.data
-        .filter((plan) => plan.selected)
-        .map(function (plan) {
-            return {
-                id: plan.id,
-                customer: plan.customer.name,
-                end_date: plan.end_date
-            }
-        })
-}
-
-const atLeastOnePlanSelected = computed(() => {
-    return props.plans.data.some((plan) => plan.selected);
-})
-
-function openModalToAddDays() {
-    firstSelectedPlans()
-
-    if (selectedPlans.value.length == 0) {
-        notify.error('Select at least one plan');
-        return;
-    }
-
-    openModal.value = true;
-}
-
-watch(() => days.value, (value) => {
-    if (!value) {
-        firstSelectedPlans()
-        return;
-    };
-
-    selectedPlans.value.forEach((plan) => {
-        const date = new Carbon(plan.end_date);
-        plan.end_date = date.addPeriod(parseInt(value) + 1).format('Y-m-d');
-    })
-})
-
-function submitAddDays() {
-    if (!days.value || days.value == 0 || days.value < 1) {
-        notify.error('Days must be greater than 0');
-        return;
-    };
-
-    router.put(route('dashboard.extend-plan'), selectedPlans.value, {
-        preserveState: true,
-        preserveScroll: true,
-        onSuccess: () => {
-            resetValues();
-            notify.success('Days added successfully');
-        },
-    });
-}
-
-function resetValues() {
-    days.value = null;
-    selectedPlans.value = [];
-    openModal.value = false;
-}
-
-function isPaymentToday(planDate) {
-    return TODAY == new Carbon(planDate).addDays(2).format('Y-m-d');
-}
-
-function formatDate(date) {
-    return new Carbon(date).format('d/m/Y');
-}
-
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -162,7 +34,7 @@ function formatDate(date) {
                             <tr v-for="plan in selectedPlans">
                                 <td>{{ plan.id }}</td>
                                 <td>{{ plan.customer }}</td>
-                                <td>{{ plan.end_date }}</td>
+                                <td>{{ Carbon.simpleFormat(plan.end_date) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -212,10 +84,10 @@ function formatDate(date) {
                     </td>
                     <td>
                         <span class="badge-gray">
-                            {{ formatDate(plan.start_date) }}
+                            {{ Carbon.simpleFormat(plan.start_date) }}
                         </span>
                         <span class="badge-blue">
-                            {{ formatDate(plan.end_date) }}
+                            {{ Carbon.simpleFormat(plan.end_date) }}
                         </span>
                     </td>
                     <td>
@@ -255,3 +127,126 @@ function formatDate(date) {
 
     </AppLayout>
 </template>
+
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import ThePaginator from '@/Components/ThePaginator.vue';
+import SearchComponent from '@/Components/SearchComponent.vue';
+import { reactive, ref, watch, computed } from 'vue';
+import { router } from '@inertiajs/vue3';
+import Checkbox from '@/Components/Checkbox.vue';
+import DialogModal from '@/Components/DialogModal.vue';
+import InputForm from '@/Components/Form/InputForm.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { Carbon } from '@/Classes/Carbon.js';
+import TableSection from '@/Components/TableSection.vue';
+import UserInformation from '@/Components/UserInformation.vue';
+import useNotify from '@/Use/notify.js';
+
+const props = defineProps({
+    plans: {
+        type: Object, required: true
+    },
+})
+
+const checkBox = ref(true);
+const openModal = ref(false);
+const days = ref(null);
+const notify = useNotify();
+const selectedPlans = ref([]);
+const TODAY = Carbon.today('Y-m-d');
+
+const queryParams = reactive({
+    search: '',
+    type: 'active'
+})
+
+watch(() => checkBox.value, (value) => {
+    queryParams.type = value ? 'active' : 'expired';
+    getFilteredPlans();
+})
+
+function searchPlans(value) {
+    queryParams.search = value;
+    getFilteredPlans()
+}
+
+function getFilteredPlans() {
+    if (queryParams.search === '') {
+        delete queryParams.search;
+    }
+
+    router.get(route('dashboard.plans.index'), queryParams, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['plans'],
+        replace: true,
+    });
+}
+
+function initSelectedPlans() {
+    selectedPlans.value = props.plans.data
+        .filter((plan) => plan.selected)
+        .map(function (plan) {
+            return {
+                id: plan.id,
+                customer: plan.customer.name,
+                end_date: plan.end_date
+            }
+        })
+}
+
+const atLeastOnePlanSelected = computed(() => {
+    return props.plans.data.some((plan) => plan.selected);
+})
+
+function openModalToAddDays() {
+    initSelectedPlans()
+
+    if (selectedPlans.value.length == 0) {
+        notify.error('Select at least one plan');
+        return;
+    }
+
+    openModal.value = true;
+}
+
+watch(() => days.value, (value) => {
+    if (!value) {
+        initSelectedPlans()
+        return;
+    };
+
+    selectedPlans.value.forEach((plan) => {
+        plan.end_date = Carbon.create(plan.end_date).addDays(parseInt(value) + 1).format('Y-m-d');
+    })
+})
+
+function submitAddDays() {
+    if (!days.value || days.value == 0 || days.value < 1) {
+        notify.error('Days must be greater than 0');
+        return;
+    };
+
+    router.put(route('dashboard.extend-plan'), selectedPlans.value, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            resetValues();
+            notify.success('Days added successfully');
+        },
+    });
+}
+
+function resetValues() {
+    days.value = null;
+    selectedPlans.value = [];
+    openModal.value = false;
+}
+
+function isPaymentToday(planDate) {
+    return TODAY == new Carbon(planDate).addDays(2).format('Y-m-d');
+}
+
+</script>

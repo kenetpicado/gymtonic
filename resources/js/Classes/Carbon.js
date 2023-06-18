@@ -26,6 +26,10 @@ export class Carbon {
         return new Carbon(dateString);
     }
 
+    static today(format = "Y-m-d") {
+        return new Carbon().format(format);
+    }
+
     addMonth(month = 1) {
         this.date.setMonth(this.date.getMonth() + month);
         return this;
@@ -53,6 +57,16 @@ export class Carbon {
 
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
+
+        return format
+            .replace("Y", year)
+            .replace("m", month)
+            .replace("d", day)
+            .toString();
+    }
+
+    static simpleFormat(dateString, format = "d/m/Y") {
+        const [year, month, day] = dateString.split("-");
 
         return format
             .replace("Y", year)
