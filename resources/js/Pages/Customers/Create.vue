@@ -26,9 +26,11 @@
                 </template>
 
                 <template #actions>
-                    <SecondaryButton @click="$inertia.visit(route('dashboard.customers.index'))">
-                        Cancel
-                    </SecondaryButton>
+                    <Link :href="route('dashboard.customers.index')">
+                        <SecondaryButton>
+                            Cancel
+                        </SecondaryButton>
+                    </Link>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         Save
                     </PrimaryButton>
@@ -113,6 +115,7 @@ import SectionBorder from '@/Components/SectionBorder.vue';
 import { watch, ref, computed } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
 import { toast } from '@/Use/toast.js';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     customer: {
@@ -163,10 +166,7 @@ watch(() => form.service_id, (value) => {
 }, { immediate: true });
 
 const end_date = computed(() => {
-    const date = new Carbon(form.start_date);
-    date.addPeriod(parseInt(form.period));
-
-    return date.format('Y-m-d');
+    return Carbon.create(form.start_date).addPeriod(parseInt(form.period)).format('Y-m-d');
 });
 
 const end_date_label = computed(() => {

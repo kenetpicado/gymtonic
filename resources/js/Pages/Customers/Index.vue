@@ -5,9 +5,11 @@
                 Customers
             </h2>
             <div>
-                <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.customers.create'))">
-                    New
-                </PrimaryButton>
+                <Link :href="route('dashboard.customers.create')">
+                    <PrimaryButton type="button">
+                        New
+                    </PrimaryButton>
+                </Link>
             </div>
         </template>
 
@@ -56,7 +58,7 @@
                             <IconPencil />
                             </Link>
 
-                            <Link :href="route('dashboard.customers.history', customer.id)" tooltip="History" >
+                            <Link :href="route('dashboard.customers.history', customer.id)" tooltip="History">
                             <IconHistory />
                             </Link>
                         </div>
