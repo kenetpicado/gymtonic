@@ -28,26 +28,27 @@
                     <template v-if="isCurrentActive">
                         <div class="col-span-4">
                             El plan se encuentra activo, por lo que se asume un pago adelantado.
-                            La fecha de fin del plan se actualizara en funcion de la fecha anterior
-                            ({{ plan.end_date_formated }}) y el periodo
-                            seleccionado ({{ periodLabelSelected }})
+                            La fecha de fin del plan se actualizara en funcion de la fecha anterior:
+                            <span class="badge-blue text-sm">
+                                {{ Carbon.simpleFormat(plan.end_date) }}
+                            </span> y el periodo seleccionado: {{ form.period }} dias.
                         </div>
                         <div class="col-span-4  font-medium text-gray-900">
-                            End date: <span class="badge-blue text-sm">{{ newEndDateLabel }}</span>
+                            End date: <span class="badge-blue text-sm">{{ end_date_label }}</span>
                         </div>
                     </template>
                     <template v-else>
                         <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
                         <div class="col-span-4  font-medium text-gray-900">
-                            Last day: <span class="badge-danger text-sm">{{ newEndDateLabel }}</span>
+                            Last day: <span class="badge-danger text-sm">{{ end_date_label }}</span>
                         </div>
                     </template>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
                     <div class="col-span-4 text-lg font-medium text-gray-900">
-                        <h3 v-if="form.period && prices.length > 0">
-                            Total: {{ total }} C$
+                        <h3>
+                            Total: C$ {{ total }}
                         </h3>
                     </div>
                 </template>
@@ -73,9 +74,10 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import useNotify from "@/Use/notify.js";
 import { defineProps, watch, ref, computed } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
+import { toast } from '@/Use/toast.js';
+import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
 
 const props = defineProps({
     services: {
@@ -89,7 +91,6 @@ const props = defineProps({
     }
 })
 
-const notify = useNotify();
 const prices = ref([])
 const TODAY = new Carbon().format('Y-m-d');
 
@@ -105,28 +106,11 @@ const form = useForm({
 });
 
 const total = computed(() => {
-    if (form.period && prices.value.length > 0) {
-        const price = prices.value.find(price => price.period == form.period);
-        return price.value - form.discount;
-    }
-    return 0;
+    return calculateTotal({period: form.period, discount: form.discount }, prices.value);
 });
 
-const periodLabelSelected = computed(() => {
-    if (form.period && prices.value.length > 0) {
-        const price = prices.value.find(price => price.period == form.period);
-        if (price.period == 30) {
-            return '1 mes';
-        } else {
-            return `${price.period} dia(s)`;
-        }
-    }
-    return 'No hay periodo seleccionado';
-});
-
-const newEndDate = computed(() => {
-    const date = new Carbon(props.isCurrentActive ? form.end_date : form.start_date);
-    date.addPeriod(parseInt(form.period));
+const end_date = computed(() => {
+    const date = new Carbon(props.isCurrentActive ? form.end_date : form.start_date).addPeriod(parseInt(form.period));
 
     if (props.isCurrentActive) {
         date.addDays();
@@ -135,25 +119,21 @@ const newEndDate = computed(() => {
     return date.format('Y-m-d');
 });
 
-const newEndDateLabel = computed(() => {
-    const [year, month, day] = newEndDate.value.split('-');
-    return `${day}/${month}/${year}`;
+const end_date_label = computed(() => {
+    return Carbon.simpleFormat(end_date.value);
 });
 
-watch(() => form.service_id, (value) => {
-    prices.value = props.services.find(service => service.id == value).prices;
-    form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[prices.value.length - 1].period;
-}, { immediate: true });
+watchForPrices(form, props.services, prices);
 
 function submit() {
     form.amount = total.value;
-    form.end_date = newEndDate.value;
+    form.end_date = end_date.value;
 
     form.put(route('dashboard.plans.update', form.id), {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            notify.success('Customer updated successfully!');
+            toast.success('Plan created successfully!');
             router.get(route('dashboard.plans.index'));
         },
     });

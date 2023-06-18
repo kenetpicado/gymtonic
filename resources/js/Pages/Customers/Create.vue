@@ -84,7 +84,7 @@
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
                     <div class="col-span-4 text-lg font-medium text-gray-900">
-                        <h3 v-if="form.period && prices.length > 0">
+                        <h3>
                             Total: C$ {{ total }}
                         </h3>
                     </div>
@@ -116,6 +116,7 @@ import { watch, ref, computed } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
 import { toast } from '@/Use/toast.js';
 import { Link } from '@inertiajs/vue3';
+import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
 
 const props = defineProps({
     customer: {
@@ -149,29 +150,17 @@ const form = useForm({
 });
 
 const total = computed(() => {
-    if (form.period && prices.value.length > 0) {
-        const price = prices.value.find(price => price.period == form.period);
-        return price.value - form.discount;
-    }
-    return 0;
+    return calculateTotal({period: form.period, discount: form.discount }, prices.value);
 });
 
-//Get the prices of the selected service
-//If the current period is not in the new prices selected
-//Set the period to the last price
-
-watch(() => form.service_id, (value) => {
-    prices.value = props.services.find(service => service.id == value).prices;
-    form.period = prices.value.find(price => price.period == form.period) ? form.period : prices.value[prices.value.length - 1].period;
-}, { immediate: true });
+watchForPrices(form, props.services, prices);
 
 const end_date = computed(() => {
     return Carbon.create(form.start_date).addPeriod(parseInt(form.period)).format('Y-m-d');
 });
 
 const end_date_label = computed(() => {
-    const [year, month, day] = end_date.value.split('-');
-    return `${day}/${month}/${year}`;
+    return Carbon.simpleFormat(end_date.value);
 });
 
 function saveCustomer() {
