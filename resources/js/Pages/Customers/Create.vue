@@ -27,9 +27,9 @@
 
                 <template #actions>
                     <Link :href="route('dashboard.customers.index')">
-                        <SecondaryButton>
-                            Cancel
-                        </SecondaryButton>
+                    <SecondaryButton>
+                        Cancel
+                    </SecondaryButton>
                     </Link>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         Save
@@ -87,6 +87,7 @@
                         <h3>
                             Total: C$ {{ total }}
                         </h3>
+                        <pre>{{ form }}</pre>
                     </div>
                 </template>
 
@@ -112,11 +113,12 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
-import { watch, ref, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
 import { toast } from '@/Use/toast.js';
 import { Link } from '@inertiajs/vue3';
 import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
+import { Plan } from '../../Classes/Plan';
 
 const props = defineProps({
     customer: {
@@ -131,7 +133,6 @@ const props = defineProps({
 })
 
 const prices = ref([])
-const today = new Carbon().format('Y-m-d');
 
 const form = useForm({
     id: props.customer?.id ?? null,
@@ -139,24 +140,19 @@ const form = useForm({
     phone: props.customer?.phone ?? '',
     birth_date: props.customer?.birth_date ?? '',
     gender: props.customer?.gender ?? 'F',
-
-    amount: props.customer?.plan?.amount ?? 0,
-    period: props.customer?.plan?.period ?? null,
-    start_date: props.customer?.plan?.start_date ?? today,
-    end_date: props.customer?.plan?.end_date ?? null,
-    discount: props.customer?.plan?.discount ?? 0,
-    note: props.customer?.plan?.note ?? '',
-    service_id: props.customer?.plan?.service_id ?? props.services[0].id,
+    ...new Plan(props.customer?.plan, props.services[0].id),
 });
 
 const total = computed(() => {
-    return calculateTotal({period: form.period, discount: form.discount }, prices.value);
+    return calculateTotal({ period: form.period, discount: form.discount }, prices.value);
 });
 
 watchForPrices(form, props.services, prices);
 
 const end_date = computed(() => {
-    return Carbon.create(form.start_date).addPeriod(parseInt(form.period)).format('Y-m-d');
+    return Carbon.create(form.start_date)
+        .addPeriod(parseInt(form.period))
+        .format('Y-m-d');
 });
 
 const end_date_label = computed(() => {

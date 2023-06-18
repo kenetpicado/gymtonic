@@ -50,6 +50,7 @@
                         <h3>
                             Total: C$ {{ total }}
                         </h3>
+                        <pre>{{ form }}</pre>
                     </div>
                 </template>
 
@@ -74,10 +75,11 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { defineProps, watch, ref, computed } from 'vue';
+import { defineProps, ref, computed } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
 import { toast } from '@/Use/toast.js';
 import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
+import { Plan } from '@/Classes/Plan.js';
 
 const props = defineProps({
     services: {
@@ -92,18 +94,7 @@ const props = defineProps({
 })
 
 const prices = ref([])
-const TODAY = new Carbon().format('Y-m-d');
-
-const form = useForm({
-    id: props.plan?.id ?? null,
-    amount: props.plan?.amount ?? 0,
-    period: props.plan?.period ?? null,
-    start_date: props.isCurrentActive ? props.plan?.start_date : TODAY,
-    end_date: props.plan?.end_date ?? null,
-    discount: props.plan?.discount ?? 0,
-    note: props.plan?.note ?? '',
-    service_id: props.plan?.service_id ?? props.services[0].id,
-});
+const form = useForm(new Plan(props.plan, props.services[0].id, props.isCurrentActive));
 
 const total = computed(() => {
     return calculateTotal({period: form.period, discount: form.discount }, prices.value);
@@ -129,7 +120,7 @@ function submit() {
     form.amount = total.value;
     form.end_date = end_date.value;
 
-    form.put(route('dashboard.plans.update', form.id), {
+    form.put(route('dashboard.plans.update', form.plan_id), {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
