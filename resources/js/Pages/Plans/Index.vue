@@ -93,18 +93,15 @@
                     <td>
                         <div class="flex items-center">
                             <span v-if="plan.end_date == TODAY" class="badge-danger">
-                                Last Day
+                                LAST DAY!
                             </span>
                             <span v-else-if="checkBox" class="badge-success">
                                 <span class="dot-green"></span>
                                 Active
                             </span>
-                            <span v-else-if="isPaymentToday(plan.end_date)" class="badge-pink">
-                                Payment today
-                            </span>
                             <span v-else class="badge-gray">
                                 <span class="dot-gray"></span>
-                                Expired
+                                Expired ({{ Carbon.create(plan.end_date).diffForHumans() }})
                             </span>
                         </div>
                     </td>
@@ -243,10 +240,6 @@ function resetValues() {
     days.value = null;
     selectedPlans.value = [];
     openModal.value = false;
-}
-
-function isPaymentToday(planDate) {
-    return TODAY == new Carbon(planDate).addDays(2).format('Y-m-d');
 }
 
 </script>
