@@ -36,10 +36,8 @@ class CustomerService
 
     public function show(Customer $customer): array
     {
-        $customer->load('weights');
-
         return [
-            'customer' => $customer,
+            'customer' => $customer->load('weights'),
         ];
     }
 

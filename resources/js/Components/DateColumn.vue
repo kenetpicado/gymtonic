@@ -1,25 +1,17 @@
 <template>
     <div class="font-medium" tooltip="Hola">
-        <div class="text-gray-700 mb-1">{{ formatDate(date) }}</div>
-        <div class="text-gray-400 text-xs"> ({{ formatDateToHuman(date) }})</div>
+        <div class="text-gray-700 mb-1">{{ Carbon.create(date).format('d/m/Y') }}</div>
+        <div class="text-gray-400 text-xs"> ({{ Carbon.create(date).diffForHumans() }})</div>
     </div>
 </template>
 
 <script setup>
-import { Datep } from '@/Classes/Datep.js';
+import { Carbon } from '@/Classes/Carbon.js';
 
 const props = defineProps({
     date: {
         type: String, required: true
     }
 })
-
-function formatDate(date) {
-    return new Datep(date).format('d/m/Y');
-}
-
-function formatDateToHuman(date) {
-    return new Datep(date).diffForHumans()
-}
 
 </script>

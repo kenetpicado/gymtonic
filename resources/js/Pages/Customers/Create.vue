@@ -111,7 +111,7 @@ import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import { watch, ref, computed } from 'vue';
-import { Datep } from '@/Classes/Datep.js';
+import { Carbon } from '@/Classes/Carbon.js';
 import { toast } from '@/Use/toast.js';
 
 const props = defineProps({
@@ -127,7 +127,7 @@ const props = defineProps({
 })
 
 const prices = ref([])
-const today = new Datep().format('Y-m-d');
+const today = new Carbon().format('Y-m-d');
 
 const form = useForm({
     id: props.customer?.id ?? null,
@@ -163,7 +163,7 @@ watch(() => form.service_id, (value) => {
 }, { immediate: true });
 
 const end_date = computed(() => {
-    const date = new Datep(form.start_date);
+    const date = new Carbon(form.start_date);
     date.addPeriod(parseInt(form.period));
 
     return date.format('Y-m-d');

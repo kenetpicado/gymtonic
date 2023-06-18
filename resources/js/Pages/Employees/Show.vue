@@ -88,7 +88,7 @@ import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { toast } from "@/Use/toast.js";
 import TableSection from '@/Components/TableSection.vue';
-import { Datep } from '@/Classes/Datep.js';
+import { Carbon } from '@/Classes/Carbon.js';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import { IconPencil } from '@tabler/icons-vue';
@@ -111,7 +111,7 @@ const form = useForm({
     concept: 'Pago de salario',
     expenditureable_type: 'App\\Models\\Employee',
     expenditureable_id: props.employee.id,
-    created_at: new Datep().format('Y-m-d'),
+    created_at: new Carbon().format('Y-m-d'),
 })
 
 function editPayment(payment) {
@@ -120,7 +120,7 @@ function editPayment(payment) {
     form.amount = payment.amount;
     form.description = payment.description;
     form.concept = payment.concept;
-    form.created_at = new Datep(payment.created_at).format('Y-m-d');
+    form.created_at = new Carbon(payment.created_at).format('Y-m-d');
     openModal.value = true;
 }
 

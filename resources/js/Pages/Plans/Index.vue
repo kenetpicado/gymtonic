@@ -9,7 +9,7 @@ import Checkbox from '@/Components/Checkbox.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { Datep } from '@/Classes/Datep.js';
+import { Carbon } from '@/Classes/Carbon.js';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import useNotify from '@/Use/notify.js';
@@ -25,7 +25,7 @@ const openModal = ref(false);
 const days = ref(null);
 const notify = useNotify();
 const selectedPlans = ref([]);
-const TODAY = new Datep().format('Y-m-d');
+const TODAY = new Carbon().format('Y-m-d');
 
 const queryParams = reactive({
     search: '',
@@ -89,7 +89,7 @@ watch(() => days.value, (value) => {
     };
 
     selectedPlans.value.forEach((plan) => {
-        const date = new Datep(plan.end_date);
+        const date = new Carbon(plan.end_date);
         plan.end_date = date.addPeriod(parseInt(value) + 1).format('Y-m-d');
     })
 })
@@ -117,11 +117,11 @@ function resetValues() {
 }
 
 function isPaymentToday(planDate) {
-    return TODAY == new Datep(planDate).addDays(2).format('Y-m-d');
+    return TODAY == new Carbon(planDate).addDays(2).format('Y-m-d');
 }
 
 function formatDate(date) {
-    return new Datep(date).format('d/m/Y');
+    return new Carbon(date).format('d/m/Y');
 }
 
 </script>

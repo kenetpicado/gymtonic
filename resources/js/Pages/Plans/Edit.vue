@@ -75,7 +75,7 @@ import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import useNotify from "@/Use/notify.js";
 import { defineProps, watch, ref, computed } from 'vue';
-import { Datep } from '@/Classes/Datep.js';
+import { Carbon } from '@/Classes/Carbon.js';
 
 const props = defineProps({
     services: {
@@ -91,7 +91,7 @@ const props = defineProps({
 
 const notify = useNotify();
 const prices = ref([])
-const TODAY = new Datep().format('Y-m-d');
+const TODAY = new Carbon().format('Y-m-d');
 
 const form = useForm({
     id: props.plan?.id ?? null,
@@ -125,7 +125,7 @@ const periodLabelSelected = computed(() => {
 });
 
 const newEndDate = computed(() => {
-    const date = new Datep(props.isCurrentActive ? form.end_date : form.start_date);
+    const date = new Carbon(props.isCurrentActive ? form.end_date : form.start_date);
     date.addPeriod(parseInt(form.period));
 
     if (props.isCurrentActive) {

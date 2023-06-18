@@ -1,4 +1,4 @@
-export class Datep {
+export class Carbon {
     date;
 
     DATE_UNITS = {
@@ -20,6 +20,10 @@ export class Datep {
         } else {
             this.date = new Date(dateString);
         }
+    }
+
+    static create(dateString) {
+        return new Carbon(dateString);
     }
 
     addMonth(month = 1) {
