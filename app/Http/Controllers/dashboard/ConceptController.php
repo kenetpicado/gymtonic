@@ -12,7 +12,7 @@ class ConceptController extends Controller
     public function index()
     {
         return inertia('Concepts/Index', [
-            'concepts' => Concept::orderBy('name')->paginate(10)
+            'concepts' => Concept::orderBy('name')->paginate()
         ]);
     }
 

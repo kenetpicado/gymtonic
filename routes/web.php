@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\dashboard\ConceptController;
+use App\Http\Controllers\dashboard\ConceptExpenditureController;
 use App\Http\Controllers\dashboard\CustomerController;
 use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\dashboard\EmployeeController;
@@ -52,4 +53,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::resource('expenditures', ExpenditureController::class);
 
         Route::resource('concepts', ConceptController::class);
+
+        Route::resource('concepts.expenditures', ConceptExpenditureController::class)->only(['index']);
     });

@@ -35,6 +35,7 @@
             <template #header>
                 <th>#</th>
                 <th>Name</th>
+                <th>$</th>
                 <th>Actions</th>
             </template>
             <template #body>
@@ -44,6 +45,14 @@
                     </td>
                     <td>
                         <ConceptInformation :concept="concept" />
+                    </td>
+                    <td>
+                        <div class="flex gap-4">
+                            <Link :href="route('dashboard.concepts.expenditures.index', concept.id)"
+                                class="inline-flex items-center rounded-full bg-red-50 p1 text-xs text-red-600">
+                            <IconArrowDown />
+                            </Link>
+                        </div>
                     </td>
                     <td>
                         <div class="flex gap-2">
@@ -59,6 +68,9 @@
                     <td colspan="4" class="text-center">No data to display</td>
                 </tr>
             </template>
+            <template #paginator>
+                <ThePaginator :links="concepts.links"></ThePaginator>
+            </template>
         </TableSection>
     </AppLayout>
 </template>
@@ -72,11 +84,12 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye } from '@tabler/icons-vue';
+import { IconPencil, IconEye, IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 import { toast } from "@/Use/toast.js";
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import { usePage } from '@inertiajs/vue3';
+import ThePaginator from '@/Components/ThePaginator.vue';
 
 const props = defineProps({
     concepts: {

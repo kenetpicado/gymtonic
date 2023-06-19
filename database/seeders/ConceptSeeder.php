@@ -65,10 +65,6 @@ class ConceptSeeder extends Seeder
                 'image' => 'https://i.postimg.cc/HWvKxDCd/promotion.png'
             ],
             [
-                'name' => 'Salario',
-                'image' => 'https://i.postimg.cc/NfWz66Mn/salary.png'
-            ],
-            [
                 'name' => 'Servicios',
                 'image' => 'https://i.postimg.cc/G27MHYVq/services.png'
             ],

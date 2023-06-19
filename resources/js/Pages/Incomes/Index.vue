@@ -17,15 +17,18 @@
             </template>
 
             <template #header>
+                <th>Date</th>
                 <th>Type</th>
                 <th>Concept</th>
                 <th>Amount</th>
                 <th>Total</th>
-                <th>Date</th>
             </template>
 
             <template #body>
                 <tr v-for="(income, index) in incomes.data" class="hover:bg-gray-50">
+                    <td>
+                        <DateColumn :date="income.created_at" />
+                    </td>
                     <td>
                         <span v-if="!income.incomeable_type" class="text-sm text-gray-400 italic">
                             None
@@ -51,9 +54,6 @@
                         <span class="badge-blue">
                             C$ {{ (income.amount * income.quantity).toLocaleString('en-US') }}
                         </span>
-                    </td>
-                    <td>
-                        <DateColumn :date="income.created_at" />
                     </td>
                 </tr>
                 <tr v-if="incomes.data.length == 0">

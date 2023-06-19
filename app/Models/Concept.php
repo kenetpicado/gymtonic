@@ -10,4 +10,9 @@ class Concept extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'image'];
+
+    public function expenditures()
+    {
+        return $this->morphMany(Expenditure::class, 'expenditureable');
+    }
 }

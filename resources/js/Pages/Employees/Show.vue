@@ -34,7 +34,6 @@
 
         <TableSection>
             <template #header>
-                <th>ID</th>
                 <th>Date</th>
                 <th>Concept</th>
                 <th>Amount</th>
@@ -43,9 +42,6 @@
 
             <template #body>
                 <tr v-for="(payment, index) in payments.data" class="hover:bg-gray-50">
-                    <td>
-                        {{ index + 1 }}
-                    </td>
                     <td>
                         <DateColumn :date="payment.created_at"/>
                     </td>
@@ -67,7 +63,7 @@
                     </td>
                 </tr>
                 <tr v-if="payments.data.length == 0">
-                    <td colspan="4" class="text-center">No data to display</td>
+                    <td colspan="5" class="text-center">No data to display</td>
                 </tr>
             </template>
 
