@@ -1,17 +1,17 @@
 <?php
 
-use App\Http\Controllers\dashboard\ConceptController;
-use App\Http\Controllers\dashboard\ConceptExpenditureController;
-use App\Http\Controllers\dashboard\CustomerController;
-use App\Http\Controllers\dashboard\DashboardController;
-use App\Http\Controllers\dashboard\EmployeeController;
-use App\Http\Controllers\dashboard\ExpenditureController;
-use App\Http\Controllers\dashboard\ExtendPlanController;
-use App\Http\Controllers\dashboard\IncomeHistoryController;
-use App\Http\Controllers\dashboard\IncomeController;
-use App\Http\Controllers\dashboard\PlanController;
-use App\Http\Controllers\dashboard\ServiceController;
-use App\Http\Controllers\dashboard\WeightController;
+use App\Http\Controllers\Dashboard\ConceptController;
+use App\Http\Controllers\Dashboard\ConceptExpenditureController;
+use App\Http\Controllers\Dashboard\CustomerController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\EmployeeController;
+use App\Http\Controllers\Dashboard\ExpenditureController;
+use App\Http\Controllers\Dashboard\ExtendPlanController;
+use App\Http\Controllers\Dashboard\IncomeHistoryController;
+use App\Http\Controllers\Dashboard\IncomeController;
+use App\Http\Controllers\Dashboard\PlanController;
+use App\Http\Controllers\Dashboard\ServiceController;
+use App\Http\Controllers\Dashboard\WeightController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
