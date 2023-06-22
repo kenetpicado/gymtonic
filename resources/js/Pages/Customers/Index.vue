@@ -50,8 +50,8 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <Link :href="route('dashboard.customers.show', customer.id)">
-                            <IconEye />
+                            <Link :href="route('dashboard.customers.weights.index', customer.id)">
+                            <IconWeight />
                             </Link>
 
                             <Link :href="route('dashboard.customers.edit', customer.id)">
@@ -85,7 +85,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { defineProps } from 'vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye, IconHistory } from '@tabler/icons-vue';
+import { IconPencil, IconEye, IconHistory, IconWeight } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({

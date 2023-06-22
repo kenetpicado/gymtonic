@@ -3,15 +3,15 @@
 use App\Http\Controllers\Dashboard\ConceptController;
 use App\Http\Controllers\Dashboard\ConceptExpenditureController;
 use App\Http\Controllers\Dashboard\CustomerController;
+use App\Http\Controllers\Dashboard\CustomerWeightController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\ExpenditureController;
 use App\Http\Controllers\Dashboard\ExtendPlanController;
-use App\Http\Controllers\Dashboard\IncomeHistoryController;
 use App\Http\Controllers\Dashboard\IncomeController;
+use App\Http\Controllers\Dashboard\IncomeHistoryController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\ServiceController;
-use App\Http\Controllers\Dashboard\WeightController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -34,7 +34,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     ->group(function () {
         Route::get('', DashboardController::class)->name('index');
 
-        Route::resource('customers', CustomerController::class);
+        Route::resource('customers', CustomerController::class)->except(['show', 'destroy']);
+
+        Route::resource('customers.weights', CustomerWeightController::class)->except(['show', 'create']);
 
         Route::get('customers/{customer}/history', IncomeHistoryController::class)->name('customers.history');
 
@@ -42,9 +44,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::resource('plans', PlanController::class);
 
-        Route::resource('weights', WeightController::class)->only(['store', 'update', 'destroy']);
-
-        Route::put('extend-plan', ExtendPlanController::class)->name('extend-plan');
+        Route::put('plans-extend', ExtendPlanController::class)->name('plans.extend');
 
         Route::resource('employees', EmployeeController::class);
 

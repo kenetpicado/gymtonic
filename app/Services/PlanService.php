@@ -5,23 +5,25 @@ namespace App\Services;
 use App\Models\Income;
 use App\Models\Plan;
 use App\Models\Service;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlanService
 {
-    public function index($request): LengthAwarePaginator
+    public function index($request): array
     {
-        return Plan::with(['customer:id,name', 'service'])
-            ->when(
-                $request->search,
-                fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))
-            )
-            ->when(
-                $request->type == 'expired',
-                fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d'))->orderBy('end_date', 'desc'),
-                fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))->orderBy('end_date')
-            )
-            ->paginate(10);
+        return [
+            'plans' => Plan::query()
+                ->with(['customer:id,name', 'service'])
+                ->when(
+                    $request->search,
+                    fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))
+                )
+                ->when(
+                    $request->type == 'expired',
+                    fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d'))->orderBy('end_date', 'desc'),
+                    fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))->orderBy('end_date')
+                )
+                ->paginate(10)
+        ];
     }
 
     public function edit($plan): array
@@ -60,5 +62,18 @@ class PlanService
             'note' => $request['note'],
             'service_id' => $request['service_id']
         ]);
+    }
+
+    public static function extend($request): void
+    {
+        $requestCollection = collect($request);
+
+        $plans = Plan::whereIn('id', $requestCollection->pluck('id'))->get(['id', 'end_date']);
+
+        foreach ($plans as $plan) {
+            $plan->update([
+                'end_date' => $requestCollection->where('id', $plan->id)->value('end_date')
+            ]);
+        }
     }
 }

@@ -26,11 +26,6 @@ class CustomerController extends Controller
         return inertia('Customers/Create', $this->customerService->create());
     }
 
-    public function show(Customer $customer): Response
-    {
-        return inertia('Customers/Show', $this->customerService->show($customer));
-    }
-
     public function store(CustomerRequest $request)
     {
         $this->customerService->store($request->validated());

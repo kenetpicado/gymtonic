@@ -225,7 +225,7 @@ function submitAddDays() {
         return;
     };
 
-    router.put(route('dashboard.extend-plan'), selectedPlans.value, {
+    router.put(route('dashboard.plans.extend'), selectedPlans.value, {
         preserveState: true,
         preserveScroll: true,
         onSuccess: () => {

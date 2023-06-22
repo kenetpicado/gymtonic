@@ -89,13 +89,13 @@ const openModal = ref(false)
 const isNew = ref(true);
 
 const form = useForm({
+    id: null,
     value: null,
-    customer_id: props.customer.id,
 })
 
 function saveWeight() {
     if (isNew.value) {
-        form.post(route('dashboard.weights.store'), {
+        form.post(route('dashboard.customers.weights.store', props.customer.id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
@@ -104,7 +104,7 @@ function saveWeight() {
             },
         });
     } else {
-        form.put(route('dashboard.weights.update', form.id), {
+        form.put(route('dashboard.customers.weights.update', [props.customer.id, form.id]), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
@@ -124,7 +124,7 @@ async function editWeight(weight) {
 
 function removeWeight(id) {
     confirmAlert(() => {
-        router.delete(route('dashboard.weights.destroy', id), {
+        router.delete(route('dashboard.customers.weights.destroy', [props.customer.id, id]), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {

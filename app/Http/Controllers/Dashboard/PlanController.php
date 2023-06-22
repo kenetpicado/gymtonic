@@ -18,9 +18,7 @@ class PlanController extends Controller
 
     public function index(Request $request): Response
     {
-        return inertia('Plans/Index', [
-            'plans' => $this->planService->index($request)
-        ]);
+        return inertia('Plans/Index', $this->planService->index($request));
     }
 
     public function edit(Plan $plan)
