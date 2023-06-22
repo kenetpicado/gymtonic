@@ -50,7 +50,6 @@
                         <h3>
                             Total: C$ {{ total }}
                         </h3>
-                        <pre>{{ form }}</pre>
                     </div>
                 </template>
 
