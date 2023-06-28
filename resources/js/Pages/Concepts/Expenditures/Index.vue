@@ -2,14 +2,42 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Payments: {{concept.name}}
+                Payments: {{ concept.name }}
             </h2>
             <div>
-                <!-- <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.expenditures.create'))">
+                <PrimaryButton type="button" @click="openModal = true">
                     New
-                </PrimaryButton> -->
+                </PrimaryButton>
             </div>
         </template>
+
+        <DialogModal :show="openModal">
+            <template #title>
+                New Payment
+            </template>
+            <template #content>
+                <div class="grid gap-6">
+                    <InputForm text="Concept" v-model="form.concept" />
+                    <InputForm text="Description (optional)" v-model="form.description" />
+                    <InputForm text="Quantity" v-model="form.quantity" type="number" />
+                    <InputForm text="Amount" v-model="form.amount" />
+
+                    <div class="col-span-4 text-lg font-medium text-gray-900 mb-2">
+                        <h3>
+                            Total: C$ {{ total }}
+                        </h3>
+                    </div>
+                </div>
+            </template>
+            <template #footer>
+                <SecondaryButton @click="resetValues">
+                    Cancel
+                </SecondaryButton>
+                <PrimaryButton type="button" @click="saveExpenditure">
+                    Save
+                </PrimaryButton>
+            </template>
+        </DialogModal>
 
         <TableSection>
             <template #topbar>
@@ -59,22 +87,18 @@
 </template>
 
 <script setup>
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
-import DialogModal from '@/Components/DialogModal.vue';
-import InputForm from '@/Components/Form/InputForm.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
-import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye, IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
-import { Link } from '@inertiajs/vue3';
-import { toast } from "@/Use/toast.js";
-import ConceptInformation from '@/Components/ConceptInformation.vue';
-import { usePage } from '@inertiajs/vue3';
 import ConceptInfo from '@/Components/ConceptInfo.vue';
 import DateColumn from '@/Components/DateColumn.vue';
+import DialogModal from '@/Components/DialogModal.vue';
+import InputForm from '@/Components/Form/InputForm.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { toast } from "@/Use/toast.js";
+import { useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
     concept: {
@@ -85,50 +109,47 @@ const props = defineProps({
     }
 })
 
-// const openModal = ref(false)
-// const isNew = ref(true);
+const openModal = ref(false)
+const isNew = ref(true);
 
-// const form = useForm({
-//     id: null,
-//     name: '',
-//     image: '',
-// })
+const form = useForm({
+    quantity: 1,
+    amount: props.expenditures.data.length > 0 ? props.expenditures.data[0].amount : 0,
+    concept: '',
+    expenditureable_id: props.concept.id,
+    expenditureable_type: 'App\\Models\\Concept'
+})
 
-// function editConcept(concept) {
-//     form.id = concept.id;
-//     form.name = concept.name;
-//     form.image = concept.image;
-//     isNew.value = false;
-//     openModal.value = true;
-// }
+const total = computed(() => {
+    return (form.quantity * form.amount).toLocaleString('en-US')
+})
 
-// function saveConcept() {
-//     if (isNew.value) {
-//         form.post(route('dashboard.concepts.store'), {
-//             preserveScroll: true,
-//             preserveState: true,
-//             onSuccess: () => {
-//                 toast.success('Concept created successfully')
-//                 resetValues()
-//             },
-//         });
-//     } else {
-//         form.put(route('dashboard.concepts.update', form.id), {
-//             preserveScroll: true,
-//             preserveState: true,
-//             onSuccess: () => {
-//                 toast.success('Concept updated successfully')
-//                 resetValues()
-//             },
-//         });
-//     }
-// }
+function saveExpenditure() {
+    if (isNew.value) {
+        form.post(route('dashboard.concepts.expenditures.store', props.concept.id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success('Payment created successfully')
+                resetValues()
+            },
+        });
+    } else {
+        // form.put(route('dashboard.concepts.expenditures.update', form.id), {
+        //     preserveScroll: true,
+        //     preserveState: true,
+        //     onSuccess: () => {
+        //         toast.success('Payment updated successfully')
+        //         resetValues()
+        //     },
+        // });
+    }
+}
 
-// function resetValues() {
-//     form.reset();
-//     isNew.value = true;
-//     openModal.value = false;
-//     usePage().props.errors = {};
-// }
+function resetValues() {
+    form.reset();
+    isNew.value = true;
+    openModal.value = false;
+}
 
 </script>

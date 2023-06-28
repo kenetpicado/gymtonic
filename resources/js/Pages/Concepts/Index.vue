@@ -55,13 +55,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="flex gap-2">
-                            <Link :href="route('dashboard.concepts.show', concept.id)">
-                            <IconEye />
-                            </Link>
-
-                            <IconPencil @click="editConcept(concept)" role="button" />
-                        </div>
+                        <IconPencil @click="editConcept(concept)" role="button" />
                     </td>
                 </tr>
                 <tr v-if="concepts.length == 0">
@@ -84,7 +78,7 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye, IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
+import { IconPencil, IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 import { toast } from "@/Use/toast.js";
 import ConceptInformation from '@/Components/ConceptInformation.vue';

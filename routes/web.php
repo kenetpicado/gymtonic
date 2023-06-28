@@ -54,5 +54,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::resource('concepts', ConceptController::class);
 
-        Route::resource('concepts.expenditures', ConceptExpenditureController::class)->only(['index']);
+        Route::resource('concepts.expenditures', ConceptExpenditureController::class)->only(['index', 'store']);
     });
