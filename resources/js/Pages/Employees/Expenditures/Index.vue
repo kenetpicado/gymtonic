@@ -17,7 +17,7 @@
             </template>
             <template #content>
                 <div class="grid gap-6">
-                    <InputForm text="Amount" v-model="form.amount"></InputForm>
+                    <InputForm text="Value" v-model="form.value"></InputForm>
                     <InputForm text="Description (optional)" v-model="form.description"></InputForm>
                     <InputForm text="Date" v-model="form.created_at" type="date"></InputForm>
                 </div>
@@ -56,7 +56,7 @@
                         </div>
                     </th>
                     <td>
-                        <span class="badge-blue">C$ {{ payment.amount.toLocaleString('en-US') }}</span>
+                        <span class="badge-blue">C$ {{ payment.value.toLocaleString('en-US') }}</span>
                     </td>
                     <td>
                         <IconPencil @click="editPayment(payment)" role="button"/>
@@ -102,7 +102,7 @@ const openModal = ref(false)
 const isNew = ref(true);
 
 const form = useForm({
-    amount: 0,
+    value: 0,
     description: '',
     concept: 'Pago de salario',
     expenditureable_type: 'App\\Models\\Employee',
@@ -113,7 +113,7 @@ const form = useForm({
 function editPayment(payment) {
     isNew.value = false;
     form.id = payment.id;
-    form.amount = payment.amount;
+    form.value = payment.value;
     form.description = payment.description;
     form.concept = payment.concept;
     form.created_at = new Carbon(payment.created_at).format('Y-m-d');

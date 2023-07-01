@@ -13,7 +13,7 @@ class DashboardService
         return [
             'incomes_month' => DB::table('incomes')
                 ->where('created_at', '>=', $firstDayOfMonth)
-                ->select(DB::raw('SUM(amount * quantity) as total, SUM(discount) as discount'))
+                ->select(DB::raw('SUM(value * quantity) as total, SUM(discount) as discount'))
                 ->first(),
 
             'plans' => DB::table('plans')
@@ -23,7 +23,7 @@ class DashboardService
 
             'expenditures_month' => DB::table('expenditures')
                 ->where('created_at', '>=', $firstDayOfMonth)
-                ->select(DB::raw('SUM(amount * quantity) as total'))
+                ->select(DB::raw('SUM(value * quantity) as total'))
                 ->value('total'),
 
             'customers' => DB::table('customers')->groupBy('gender')->get(['gender', DB::raw('count(*) as total')])

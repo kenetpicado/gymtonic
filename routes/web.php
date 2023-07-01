@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\CustomerController;
 use App\Http\Controllers\Dashboard\CustomerWeightController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EmployeeController;
+use App\Http\Controllers\Dashboard\EmployeeExpenditureController;
 use App\Http\Controllers\Dashboard\ExpenditureController;
 use App\Http\Controllers\Dashboard\ExtendPlanController;
 use App\Http\Controllers\Dashboard\IncomeController;
@@ -46,7 +47,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::put('plans-extend', ExtendPlanController::class)->name('plans.extend');
 
-        Route::resource('employees', EmployeeController::class);
+        Route::resource('employees', EmployeeController::class)->only(['index', 'store', 'update']);
+
+        Route::resource('employees.expenditures', EmployeeExpenditureController::class)->only(['index']);
 
         Route::resource('incomes', IncomeController::class);
 

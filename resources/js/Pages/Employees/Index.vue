@@ -52,8 +52,8 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <Link :href="route('dashboard.employees.show', employee.id)">
-                            <IconEye />
+                            <Link :href="route('dashboard.employees.expenditures.index', employee.id)">
+                            <IconCurrencyDollar/>
                             </Link>
 
                             <IconPencil @click="editEmployee(employee)" role="button" />
@@ -78,7 +78,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye } from '@tabler/icons-vue';
+import { IconPencil, IconEye, IconCurrencyDollar } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 import { toast } from "@/Use/toast.js";
 

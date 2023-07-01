@@ -16,14 +16,6 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function show(Employee $employee)
-    {
-        return inertia('Employees/Show', [
-            'employee' => $employee,
-            'payments' => $employee->payments()->paginate(10),
-        ]);
-    }
-
     public function store(EmployeeRequest $request)
     {
         Employee::create($request->validated());
