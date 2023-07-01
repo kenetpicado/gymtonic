@@ -2,17 +2,17 @@
     <AppLayout title="Customer">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Plans
+                Plan
             </h2>
         </template>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="submit">
                 <template #title>
-                    Plan Information
+                    Informacion del Plan
                 </template>
 
                 <template #description>
-                    Set the plan's information.
+                    Editar plan
                 </template>
 
                 <template #form>
@@ -34,7 +34,7 @@
                             </span> y el periodo seleccionado: {{ form.period }} dias.
                         </div>
                         <div class="col-span-4  font-medium text-gray-900">
-                            End date: <span class="badge-blue text-sm">{{ end_date_label }}</span>
+                            Fecha fin: <span class="badge-blue text-sm">{{ end_date_label }}</span>
                         </div>
                     </template>
                     <template v-else>
@@ -55,10 +55,10 @@
 
                 <template #actions>
                     <SecondaryButton @click="$inertia.visit(route('dashboard.plans.index'))">
-                        Cancel
+                        Cancelar
                     </SecondaryButton>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Save
+                        Guardar
                     </PrimaryButton>
                 </template>
             </FormSection>
@@ -67,18 +67,18 @@
 </template>
 
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import FormSection from '../../Components/FormSection.vue';
-import { router, useForm } from '@inertiajs/vue3';
-import InputForm from '@/Components/Form/InputForm.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SelectForm from "@/Components/Form/SelectForm.vue";
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { defineProps, ref, computed } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
-import { toast } from '@/Use/toast.js';
-import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
 import { Plan } from '@/Classes/Plan.js';
+import InputForm from '@/Components/Form/InputForm.vue';
+import SelectForm from "@/Components/Form/SelectForm.vue";
+import FormSection from '@/Components/FormSection.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
+import { toast } from '@/Use/toast.js';
+import { router, useForm } from '@inertiajs/vue3';
+import { computed, defineProps, ref } from 'vue';
 
 const props = defineProps({
     services: {
@@ -116,7 +116,7 @@ const end_date_label = computed(() => {
 watchForPrices(form, props.services, prices);
 
 function submit() {
-    form.amount = total.value;
+    form.price = total.value;
     form.end_date = end_date.value;
 
     form.put(route('dashboard.plans.update', form.plan_id), {

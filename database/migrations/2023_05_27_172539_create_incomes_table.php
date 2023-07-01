@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
             $table->nullableMorphs('incomeable');
-            $table->double('amount');
+            $table->double('value');
             $table->integer('quantity')->default(1);
             $table->double('discount')->default(0);
             $table->string('concept');

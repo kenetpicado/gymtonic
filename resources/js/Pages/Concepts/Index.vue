@@ -2,31 +2,30 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Concepts
+                Conceptos
             </h2>
             <div>
                 <PrimaryButton type="button" @click="openModal = true">
-                    New
+                    Nuevo
                 </PrimaryButton>
             </div>
         </template>
 
         <DialogModal :show="openModal">
             <template #title>
-                New Concept
+                Nuevo Concepto
             </template>
             <template #content>
                 <div class="grid gap-6">
-                    <InputForm text="Name" v-model="form.name"></InputForm>
-                    <InputForm text="Image" v-model="form.image" type="url"></InputForm>
+                    <InputForm text="Name" v-model="form.name"/>
                 </div>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
-                    Cancel
+                    Cancelar
                 </SecondaryButton>
                 <PrimaryButton type="button" @click="saveConcept">
-                    Save
+                    Guardar
                 </PrimaryButton>
             </template>
         </DialogModal>
@@ -34,9 +33,9 @@
         <TableSection>
             <template #header>
                 <th>#</th>
-                <th>Name</th>
-                <th>$</th>
-                <th>Actions</th>
+                <th>Nombre</th>
+                <th>Flujo</th>
+                <th>Acciones</th>
             </template>
             <template #body>
                 <tr v-for="(concept, index) in concepts.data" class="hover:bg-gray-50">
@@ -58,7 +57,7 @@
                         <IconPencil @click="editConcept(concept)" role="button" />
                     </td>
                 </tr>
-                <tr v-if="concepts.length == 0">
+                <tr v-if="concepts.data.length == 0">
                     <td colspan="4" class="text-center">No data to display</td>
                 </tr>
             </template>
@@ -97,13 +96,11 @@ const isNew = ref(true);
 const form = useForm({
     id: null,
     name: '',
-    image: '',
 })
 
 function editConcept(concept) {
     form.id = concept.id;
     form.name = concept.name;
-    form.image = concept.image;
     isNew.value = false;
     openModal.value = true;
 }
@@ -114,7 +111,7 @@ function saveConcept() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Concept created successfully')
+                toast.success('Concepto creado correctamente!')
                 resetValues()
             },
         });
@@ -123,7 +120,7 @@ function saveConcept() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Concept updated successfully')
+                toast.success('Concepto actualizado correctamente!')
                 resetValues()
             },
         });

@@ -2,18 +2,18 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Employees
+                Empleados
             </h2>
             <div>
                 <PrimaryButton type="button" @click="openModal = true">
-                    New
+                    Nuevo
                 </PrimaryButton>
             </div>
         </template>
 
         <DialogModal :show="openModal">
             <template #title>
-                New Employee
+                Nuevo Empleado
             </template>
             <template #content>
                 <div class="grid gap-6">
@@ -24,10 +24,10 @@
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
-                    Cancel
+                    Cancelar
                 </SecondaryButton>
                 <PrimaryButton type="button" @click="saveEmployee">
-                    Save
+                    Guardar
                 </PrimaryButton>
             </template>
         </DialogModal>
@@ -35,9 +35,9 @@
         <TableSection>
             <template #header>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Schedule</th>
-                <th>Actions</th>
+                <th>Nombre</th>
+                <th>Horario</th>
+                <th>Acciones</th>
             </template>
             <template #body>
                 <tr v-for="(employee, index) in employees" class="hover:bg-gray-50">
@@ -113,7 +113,7 @@ function saveEmployee() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Employee created successfully')
+                toast.success('Empleado creado correctamente!')
                 resetValues()
             },
         });
@@ -122,7 +122,7 @@ function saveEmployee() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Employee updated successfully')
+                toast.success('Empleado actualizado correctamente!')
                 resetValues()
             },
         });

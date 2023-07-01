@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
             $table->foreignId('customer_id')->constrained()->onDelete('cascade');
             $table->string('period');
-            $table->float('amount');
+            $table->float('price');
             $table->float('discount')->default(0);
             $table->string('note')->nullable();
             $table->date('start_date');

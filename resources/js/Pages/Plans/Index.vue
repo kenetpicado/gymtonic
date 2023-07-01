@@ -2,26 +2,26 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ checkBox ? 'Active Plans' : 'Expired Plans' }}
+                {{ checkBox ? 'Planes activos' : 'Planes expirados' }}
             </h2>
 
             <div class="flex gap-2 items-center">
                 <div v-show="atLeastOnePlanSelected">
                     <PrimaryButton type="button" @click="openModalToAddDays()">
-                        Add Days
+                        Agregar dias
                     </PrimaryButton>
                 </div>
                 <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.customers.create'))">
-                    New
+                    Nuevo
                 </PrimaryButton>
             </div>
 
             <DialogModal :show="openModal">
                 <template #title>
-                    Extend Plan
+                    Agregar dias
                 </template>
                 <template #content>
-                    <InputForm text="Days" v-model="days" type="number"></InputForm>
+                    <InputForm text="Dias" name="days" v-model="days" type="number"></InputForm>
                     <table class="w-full border-collapse bg-white text-left text-sm text-gray-500 mt-4">
                         <thead class="bg-gray-50">
                             <tr>
@@ -41,10 +41,10 @@
                 </template>
                 <template #footer>
                     <SecondaryButton @click="resetValues">
-                        Cancel
+                        Cancelar
                     </SecondaryButton>
                     <PrimaryButton type="button" @click="submitAddDays">
-                        Save
+                        Guardar
                     </PrimaryButton>
                 </template>
             </DialogModal>
@@ -54,17 +54,17 @@
             <template #topbar>
                 <div>
                     <Checkbox v-model:checked="checkBox" name="status" />
-                    <span class="ml-2 text-sm text-gray-600">Active</span>
+                    <span class="ml-2 text-sm text-gray-600">Activos</span>
                 </div>
                 <SearchComponent @search="searchPlans"></SearchComponent>
             </template>
 
             <template #header>
-                <th>Customer</th>
-                <th>Service</th>
-                <th>Period</th>
-                <th>State</th>
-                <th>Actions</th>
+                <th>Cliente</th>
+                <th>Servicio</th>
+                <th>Periodo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
@@ -78,7 +78,7 @@
                     <td>
                         {{ plan.service.name }}
                         <div class="text-sm mt-1">
-                            ({{ plan.period }} days)
+                            ({{ plan.period }} dias)
                         </div>
                     </td>
                     <td>
@@ -92,22 +92,20 @@
                     <td>
                         <div class="flex items-center">
                             <span v-if="plan.end_date == TODAY" class="badge-danger">
-                                LAST DAY!
+                                ULTIMO DIA!
                             </span>
                             <span v-else-if="checkBox" class="badge-success">
-                                <span class="dot-green"></span>
-                                Active
+                                Activo
                             </span>
                             <span v-else class="badge-gray">
-                                <span class="dot-gray"></span>
-                                Expired ({{ Carbon.create(plan.end_date).diffForHumans() }})
+                                Expirado {{ Carbon.create(plan.end_date).diffForHumans() }}
                             </span>
                         </div>
                     </td>
                     <td>
                         <span role="button" class="badge-blue"
                             @click="$inertia.visit(route('dashboard.plans.edit', plan.id))">
-                            {{ checkBox ? 'Pay $' : 'Renew $' }}
+                            {{ checkBox ? 'Pagar $' : 'Renovar $' }}
                         </span>
                     </td>
                 </tr>

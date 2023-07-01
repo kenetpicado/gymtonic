@@ -2,18 +2,18 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ employee.name }} | Payments
+                {{ employee.name }} | Pagos
             </h2>
             <div>
                 <PrimaryButton payment="button" @click="openModal = true">
-                    New
+                    Nuevo
                 </PrimaryButton>
             </div>
         </template>
 
         <DialogModal :show="openModal">
             <template #title>
-                New Payment
+                Nuevo Pago
             </template>
             <template #content>
                 <div class="grid gap-6">
@@ -24,20 +24,20 @@
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
-                    Cancel
+                    Cancelar
                 </SecondaryButton>
                 <PrimaryButton payment="button" @click="savePayment">
-                    Save
+                    Guardar
                 </PrimaryButton>
             </template>
         </DialogModal>
 
         <TableSection>
             <template #header>
-                <th>Date</th>
-                <th>Concept</th>
-                <th>Amount</th>
-                <th>Actions</th>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
@@ -107,7 +107,7 @@ const form = useForm({
     concept: 'Pago de salario',
     expenditureable_type: 'App\\Models\\Employee',
     expenditureable_id: props.employee.id,
-    created_at: new Carbon().format('Y-m-d'),
+    created_at: Carbon.today(),
 })
 
 function editPayment(payment) {
@@ -127,7 +127,7 @@ function savePayment() {
             preserveState: true,
             onSuccess: () => {
                 resetValues();
-                toast.success('Payment added successfully');
+                toast.success('Pago guardado correctamente!');
             }
         });
     } else {
@@ -136,7 +136,7 @@ function savePayment() {
             preserveState: true,
             onSuccess: () => {
                 resetValues();
-                toast.success('Payment updated successfully');
+                toast.success('Pago actualizado correctamente!');
             },
         });
     }

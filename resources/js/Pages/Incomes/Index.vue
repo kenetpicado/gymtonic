@@ -17,10 +17,10 @@
             </template>
 
             <template #header>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Concept</th>
-                <th>Amount</th>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Concepto</th>
+                <th>Monto</th>
                 <th>Total</th>
             </template>
 
@@ -41,18 +41,18 @@
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
-                            C$ {{ (income.amount + income.discount).toLocaleString('en-US') }}
+                            C$ {{ (income.value + income.discount).toLocaleString('en-US') }}
                         </div>
                         <div class="text-red-400 mt-1 text-xs" v-if="income.discount">
                             -C$ {{ income.discount.toLocaleString('en-US') }}
                         </div>
                         <div class="text-gray-400" v-if="income.quantity > 1">
-                            Qty: {{ income.quantity }}
+                            cant. {{ income.quantity }}
                         </div>
                     </td>
                     <td>
                         <span class="badge-blue">
-                            C$ {{ (income.amount * income.quantity).toLocaleString('en-US') }}
+                            C$ {{ (income.value * income.quantity).toLocaleString('en-US') }}
                         </span>
                     </td>
                 </tr>

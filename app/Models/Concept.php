@@ -9,7 +9,7 @@ class Concept extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'image'];
+    protected $fillable = ['name'];
 
     public function expenditures()
     {

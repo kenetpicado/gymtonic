@@ -2,7 +2,7 @@ import { Carbon } from "./Carbon";
 
 export class Plan {
     plan_id;
-    amount;
+    price;
     period;
     start_date;
     end_date;
@@ -17,7 +17,7 @@ export class Plan {
         this.TODAY = new Carbon().format("Y-m-d");
 
         this.plan_id = plan?.id;
-        this.amount = plan?.amount ?? 0;
+        this.price = plan?.price ?? 0;
         this.period = plan?.period;
 
         if (isCurrentActive === null) {

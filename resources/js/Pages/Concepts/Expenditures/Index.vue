@@ -2,25 +2,25 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Payments: {{ concept.name }}
+                Pagos: {{ concept.name }}
             </h2>
             <div>
                 <PrimaryButton type="button" @click="openModal = true">
-                    New
+                    Nuevo
                 </PrimaryButton>
             </div>
         </template>
 
         <DialogModal :show="openModal">
             <template #title>
-                New Payment
+                Nuevo Pago
             </template>
             <template #content>
                 <div class="grid gap-6">
                     <InputForm text="Concept" v-model="form.concept" />
                     <InputForm text="Description (optional)" v-model="form.description" />
                     <InputForm text="Quantity" v-model="form.quantity" type="number" />
-                    <InputForm text="Amount" v-model="form.amount" />
+                    <InputForm text="Value" v-model="form.value" />
 
                     <div class="col-span-4 text-lg font-medium text-gray-900 mb-2">
                         <h3>
@@ -31,10 +31,10 @@
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
-                    Cancel
+                    Cancelar
                 </SecondaryButton>
                 <PrimaryButton type="button" @click="saveExpenditure">
-                    Save
+                    Guardar
                 </PrimaryButton>
             </template>
         </DialogModal>
@@ -45,9 +45,9 @@
             </template>
 
             <template #header>
-                <th>Date</th>
-                <th>Concept</th>
-                <th>Amount</th>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th>Monto</th>
                 <th>Total</th>
             </template>
 
@@ -61,15 +61,15 @@
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
-                            C$ {{ (expenditure.amount).toLocaleString('en-US') }}
+                            C$ {{ (expenditure.value).toLocaleString('en-US') }}
                         </div>
                         <div class="text-gray-400" v-if="expenditure.quantity > 1">
-                            Qty: {{ expenditure.quantity }}
+                            Cant. {{ expenditure.quantity }}
                         </div>
                     </td>
                     <td>
                         <span class="badge-danger">
-                            C$ {{ (expenditure.amount * expenditure.quantity).toLocaleString('en-US') }}
+                            C$ {{ (expenditure.value * expenditure.quantity).toLocaleString('en-US') }}
                         </span>
                     </td>
                 </tr>
@@ -113,36 +113,38 @@ const openModal = ref(false)
 const isNew = ref(true);
 
 const form = useForm({
+    id: null,
     quantity: 1,
-    amount: props.expenditures.data.length > 0 ? props.expenditures.data[0].amount : 0,
+    value: props.expenditures.data.length > 0 ? props.expenditures.data[0].value : 0,
     concept: '',
+    description: '',
     expenditureable_id: props.concept.id,
     expenditureable_type: 'App\\Models\\Concept'
 })
 
 const total = computed(() => {
-    return (form.quantity * form.amount).toLocaleString('en-US')
+    return (form.quantity * form.value).toLocaleString('en-US')
 })
 
 function saveExpenditure() {
     if (isNew.value) {
-        form.post(route('dashboard.concepts.expenditures.store', props.concept.id), {
+        form.post(route('dashboard.expenditures.store'), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Payment created successfully')
+                toast.success('Pago creado correctamente!')
                 resetValues()
             },
         });
     } else {
-        // form.put(route('dashboard.concepts.expenditures.update', form.id), {
-        //     preserveScroll: true,
-        //     preserveState: true,
-        //     onSuccess: () => {
-        //         toast.success('Payment updated successfully')
-        //         resetValues()
-        //     },
-        // });
+        form.put(route('dashboard.expenditures.update', form.id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success('Pago actualizado correctamente!')
+                resetValues()
+            },
+        });
     }
 }
 

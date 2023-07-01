@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('expenditures', function (Blueprint $table) {
             $table->id();
             $table->nullableMorphs('expenditureable');
-            $table->double('amount');
+            $table->double('value');
             $table->integer('quantity')->default(1);
             $table->string('concept');
             $table->string('description')->nullable();

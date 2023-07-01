@@ -2,16 +2,16 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ customer.name }} | History
+                {{ customer.name }} | Historial
             </h2>
         </template>
 
         <TableSection>
             <template #header>
                 <th>ID</th>
-                <th>Concept</th>
-                <th>Description</th>
-                <th>Date</th>
+                <th>Concepto</th>
+                <th>Descripcion</th>
+                <th>Fecha</th>
             </template>
 
             <template #body>

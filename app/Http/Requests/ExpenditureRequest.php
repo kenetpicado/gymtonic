@@ -24,12 +24,12 @@ class ExpenditureRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => 'required|numeric|gt:0',
+            'value' => 'required|numeric|gt:0',
             'concept' => 'required|string',
             'description' => 'nullable|string',
             'expenditureable_id' => 'required|numeric',
             'expenditureable_type' => 'required|string',
-            'created_at' => 'required|date'
+            'created_at' => 'nullable|date'
         ];
     }
 }

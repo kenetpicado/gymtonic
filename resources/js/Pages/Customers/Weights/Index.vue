@@ -2,28 +2,28 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ customer.name }} | Weights
+                {{ customer.name }} | Pesos
             </h2>
             <div>
                 <PrimaryButton type="button" @click="openModal = true">
-                    New
+                    Nuevo
                 </PrimaryButton>
             </div>
         </template>
 
         <DialogModal :show="openModal">
             <template #title>
-                New Weight
+                Nuevo Peso
             </template>
             <template #content>
                 <InputForm text="Value" v-model="form.value"></InputForm>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
-                    Cancel
+                    Cancelar
                 </SecondaryButton>
                 <PrimaryButton type="button" @click="saveWeight">
-                    Save
+                    Guardar
                 </PrimaryButton>
             </template>
         </DialogModal>
@@ -31,9 +31,9 @@
         <TableSection>
             <template #header>
                 <th>ID</th>
-                <th>Date</th>
-                <th>Weight (lbs)</th>
-                <th>Actions</th>
+                <th>Fecha</th>
+                <th>Peso (lbs)</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>

@@ -2,12 +2,12 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Customers
+                Clientes
             </h2>
             <div>
                 <Link :href="route('dashboard.customers.create')">
                     <PrimaryButton type="button">
-                        New
+                        Nuevo
                     </PrimaryButton>
                 </Link>
             </div>
@@ -20,10 +20,10 @@
 
             <template #header>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>State</th>
-                <th>Actions</th>
+                <th>Nombre</th>
+                <th>Genero</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
@@ -41,7 +41,6 @@
                     </td>
                     <td>
                         <span v-if="customer.active_plans > 0" class="badge-success">
-                            <span class="dot-green"></span>
                             Active
                         </span>
                         <span v-else class="badge-gray">

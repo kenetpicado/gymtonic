@@ -40,7 +40,7 @@ class PlanService
         $plan->update($request);
 
         Income::create([
-            'amount' => $plan->amount,
+            'value' => $plan->price,
             'discount' => $plan->discount,
             'concept' => 'Pago de plan',
             'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
@@ -57,7 +57,7 @@ class PlanService
             'period' => $request['period'],
             'start_date' => $request['start_date'],
             'end_date' => $request['end_date'],
-            'amount' => $request['amount'],
+            'price' => $request['price'],
             'discount' => $request['discount'],
             'note' => $request['note'],
             'service_id' => $request['service_id']

@@ -2,18 +2,18 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Services
+                Servicios
             </h2>
             <div>
                 <PrimaryButton type="button" @click="openModal = true">
-                    New
+                    Nuevo
                 </PrimaryButton>
             </div>
         </template>
 
         <DialogModal :show="openModal">
             <template #title>
-                New Service
+                Nuevo Servicio
             </template>
             <template #content>
                 <InputForm text="Name" v-model="form.name"></InputForm>
@@ -21,7 +21,7 @@
                     <Checkbox v-model:checked="form.is_active" name="is_active" />
                     <span class="ml-2 text-sm text-gray-600">Active</span>
                 </label>
-                <h4>Prices</h4>
+                <h4 class="font-bold text-lg">Precios</h4>
                 <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors['prices']">
                     {{ $page.props.errors['prices'] }}
                 </p>
@@ -31,10 +31,10 @@
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
-                    Cancel
+                    Cancelar
                 </SecondaryButton>
                 <PrimaryButton type="button" @click="saveService">
-                    Save
+                    Guardar
                 </PrimaryButton>
             </template>
         </DialogModal>
@@ -42,10 +42,10 @@
         <TableSection>
             <template #header>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Prices</th>
-                <th>State</th>
-                <th>Actions</th>
+                <th>Nombre</th>
+                <th>Precios</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
@@ -63,12 +63,10 @@
                     </td>
                     <td>
                         <span v-if="service.is_active" class="badge-success">
-                            <span class="dot-green"></span>
-                            Active
+                            Activo
                         </span>
                         <span v-else class="badge-gray">
-                            <span class="dot-gray"></span>
-                            Inactive
+                            Inactivo
                         </span>
                     </td>
                     <td>
@@ -147,7 +145,7 @@ function saveService() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Service created successfully')
+                toast.success('Servicio creado correctamente!')
                 resetValues()
             },
         });
@@ -156,7 +154,7 @@ function saveService() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Service updated successfully')
+                toast.success('Servicio actualizado correctamente!')
                 resetValues()
             },
         });

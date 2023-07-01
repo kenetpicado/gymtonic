@@ -13,7 +13,7 @@ class Plan extends Model
         'period',
         'start_date',
         'end_date',
-        'amount',
+        'price',
         'discount',
         'note',
         'service_id',

@@ -2,17 +2,17 @@
     <AppLayout title="Customer">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Customers
+                Clientes
             </h2>
         </template>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="saveCustomer">
                 <template #title>
-                    Customer Information
+                    Informacion del Cliente
                 </template>
 
                 <template #description>
-                    Set the customer's information.
+                    Datos personales del cliente
                 </template>
 
                 <template #form>
@@ -20,19 +20,19 @@
                     <InputForm text="Phone" v-model="form.phone" type="number"></InputForm>
                     <InputForm text="Birth Date" v-model="form.birth_date" type="date"></InputForm>
                     <SelectForm v-model="form.gender" text="Gender">
-                        <option value="F">Female</option>
-                        <option value="M">Male</option>
+                        <option value="F">Femenino</option>
+                        <option value="M">Masculino</option>
                     </SelectForm>
                 </template>
 
                 <template #actions>
                     <Link :href="route('dashboard.customers.index')">
                     <SecondaryButton>
-                        Cancel
+                        Cancelar
                     </SecondaryButton>
                     </Link>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Save
+                        Guardar
                     </PrimaryButton>
                 </template>
             </FormSection>
@@ -41,11 +41,11 @@
 
             <FormSection @submitted="saveCustomer">
                 <template #title>
-                    Plan Information
+                    Informacion del Plan
                 </template>
 
                 <template #description>
-                    Set the plan's information.
+                    Datos del plan del cliente
                     <br>
                     <template v-if="customer">
                         <p v-if="!customer.plan" class="mt-2 text-red-600">
@@ -92,10 +92,10 @@
 
                 <template #actions>
                     <SecondaryButton @click="$inertia.visit(route('dashboard.customers.index'))">
-                        Cancel
+                        Cancelar
                     </SecondaryButton>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Save
+                        Guardar
                     </PrimaryButton>
                 </template>
             </FormSection>
@@ -117,7 +117,7 @@ import { Carbon } from '@/Classes/Carbon.js';
 import { toast } from '@/Use/toast.js';
 import { Link } from '@inertiajs/vue3';
 import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
-import { Plan } from '../../Classes/Plan';
+import { Plan } from '@/Classes/Plan';
 
 const props = defineProps({
     customer: {
@@ -159,7 +159,7 @@ const end_date_label = computed(() => {
 });
 
 function saveCustomer() {
-    form.amount = total.value;
+    form.price = total.value;
     form.end_date = end_date.value;
 
     if (props.isNew) {
@@ -167,8 +167,11 @@ function saveCustomer() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Customer created successfully!');
+                toast.success('Cliente creado correctamente!');
                 router.get(route('dashboard.customers.index'));
+            },
+            onError: (err) => {
+                console.log(err);
             },
         });
     } else {
@@ -176,7 +179,7 @@ function saveCustomer() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Customer updated successfully!');
+                toast.success('Cliente actualizado correctamente!');
                 router.get(route('dashboard.customers.index'));
             },
         });

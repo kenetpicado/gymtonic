@@ -35,22 +35,22 @@ const logout = () => {
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                             <NavLink routeName="dashboard.customers.index">
-                                Customers
+                                Clientes
                             </NavLink>
                             <NavLink routeName="dashboard.plans.index">
-                                Plans
+                                Planes
                             </NavLink>
                             <NavLink routeName="dashboard.employees.index">
-                                Employees
+                                Empleados
                             </NavLink>
                             <NavLink routeName="dashboard.services.index">
-                                Services
+                                Servicios
                             </NavLink>
                             <NavLink routeName="dashboard.concepts.index">
-                                Concepts
+                                Conceptos
                             </NavLink>
                             <NavLink routeName="dashboard.incomes.index">
-                                Incomes
+                                Ingresos
                             </NavLink>
                         </div>
                     </div>
