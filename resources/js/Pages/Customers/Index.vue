@@ -32,7 +32,7 @@
                         {{ customer.id }}
                     </td>
                     <th>
-                        <UserInformation :user="customer" />
+                        <UserInformation :user="customer"/>
                     </th>
                     <td>
                         <span :class="[customer.gender == 'F' ? 'badge-pink' : 'badge-blue']">

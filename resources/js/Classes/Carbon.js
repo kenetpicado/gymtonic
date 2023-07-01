@@ -1,20 +1,20 @@
+const DATE_UNITS = {
+    year: 31536000,
+    month: 2592000,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+    second: 1,
+};
 export class Carbon {
     date;
 
-    DATE_UNITS = {
-        year: 31536000,
-        month: 2592000,
-        day: 86400,
-        hour: 3600,
-        minute: 60,
-        second: 1,
-    };
-
-    rtf = new Intl.RelativeTimeFormat(navigator.language, {
-        numeric: "auto",
-    });
-
     constructor(dateString) {
+
+        if (dateString && !dateString.includes(":")) {
+            dateString = dateString + "T06:00:00.000000Z";
+        }
+
         if (!dateString) {
             this.date = new Date();
         } else {
@@ -51,18 +51,15 @@ export class Carbon {
     }
 
     format(format = "Y-m-d") {
-        let year = this.date.getFullYear();
-        let month = this.date.getMonth() + 1;
-        let day = this.date.getDate();
-
-        if (month < 10) month = "0" + month;
-        if (day < 10) day = "0" + day;
+        const month = formatValue(this.date.getMonth() + 1);
 
         return format
-            .replace("Y", year)
+            .replace("Y", this.date.getFullYear())
             .replace("m", month)
-            .replace("d", day)
-            .toString();
+            .replace("d", formatValue(this.date.getDate()))
+            .replace("H", formatValue(this.date.getHours()))
+            .replace("i", formatValue(this.date.getMinutes()))
+            .replace("s", formatValue(this.date.getSeconds()));
     }
 
     static simpleFormat(dateString, format = "d/m/Y") {
@@ -80,13 +77,30 @@ export class Carbon {
         const targetTimestamp = Math.floor(this.date.getTime() / 1000);
         const diff = currentTimestamp - targetTimestamp;
 
-        for (const unit in this.DATE_UNITS) {
-            if (diff >= this.DATE_UNITS[unit]) {
-                const value = Math.floor(diff / this.DATE_UNITS[unit]);
-                return this.rtf.format(-value, unit);
+        const rtf = new Intl.RelativeTimeFormat(navigator.language, {
+            numeric: "auto",
+        });
+
+        if (diff > 0) {
+            for (const unit in DATE_UNITS) {
+                if (diff >= DATE_UNITS[unit]) {
+                    const value = Math.floor(diff / DATE_UNITS[unit]);
+                    return rtf.format(-value, unit);
+                }
+            }
+        } else {
+            for (const unit in DATE_UNITS) {
+                if (diff <= -DATE_UNITS[unit]) {
+                    const value = Math.floor(diff / DATE_UNITS[unit]);
+                    return rtf.format(-value, unit);
+                }
             }
         }
 
-        return this.rtf.format(-diff, "second");
+        return "Now";
     }
+}
+
+function formatValue(value) {
+    return value.toString().padStart(2, "0");
 }

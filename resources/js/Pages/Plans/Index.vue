@@ -85,7 +85,7 @@
                         <span class="badge-gray">
                             {{ Carbon.simpleFormat(plan.start_date) }}
                         </span>
-                        <span class="badge-blue">
+                        <span class="badge-blue" :tooltip="Carbon.create(plan.end_date).diffForHumans()">
                             {{ Carbon.simpleFormat(plan.end_date) }}
                         </span>
                     </td>
