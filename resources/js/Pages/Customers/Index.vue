@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Dashboard">
+    <AppLayout title="Dashboard" :breads="breads">
         <TableSection>
             <template #topbar>
                 <SearchComponent :url="route('dashboard.customers.index')" :only="['customers']" />
@@ -41,8 +41,8 @@
                         </span>
                     </td>
                     <td>
-                        <div class="flex gap-2">
-                            <Link :href="route('dashboard.customers.weights.index', customer.id)">
+                        <div class="flex gap-4">
+                            <Link :href="route('dashboard.customers.weights.index', customer.id)" tooltip="Pesos">
                             <IconWeight />
                             </Link>
 
@@ -85,5 +85,10 @@ const props = defineProps({
         type: Object, required: true
     }
 })
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Clientes', route: 'dashboard.customers.index' },
+]
 
 </script>

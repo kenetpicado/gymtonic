@@ -1,16 +1,5 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ employee.name }} | Pagos
-            </h2>
-            <div>
-                <PrimaryButton payment="button" @click="openModal = true">
-                    Nuevo
-                </PrimaryButton>
-            </div>
-        </template>
-
+    <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
                 Nuevo Pago
@@ -33,6 +22,18 @@
         </DialogModal>
 
         <TableSection>
+
+            <template #topbar>
+                <div>
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
+                        Pagos: {{ employee.name }}
+                    </h2>
+                </div>
+                <PrimaryButton payment="button" @click="openModal = true">
+                    Nuevo
+                </PrimaryButton>
+            </template>
+
             <template #header>
                 <th>Fecha</th>
                 <th>Concepto</th>
@@ -43,7 +44,7 @@
             <template #body>
                 <tr v-for="(payment, index) in payments.data" class="hover:bg-gray-50">
                     <td>
-                        <DateColumn :date="payment.created_at"/>
+                        <DateColumn :date="payment.created_at" />
                     </td>
                     <th>
                         <div class="text-sm">
@@ -59,7 +60,7 @@
                         <span class="badge-blue">C$ {{ payment.value.toLocaleString('en-US') }}</span>
                     </td>
                     <td>
-                        <IconPencil @click="editPayment(payment)" role="button"/>
+                        <IconPencil @click="editPayment(payment)" role="button" />
                     </td>
                 </tr>
                 <tr v-if="payments.data.length == 0">
@@ -100,6 +101,12 @@ const props = defineProps({
 
 const openModal = ref(false)
 const isNew = ref(true);
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Empleados', route: 'dashboard.employees.index' },
+    { name: 'Pagos', route: 'dashboard.employees.expenditures.index', params: [props.employee.id] },
+]
 
 const form = useForm({
     value: 0,

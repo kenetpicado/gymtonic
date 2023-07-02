@@ -1,62 +1,58 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ checkBox ? 'Planes activos' : 'Planes expirados' }}
-            </h2>
-
-            <div class="flex gap-2 items-center">
-                <div v-show="atLeastOnePlanSelected">
-                    <PrimaryButton type="button" @click="openModalToAddDays()">
-                        Agregar dias
-                    </PrimaryButton>
-                </div>
-                <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.customers.create'))">
-                    Nuevo
+    <AppLayout title="Dashboard" :breads="breads">
+        <DialogModal :show="openModal">
+            <template #title>
+                Agregar dias
+            </template>
+            <template #content>
+                <InputForm text="Dias" name="days" v-model="days" type="number"></InputForm>
+                <table class="w-full border-collapse bg-white text-left text-sm text-gray-500 mt-4">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th>Plan ID</th>
+                            <th>Customer</th>
+                            <th>End date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+                        <tr v-for="plan in selectedPlans">
+                            <td>{{ plan.id }}</td>
+                            <td>{{ plan.customer }}</td>
+                            <td>{{ Carbon.simpleFormat(plan.end_date) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+            <template #footer>
+                <SecondaryButton @click="resetValues">
+                    Cancelar
+                </SecondaryButton>
+                <PrimaryButton type="button" @click="submitAddDays">
+                    Guardar
                 </PrimaryButton>
-            </div>
-
-            <DialogModal :show="openModal">
-                <template #title>
-                    Agregar dias
-                </template>
-                <template #content>
-                    <InputForm text="Dias" name="days" v-model="days" type="number"></InputForm>
-                    <table class="w-full border-collapse bg-white text-left text-sm text-gray-500 mt-4">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th>Plan ID</th>
-                                <th>Customer</th>
-                                <th>End date</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                            <tr v-for="plan in selectedPlans">
-                                <td>{{ plan.id }}</td>
-                                <td>{{ plan.customer }}</td>
-                                <td>{{ Carbon.simpleFormat(plan.end_date) }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </template>
-                <template #footer>
-                    <SecondaryButton @click="resetValues">
-                        Cancelar
-                    </SecondaryButton>
-                    <PrimaryButton type="button" @click="submitAddDays">
-                        Guardar
-                    </PrimaryButton>
-                </template>
-            </DialogModal>
-        </template>
+            </template>
+        </DialogModal>
 
         <TableSection>
             <template #topbar>
-                <div>
-                    <Checkbox v-model:checked="checkBox" name="status" />
-                    <span class="ml-2 text-sm text-gray-600">Activos</span>
+                <div class="flex items-center gap-4">
+                    <SearchComponent @search="searchPlans" />
+                    <div>
+                        <Checkbox v-model:checked="checkBox" name="status" />
+                        <span class="ml-2 text-sm text-gray-600">Activos</span>
+                    </div>
                 </div>
-                <SearchComponent @search="searchPlans"></SearchComponent>
+
+                <div class="flex gap-2 items-center">
+                    <div v-show="atLeastOnePlanSelected">
+                        <PrimaryButton type="button" @click="openModalToAddDays()">
+                            Agregar dias
+                        </PrimaryButton>
+                    </div>
+                    <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.customers.create'))">
+                        Nuevo
+                    </PrimaryButton>
+                </div>
             </template>
 
             <template #header>
@@ -155,6 +151,11 @@ const queryParams = reactive({
     search: '',
     type: 'active'
 })
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Planes', route: 'dashboard.plans.index' },
+]
 
 watch(() => checkBox.value, (value) => {
     queryParams.type = value ? 'active' : 'expired';

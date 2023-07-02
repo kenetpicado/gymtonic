@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Customer">
+    <AppLayout title="Customer" :breads="breads">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Plan
@@ -12,7 +12,22 @@
                 </template>
 
                 <template #description>
-                    Editar plan
+                    <template v-if="isCurrentActive">
+                        <div class="col-span-4 space-y-3">
+                            <div>
+                                El plan se encuentra activo, por lo que se asume un pago adelantado.
+                            </div>
+                            <div>
+                                La fecha de fin del plan se actualizara en funcion de la fecha anterior:
+                                <span class="badge-blue text-sm">
+                                    {{ Carbon.simpleFormat(plan.end_date) }}
+                                </span> y el periodo seleccionado: {{ form.period }} dias.
+                            </div>
+                        </div>
+                    </template>
+                    <div class="font-medium text-gray-900">
+                        Fin del plan: <span class="badge-blue text-sm">{{ end_date_label }}</span>
+                    </div>
                 </template>
 
                 <template #form>
@@ -25,23 +40,8 @@
                             {{ price.period_label }} - {{ price.value }} C$
                         </option>
                     </SelectForm>
-                    <template v-if="isCurrentActive">
-                        <div class="col-span-4">
-                            El plan se encuentra activo, por lo que se asume un pago adelantado.
-                            La fecha de fin del plan se actualizara en funcion de la fecha anterior:
-                            <span class="badge-blue text-sm">
-                                {{ Carbon.simpleFormat(plan.end_date) }}
-                            </span> y el periodo seleccionado: {{ form.period }} dias.
-                        </div>
-                        <div class="col-span-4  font-medium text-gray-900">
-                            Fecha fin: <span class="badge-blue text-sm">{{ end_date_label }}</span>
-                        </div>
-                    </template>
-                    <template v-else>
+                    <template v-if="!isCurrentActive">
                         <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
-                        <div class="col-span-4  font-medium text-gray-900">
-                            Last day: <span class="badge-danger text-sm">{{ end_date_label }}</span>
-                        </div>
                     </template>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
@@ -95,8 +95,14 @@ const props = defineProps({
 const prices = ref([])
 const form = useForm(new Plan(props.plan, props.services[0].id, props.isCurrentActive));
 
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Planes', route: 'dashboard.plans.index' },
+    { name: 'Actualizar', route: 'dashboard.plans.edit', params: [form.plan_id] },
+]
+
 const total = computed(() => {
-    return calculateTotal({period: form.period, discount: form.discount }, prices.value);
+    return calculateTotal({ period: form.period, discount: form.discount }, prices.value);
 });
 
 const end_date = computed(() => {

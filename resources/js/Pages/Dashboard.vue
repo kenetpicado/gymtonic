@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Dashboard">
+    <AppLayout title="Dashboard" :breads="breads">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight p-1">
                 Dashboard
@@ -74,6 +74,10 @@ function monthName() {
     const month = new Date().getMonth();
     return names[month];
 }
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+]
 
 const serviceList = [
     "Pesas",

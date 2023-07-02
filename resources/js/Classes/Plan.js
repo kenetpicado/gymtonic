@@ -28,7 +28,7 @@ export class Plan {
 
         this.end_date = plan?.end_date;
         this.discount = plan?.discount ?? 0;
-        this.note = plan?.note;
+        this.note = plan?.note ?? "";
         this.service_id = plan?.service_id ?? service_id;
     }
 }

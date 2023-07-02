@@ -1,5 +1,5 @@
 <template>
-    <div class="w-1/4">
+    <div style="width: 17rem;">
         <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block w-full"
             type="search" placeholder="Search" @input="onInput($event.target.value)" />
     </div>

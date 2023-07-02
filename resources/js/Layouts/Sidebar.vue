@@ -29,7 +29,7 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
-import { IconHome, IconLogout, IconUser, IconUsersGroup } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
 
@@ -51,6 +51,7 @@ const items = [
     {
         name: 'Planes',
         route: 'dashboard.plans.index',
+        icon: IconRun
     },
     {
         name: 'Empleados',
