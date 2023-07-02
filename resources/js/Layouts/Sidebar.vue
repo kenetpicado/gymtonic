@@ -1,0 +1,87 @@
+<template>
+    <aside class="w-72 min-h-screen p-0 m-0 bg-white flex flex-col border">
+        <div class="h-full px-3 py-4 overflow-y-auto">
+            <ul class="space-y-2">
+                <li v-for="item in items">
+                    <span v-if="item.header"
+                        class="block text-xs text-gray-500 uppercase tracking-wider font-semibold mt-4 px-2">
+                        {{ item.header }}
+                    </span>
+                    <Link v-else :href="route(item.route)">
+                    <span class="flex items-center px-2 py-3 rounded-lg gap-4" :class="getClass(item.route)">
+                        <component :is="item.icon ?? DEFAULT_ICON"></component>
+                        <span>{{ item.name }}</span>
+                    </span>
+                    </Link>
+                </li>
+                <li>
+                    <form @submit.prevent="logout">
+                        <span class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-indigo-50" role="button">
+                            <IconLogout></IconLogout>
+                            <span>Logout</span>
+                        </span>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </aside>
+</template>
+
+<script setup>
+import { Link, router } from '@inertiajs/vue3';
+import { IconHome, IconLogout, IconUser, IconUsersGroup } from '@tabler/icons-vue';
+
+const DEFAULT_ICON = IconUser;
+
+const logout = () => {
+    router.post(route('logout'));
+};
+
+const items = [
+    {
+        name: 'Dashboard',
+        route: 'dashboard.index',
+        icon: IconHome
+    },
+    {
+        name: 'Clientes',
+        route: 'dashboard.customers.index',
+        icon: IconUser
+    },
+    {
+        name: 'Planes',
+        route: 'dashboard.plans.index',
+    },
+    {
+        name: 'Empleados',
+        route: 'dashboard.employees.index',
+        icon: IconUsersGroup
+    },
+    {
+        name: 'Servicios',
+        route: 'dashboard.services.index',
+    },
+    {
+        name: 'Conceptos',
+        route: 'dashboard.concepts.index',
+    },
+    {
+        name: 'Ingresos',
+        route: 'dashboard.incomes.index',
+    },
+    {
+        header: 'Cuenta'
+    },
+    {
+        name: 'Perfil',
+        route: 'profile.show',
+    },
+]
+
+function getClass(routeName) {
+    return route().current(routeName)
+        ? 'bg-gray-800 text-white'
+        : 'hover:bg-gray-100';
+}
+
+</script>

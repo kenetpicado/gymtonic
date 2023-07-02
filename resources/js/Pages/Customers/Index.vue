@@ -1,21 +1,14 @@
 <template>
     <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Clientes
-            </h2>
-            <div>
-                <Link :href="route('dashboard.customers.create')">
-                    <PrimaryButton type="button">
-                        Nuevo
-                    </PrimaryButton>
-                </Link>
-            </div>
-        </template>
-
         <TableSection>
             <template #topbar>
                 <SearchComponent :url="route('dashboard.customers.index')" :only="['customers']" />
+
+                <Link :href="route('dashboard.customers.create')">
+                <PrimaryButton type="button">
+                    Nuevo
+                </PrimaryButton>
+                </Link>
             </template>
 
             <template #header>
@@ -32,7 +25,7 @@
                         {{ customer.id }}
                     </td>
                     <th>
-                        <UserInformation :user="customer"/>
+                        <UserInformation :user="customer" />
                     </th>
                     <td>
                         <span :class="[customer.gender == 'F' ? 'badge-pink' : 'badge-blue']">

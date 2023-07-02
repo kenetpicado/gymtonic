@@ -1,16 +1,5 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Empleados
-            </h2>
-            <div>
-                <PrimaryButton type="button" @click="openModal = true">
-                    Nuevo
-                </PrimaryButton>
-            </div>
-        </template>
-
+    <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
                 Nuevo Empleado
@@ -33,6 +22,13 @@
         </DialogModal>
 
         <TableSection>
+            <template #topbar>
+                <div></div>
+                <PrimaryButton type="button" @click="openModal = true">
+                    Nuevo
+                </PrimaryButton>
+            </template>
+
             <template #header>
                 <th>ID</th>
                 <th>Nombre</th>
@@ -53,7 +49,7 @@
                     <td>
                         <div class="flex gap-2">
                             <Link :href="route('dashboard.employees.expenditures.index', employee.id)">
-                            <IconCurrencyDollar/>
+                            <IconCurrencyDollar />
                             </Link>
 
                             <IconPencil @click="editEmployee(employee)" role="button" />
@@ -90,6 +86,11 @@ const props = defineProps({
 
 const openModal = ref(false)
 const isNew = ref(true);
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Empleados', route: 'dashboard.employees.index' },
+]
 
 const form = useForm({
     id: null,

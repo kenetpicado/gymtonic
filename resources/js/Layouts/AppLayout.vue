@@ -1,109 +1,55 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
-import Banner from '@/Components/Banner.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
+import Sidebar from './Sidebar.vue';
+import { IconChevronRight } from '@tabler/icons-vue';
 
 defineProps({
     title: String,
+    breads: Array,
 });
 
-const logout = () => {
-    router.post(route('logout'));
-};
+function getClass(routeName) {
+    return route().current(routeName)
+        ? 'inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150'
+        : 'text-gray-700 hover:text-indigo-600';
+}
+
 </script>
 
 <template>
-    <div>
+    <div class="flex">
+
         <Head :title="title" />
-        <Banner />
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
-                <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                    <div class="flex">
-                        <!-- Logo -->
-                        <div class="shrink-0 flex items-center">
-                            <Link :href="route('dashboard.index')">
-                                <ApplicationMark class="block h-9 w-auto" />
+
+        <Sidebar />
+
+        <div class="bg-gray-100 w-full">
+
+            <header class="bg-white">
+                <div class="max-w-7xl mx-auto h-16 py-4 px-4 px-8 flex justify-between items-center">
+                    <ol class="flex items-center">
+                        <li class="flex items-center" v-for="(bread, index) in breads">
+                            <IconChevronRight v-if="index != 0" class="text-gray-300" />
+                            <Link :href="route(bread.route)">
+                            <span class="text-sm tracking-wide mx-2" :class="getClass(bread.route)">
+                                {{ bread.name }}
+                            </span>
                             </Link>
-                        </div>
-
-                        <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <NavLink routeName="dashboard.customers.index">
-                                Clientes
-                            </NavLink>
-                            <NavLink routeName="dashboard.plans.index">
-                                Planes
-                            </NavLink>
-                            <NavLink routeName="dashboard.employees.index">
-                                Empleados
-                            </NavLink>
-                            <NavLink routeName="dashboard.services.index">
-                                Servicios
-                            </NavLink>
-                            <NavLink routeName="dashboard.concepts.index">
-                                Conceptos
-                            </NavLink>
-                            <NavLink routeName="dashboard.incomes.index">
-                                Ingresos
-                            </NavLink>
-                        </div>
-                    </div>
-
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <!-- Settings Dropdown -->
-                        <div class="ml-3 relative">
-                            <Dropdown align="right" width="48">
-                                <template #trigger>
-                                    <span class="inline-flex rounded-md">
-                                        <button type="button"
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                            {{ $page.props.auth.user.name }}
-                                        </button>
-                                    </span>
-                                </template>
-
-                                <template #content>
-                                    <!-- Account Management -->
-                                    <div class="block px-4 py-2 text-xs text-gray-400">
-                                        Manage Account
-                                    </div>
-
-                                    <DropdownLink :href="route('profile.show')">
-                                        Profile
-                                    </DropdownLink>
-
-                                    <div class="border-t border-gray-200" />
-
-                                    <!-- Authentication -->
-                                    <form @submit.prevent="logout">
-                                        <DropdownLink as="button">
-                                            Log Out
-                                        </DropdownLink>
-                                    </form>
-                                </template>
-                            </Dropdown>
-                        </div>
+                        </li>
+                    </ol>
+                    <div class="shrink-0 flex items-center">
+                        <Link :href="route('dashboard.index')">
+                        <ApplicationMark class="block h-9 w-auto" />
+                        </Link>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </header>
 
-        <!-- Page Heading -->
-        <header v-if="$slots.header" class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <slot name="header" />
-            </div>
-        </header>
+            <main>
+                <slot />
+            </main>
+        </div>
 
-        <!-- Page Content -->
-        <main>
-            <slot />
-        </main>
     </div>
-</div></template>
+</template>
