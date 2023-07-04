@@ -1,12 +1,12 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ customer.name }} | Historial
-            </h2>
-        </template>
-
+    <AppLayout title="Dashboard" :breads="breads">
         <TableSection>
+            <template #topbar>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
+                    Historial: {{ customer.name }}
+                </h2>
+            </template>
+
             <template #header>
                 <th>ID</th>
                 <th>Concepto</th>
@@ -48,5 +48,11 @@ const props = defineProps({
         type: Object, required: true
     }
 })
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Clientes', route: 'dashboard.customers.index' },
+    { name: 'Historial', route: 'dashboard.customers.history', params: [ props.customer.id ] },
+]
 
 </script>

@@ -1,6 +1,12 @@
 <template>
     <aside class="w-72 min-h-screen p-0 m-0 bg-white flex flex-col border">
         <div class="h-full px-3 py-4 overflow-y-auto">
+            <div class="flex flex-col items-center mt-4 mb-6">
+                <div class="h-14 w-14">
+                    <img class="h-full w-full rounded-full object-cover object-center border-2"
+                        :src="useProfileUrl().get($page.props.auth.user.name )" alt="" />
+                </div>
+            </div>
             <ul class="space-y-2">
                 <li v-for="item in items">
                     <span v-if="item.header"
@@ -30,6 +36,7 @@
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun } from '@tabler/icons-vue';
+import useProfileUrl from '@/Composables/useProfileUrl.js';
 
 const DEFAULT_ICON = IconUser;
 

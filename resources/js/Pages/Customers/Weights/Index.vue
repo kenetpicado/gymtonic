@@ -1,16 +1,5 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                {{ customer.name }} | Pesos
-            </h2>
-            <div>
-                <PrimaryButton type="button" @click="openModal = true">
-                    Nuevo
-                </PrimaryButton>
-            </div>
-        </template>
-
+    <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
                 Nuevo Peso
@@ -29,6 +18,15 @@
         </DialogModal>
 
         <TableSection>
+            <template #topbar>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
+                    Pesos: {{ customer.name }}
+                </h2>
+                <PrimaryButton type="button" @click="openModal = true">
+                    Nuevo
+                </PrimaryButton>
+            </template>
+
             <template #header>
                 <th>ID</th>
                 <th>Fecha</th>
@@ -51,9 +49,9 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <IconPencil @click="editWeight(weight)" role="button"/>
+                            <IconPencil @click="editWeight(weight)" role="button" />
 
-                            <IconTrash @click="removeWeight(weight.id)" role="button"/>
+                            <IconTrash @click="removeWeight(weight.id)" role="button" />
                         </div>
                     </td>
                 </tr>
@@ -87,6 +85,12 @@ const props = defineProps({
 
 const openModal = ref(false)
 const isNew = ref(true);
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Clientes', route: 'dashboard.customers.index' },
+    { name: 'Pesos', route: 'dashboard.customers.weights.index', params: [props.customer.id] },
+]
 
 const form = useForm({
     id: null,

@@ -37,11 +37,6 @@ function getClass(routeName) {
                             </Link>
                         </li>
                     </ol>
-                    <!-- <div class="shrink-0 flex items-center">
-                        <Link :href="route('dashboard.index')">
-                        <ApplicationMark class="block h-9 w-auto" />
-                        </Link>
-                    </div> -->
                 </div>
             </header>
 

@@ -37,7 +37,7 @@
             <template #header>
                 <th>Fecha</th>
                 <th>Concepto</th>
-                <th>Cantidad</th>
+                <th>Monto</th>
                 <th>Acciones</th>
             </template>
 

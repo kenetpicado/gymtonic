@@ -135,7 +135,7 @@ const form = useForm({
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
     { name: 'Clientes', route: 'dashboard.customers.index' },
-    { name: 'Crear', route: 'dashboard.customers.create' },
+    { name: props.isNew ? 'Crear' : 'Editar' , route: 'dashboard.customers.create' },
 ]
 
 const total = computed(() => {
