@@ -1,12 +1,15 @@
 <template>
-    <div :class="`bg-white shadow-lg h-28 border-s-4 border-indigo-600 rounded-xl`">
-        <div class="flex items-center h-full">
-            <div class="p-4">
-                <div class="text-sm uppercase tracking-wider mb-2 font-semibold text-indigo-500 leading-tight">
-                    {{ title }}
+    <div class="bg-white shadow-soft-xl h-20 rounded-xl">
+        <div class="flex items-center h-full p-4 gap-3">
+            <span class="bg-indigo-50 rounded-full p-2">
+                <component :is="stat.icon ?? DEFAULT_ICON" size="30" class="text-indigo-600"/>
+            </span>
+            <div>
+                <div class="font-bold text-lg">
+                    {{ stat.value }}
                 </div>
-                <div class="text-4xl font-bold text-gray-800 leading-tight">
-                    {{ value }}
+                <div class="text-sm text-gray-600">
+                    {{ stat.title }}
                 </div>
             </div>
         </div>
@@ -14,16 +17,15 @@
 </template>
 
 <script setup>
+import { IconInfoCircle } from '@tabler/icons-vue';
+
+const DEFAULT_ICON = IconInfoCircle;
 
 const props = defineProps({
-    title: {
-        type: String,
+    stat: {
+        type: Object,
         required: true,
     },
-    value: {
-        type: String,
-        default: 'C$ 0',
-    }
 })
 
 </script>

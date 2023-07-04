@@ -46,11 +46,11 @@
                             <IconWeight />
                             </Link>
 
-                            <Link :href="route('dashboard.customers.edit', customer.id)">
+                            <Link :href="route('dashboard.customers.edit', customer.id)" tooltip="Editar">
                             <IconPencil />
                             </Link>
 
-                            <Link :href="route('dashboard.customers.history', customer.id)" tooltip="History">
+                            <Link :href="route('dashboard.customers.history', customer.id)" tooltip="Historial">
                             <IconHistory />
                             </Link>
                         </div>

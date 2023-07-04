@@ -1,30 +1,13 @@
 <template>
     <AppLayout title="Dashboard" :breads="breads">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight p-1">
-                Dashboard
-            </h2>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="grid grid-cols-4 gap-6 mb-6">
-                    <CardInfo title="Customers" :value="customers_total" />
-                    <CardInfo title="Plans" :value="plans_total" />
-                    <CardInfo :title="`Incomes ${month}`" :value="`C$ ${incomes_month.total ?? 0}`" />
-                    <CardInfo :title="`Expenditures ${month}`" :value="`C$ ${expenditures_month ?? 0}`" />
-                    <CardInfo :title="`Revenue ${month}`" :value="`C$ ${incomes_month.total - expenditures_month}`" />
-                    <CardInfo :title="`Discount ${month}`" :value="`C$ ${incomes_month.discount ?? 0}`" />
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="bg-white shadow-lg py-2 px-4 rounded-xl">
-                        <div class="text-lg mb-4 font-bold tracking-wider">Gender</div>
-                        <canvas id="genderChart"></canvas>
-                    </div>
-                    <div class="bg-white shadow-lg py-2 px-4 rounded-xl">
-                        <div class="text-lg mb-4 font-bold tracking-wider">Services</div>
-                        <canvas id="serviceChart"></canvas>
-                    </div>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="grid grid-cols-5 gap-6 mb-6">
+                <CardInfo v-for="stat in stats" :stat="stat" />
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-white shadow-lg py-2 px-4 rounded-xl">
+                    <div class="text-lg mb-4 font-bold tracking-wider">Services</div>
+                    <canvas id="serviceChart"></canvas>
                 </div>
             </div>
         </div>
@@ -36,6 +19,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import CardInfo from '@/Components/CardInfo.vue';
 import Chart from 'chart.js/auto'
 import { onMounted } from 'vue';
+import { Carbon } from '@/Classes/Carbon.js';
 
 const props = defineProps({
     incomes_month: {
@@ -56,7 +40,7 @@ const props = defineProps({
     }
 })
 
-const month = monthName();
+const MONHT = Carbon.now().monthName();
 
 const customers_total = props.customers.reduce((acc, customer) => {
     return acc + customer.total;
@@ -66,15 +50,6 @@ const plans_total = props.plans.reduce((acc, plan) => {
     return acc + plan.total;
 }, 0);
 
-function monthName() {
-    const names = [
-        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-    ];
-
-    const month = new Date().getMonth();
-    return names[month];
-}
-
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
 ]
@@ -83,6 +58,41 @@ const serviceList = [
     "Pesas",
     "Zumba",
     "Zumba + Pesas"
+]
+
+const stats = [
+    {
+        title: 'Clientes',
+        value: customers_total,
+    },
+    {
+        title: 'Hombres',
+        value: props.customers.filter(customer => customer.gender == 'M')[0]?.total ?? 0
+    },
+    {
+        title: 'Mujeres',
+        value: props.customers.filter(customer => customer.gender == 'F')[0]?.total ?? 0
+    },
+    {
+        title: 'Planes',
+        value: plans_total,
+    },
+    {
+        title: 'Ingresos ' + MONHT,
+        value: 'C$ ' + props.incomes_month.total,
+    },
+    {
+        title: 'Gastos ' + MONHT,
+        value: 'C$ ' + props.expenditures_month,
+    },
+    {
+        title: 'Ganancias ' + MONHT,
+        value: 'C$ ' + (props.incomes_month.total - props.expenditures_month),
+    },
+    {
+        title: 'Descuentos ' + MONHT,
+        value: 'C$ ' + props.incomes_month.discount,
+    },
 ]
 
 const options = {

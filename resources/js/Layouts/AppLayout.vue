@@ -1,6 +1,5 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Sidebar from './Sidebar.vue';
 import { IconChevronRight } from '@tabler/icons-vue';
 
@@ -11,8 +10,8 @@ defineProps({
 
 function getClass(routeName) {
     return route().current(routeName)
-        ? 'text-indigo-600 font-bold'
-        : 'text-gray-800 hover:text-indigo-600';
+        ? 'text-gray-500'
+        : 'text-gray-800';
 }
 
 </script>

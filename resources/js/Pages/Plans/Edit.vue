@@ -13,21 +13,16 @@
 
                 <template #description>
                     <template v-if="isCurrentActive">
-                        <div class="col-span-4 space-y-3">
+                        <div class="col-span-4 space-y-3 text-lg">
                             <div>
                                 El plan se encuentra activo, por lo que se asume un pago adelantado.
                             </div>
                             <div>
                                 La fecha de fin del plan se actualizara en funcion de la fecha anterior:
-                                <span class="badge-blue text-sm">
-                                    {{ Carbon.simpleFormat(plan.end_date) }}
-                                </span> y el periodo seleccionado: {{ form.period }} dias.
+                                {{ Carbon.create(plan.end_date).format('d/m/Y') }} y el periodo seleccionado: {{ form.period }} dias.
                             </div>
                         </div>
                     </template>
-                    <div class="font-medium text-gray-900">
-                        Fin del plan: <span class="badge-blue text-sm">{{ end_date_label }}</span>
-                    </div>
                 </template>
 
                 <template #form>
@@ -43,13 +38,12 @@
                     <template v-if="!isCurrentActive">
                         <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
                     </template>
+                    <InputForm text="End Date" v-model="end_date" type="date" disabled></InputForm>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
                     <div class="col-span-4 text-lg font-medium text-gray-900">
-                        <h3>
-                            Total: C$ {{ total }}
-                        </h3>
+                        Total: C$ {{ total }}
                     </div>
                 </template>
 
@@ -106,17 +100,13 @@ const total = computed(() => {
 });
 
 const end_date = computed(() => {
-    const date = new Carbon(props.isCurrentActive ? form.end_date : form.start_date).addPeriod(parseInt(form.period));
+    const date = new Carbon(props.isCurrentActive ? form.end_date : form.start_date).addPeriod(parseInt(form.period)).addDays(-1);
 
     if (props.isCurrentActive) {
         date.addDays();
     }
 
     return date.format('Y-m-d');
-});
-
-const end_date_label = computed(() => {
-    return Carbon.simpleFormat(end_date.value);
 });
 
 watchForPrices(form, props.services, prices);

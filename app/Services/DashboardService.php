@@ -13,7 +13,7 @@ class DashboardService
         return [
             'incomes_month' => DB::table('incomes')
                 ->where('created_at', '>=', $firstDayOfMonth)
-                ->select(DB::raw('SUM(value * quantity) as total, SUM(discount) as discount'))
+                ->select(DB::raw('COALESCE(SUM(value * quantity), 0) as total, COALESCE(SUM(discount), 0) as discount'))
                 ->first(),
 
             'plans' => DB::table('plans')

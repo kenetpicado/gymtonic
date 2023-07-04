@@ -72,10 +72,7 @@
                         </div>
                     </td>
                     <td>
-                        {{ plan.service.name }}
-                        <div class="text-sm mt-1">
-                            ({{ plan.period }} dias)
-                        </div>
+                        {{ plan.service.name }} ({{ plan.period }} dias)
                     </td>
                     <td>
                         <span class="badge-gray">
@@ -99,10 +96,9 @@
                         </div>
                     </td>
                     <td>
-                        <span role="button" class="badge-blue"
-                            @click="$inertia.visit(route('dashboard.plans.edit', plan.id))">
-                            {{ checkBox ? 'Pagar $' : 'Renovar $' }}
-                        </span>
+                        <Link :href="route('dashboard.plans.edit', plan.id)" tooltip="Pagar">
+                            <IconCurrencyDollar/>
+                        </Link>
                     </td>
                 </tr>
                 <tr v-if="plans.data.length == 0">
@@ -133,6 +129,8 @@ import { Carbon } from '@/Classes/Carbon.js';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import useNotify from '@/Use/notify.js';
+import { IconCurrencyDollar } from '@tabler/icons-vue';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     plans: {

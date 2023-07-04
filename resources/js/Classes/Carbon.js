@@ -10,7 +10,6 @@ export class Carbon {
     date;
 
     constructor(dateString) {
-
         if (dateString && !dateString.includes(":")) {
             dateString = dateString + "T06:00:00.000000Z";
         }
@@ -28,6 +27,29 @@ export class Carbon {
 
     static today(format = "Y-m-d") {
         return new Carbon().format(format);
+    }
+
+    static now() {
+        return new Carbon();
+    }
+
+    monthName() {
+        const months = [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre",
+        ];
+
+        return months[this.date.getMonth()];
     }
 
     addMonth(month = 1) {

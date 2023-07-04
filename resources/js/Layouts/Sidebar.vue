@@ -39,9 +39,15 @@ const logout = () => {
 
 const items = [
     {
+        header: 'Inicio'
+    },
+    {
         name: 'Dashboard',
         route: 'dashboard.index',
         icon: IconHome
+    },
+    {
+        header: 'Administración'
     },
     {
         name: 'Clientes',
@@ -61,6 +67,9 @@ const items = [
     {
         name: 'Servicios',
         route: 'dashboard.services.index',
+    },
+    {
+        header: 'Finanzas'
     },
     {
         name: 'Conceptos',

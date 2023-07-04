@@ -1,10 +1,5 @@
 <template>
-    <AppLayout title="Customer">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Clientes
-            </h2>
-        </template>
+    <AppLayout title="Customer" :breads="breads">
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="saveCustomer">
                 <template #title>
@@ -76,17 +71,12 @@
                         </option>
                     </SelectForm>
                     <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
-
-                    <div class="col-span-4  font-medium text-gray-900">
-                        Last day: <span class="badge-danger text-sm">{{ end_date_label }}</span>
-                    </div>
+                    <InputForm text="End Date" v-model="end_date" type="date" disabled></InputForm>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
                     <div class="col-span-4 text-lg font-medium text-gray-900">
-                        <h3>
-                            Total: C$ {{ total }}
-                        </h3>
+                        Total: C$ {{ total }}
                     </div>
                 </template>
 
@@ -142,6 +132,12 @@ const form = useForm({
     ...new Plan(props.customer?.plan, props.services[0].id),
 });
 
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Clientes', route: 'dashboard.customers.index' },
+    { name: 'Crear', route: 'dashboard.customers.create' },
+]
+
 const total = computed(() => {
     return calculateTotal({ period: form.period, discount: form.discount }, prices.value);
 });
@@ -149,9 +145,7 @@ const total = computed(() => {
 watchForPrices(form, props.services, prices);
 
 const end_date = computed(() => {
-    return Carbon.create(form.start_date)
-        .addPeriod(parseInt(form.period))
-        .format('Y-m-d');
+    return Carbon.create(form.start_date).addPeriod(parseInt(form.period)).addDays(-1).format();
 });
 
 const end_date_label = computed(() => {

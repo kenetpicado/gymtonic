@@ -4,8 +4,9 @@
             {{ text }}
         </label>
 
-        <input :type="type" :placeholder="placeholder"
+        <input :type="type" :placeholder="placeholder" :disabled="disabled"
                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+               :class="[disabled ? 'bg-gray-100' : '']"
                :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
 
         <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors[keyValue]">
@@ -32,6 +33,9 @@ const props = defineProps({
     },
     placeholder: {
         type: String, default: ''
+    },
+    disabled: {
+        type: Boolean, default: false
     }
 })
 
