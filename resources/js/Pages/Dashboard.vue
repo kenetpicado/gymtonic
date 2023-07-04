@@ -1,14 +1,17 @@
 <template>
     <AppLayout title="Dashboard" :breads="breads">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">general</h1>
             <div class="grid grid-cols-5 gap-6 mb-6">
                 <CardInfo v-for="stat in stats" :stat="stat" />
             </div>
-            <div class="grid grid-cols-2 gap-6">
-                <div class="bg-white shadow-lg py-2 px-4 rounded-xl">
-                    <div class="text-lg mb-4 font-bold tracking-wider">Services</div>
-                    <canvas id="serviceChart"></canvas>
-                </div>
+            <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">Finanzas</h1>
+            <div class="grid grid-cols-5 gap-6 mb-6">
+                <CardInfo v-for="finance in finances" :stat="finance" />
+            </div>
+            <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">Servicios</h1>
+            <div class="grid grid-cols-5 gap-6 mb-6">
+                <CardInfo v-for="service in services" :stat="service" />
             </div>
         </div>
     </AppLayout>
@@ -17,9 +20,8 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CardInfo from '@/Components/CardInfo.vue';
-import Chart from 'chart.js/auto'
-import { onMounted } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
+import { IconUser, IconRun, IconGenderMale, IconGenderFemale, IconCurrencyDollarOff, IconCurrencyDollar, IconGift, IconMoneybag, IconActivity } from '@tabler/icons-vue';
 
 const props = defineProps({
     incomes_month: {
@@ -64,74 +66,55 @@ const stats = [
     {
         title: 'Clientes',
         value: customers_total,
+        icon: IconUser,
     },
     {
         title: 'Hombres',
-        value: props.customers.filter(customer => customer.gender == 'M')[0]?.total ?? 0
+        value: props.customers.filter(customer => customer.gender == 'M')[0]?.total ?? 0,
+        icon: IconGenderMale,
     },
     {
         title: 'Mujeres',
-        value: props.customers.filter(customer => customer.gender == 'F')[0]?.total ?? 0
+        value: props.customers.filter(customer => customer.gender == 'F')[0]?.total ?? 0,
+        icon: IconGenderFemale,
     },
     {
         title: 'Planes',
         value: plans_total,
+        icon: IconRun,
     },
+
+]
+
+const finances = [
     {
         title: 'Ingresos ' + MONHT,
         value: 'C$ ' + props.incomes_month.total,
+        icon: IconMoneybag,
     },
     {
         title: 'Gastos ' + MONHT,
         value: 'C$ ' + props.expenditures_month,
+        icon: IconCurrencyDollarOff,
     },
     {
         title: 'Ganancias ' + MONHT,
         value: 'C$ ' + (props.incomes_month.total - props.expenditures_month),
+        icon: IconCurrencyDollar,
     },
     {
         title: 'Descuentos ' + MONHT,
         value: 'C$ ' + props.incomes_month.discount,
+        icon: IconGift,
     },
 ]
 
-const options = {
-    plugins: {
-        legend: {
-            display: false
-        }
-    },
-    scales: {
-        y: {
-            beginAtZero: true,
-        }
-    },
-}
-
-onMounted(() => {
-    new Chart(document.getElementById('genderChart'), {
-        type: 'bar',
-        data: {
-            labels: props.customers.map((customer) => customer.gender),
-            datasets: [{
-                data: props.customers.map((customer) => customer.total),
-                backgroundColor: '#c7d2fe',
-            }]
-        },
-        options: options
-    });
-
-    new Chart(document.getElementById('serviceChart'), {
-        type: 'bar',
-        data: {
-            labels: props.plans.map((plan) => serviceList[plan.service_id - 1]),
-            datasets: [{
-                data: props.plans.map((plan) => plan.total),
-                backgroundColor: '#c7d2fe',
-            }]
-        },
-        options: options
-    });
-})
+const services = props.plans.map((plan) => {
+    return {
+        title: serviceList[plan.service_id - 1],
+        value: plan.total,
+        icon: IconActivity,
+    }
+});
 
 </script>
