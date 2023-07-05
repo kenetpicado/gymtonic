@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { IconDroplet, IconBottle, IconBolt, IconWifi, IconShoppingCart, IconBrandFacebook, IconUserDollar, IconSpray, IconBarbell } from '@tabler/icons-vue';
+import { IconDroplet, IconBottle, IconBolt, IconWifi, IconShoppingCart, IconBrandFacebook, IconUserDollar, IconSpray, IconBarbell, IconInfoCircle, IconStack } from '@tabler/icons-vue';
 
 const props = defineProps({
     concept: {
@@ -20,7 +20,7 @@ const props = defineProps({
     }
 })
 
-const DEFAULT_ICON = IconDroplet;
+const DEFAULT_ICON = IconInfoCircle;
 
 const conceptComponents = {
     Agua: IconDroplet,

@@ -21,12 +21,10 @@
                     </Link>
                 </li>
                 <li>
-                    <form @submit.prevent="logout">
-                        <span class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-indigo-50" role="button">
-                            <IconLogout></IconLogout>
-                            <span>Logout</span>
-                        </span>
-                    </form>
+                    <span @click="logout" class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-indigo-50" role="button">
+                        <IconLogout></IconLogout>
+                        <span>Logout</span>
+                    </span>
                 </li>
             </ul>
         </div>
@@ -35,7 +33,7 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
-import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag } from '@tabler/icons-vue';
 import useProfileUrl from '@/Composables/useProfileUrl.js';
 
 const DEFAULT_ICON = IconUser;
@@ -74,6 +72,7 @@ const items = [
     {
         name: 'Servicios',
         route: 'dashboard.services.index',
+        icon: IconActivity
     },
     {
         header: 'Finanzas'
@@ -81,10 +80,12 @@ const items = [
     {
         name: 'Conceptos',
         route: 'dashboard.concepts.index',
+        icon: IconStack
     },
     {
         name: 'Ingresos',
         route: 'dashboard.incomes.index',
+        icon: IconMoneybag
     },
     {
         header: 'Cuenta'

@@ -1,16 +1,5 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Conceptos
-            </h2>
-            <div>
-                <PrimaryButton type="button" @click="openModal = true">
-                    Nuevo
-                </PrimaryButton>
-            </div>
-        </template>
-
+    <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
                 Nuevo Concepto
@@ -31,6 +20,13 @@
         </DialogModal>
 
         <TableSection>
+            <template #topbar>
+                <div></div>
+                <PrimaryButton type="button" @click="openModal = true">
+                    Nuevo
+                </PrimaryButton>
+            </template>
+
             <template #header>
                 <th>#</th>
                 <th>Nombre</th>
@@ -97,6 +93,11 @@ const form = useForm({
     id: null,
     name: '',
 })
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Conceptos', route: 'dashboard.concepts.index' },
+]
 
 function editConcept(concept) {
     form.id = concept.id;

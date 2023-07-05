@@ -2,15 +2,15 @@
     <AppLayout title="Dashboard" :breads="breads">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">general</h1>
-            <div class="grid grid-cols-5 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
                 <CardInfo v-for="stat in stats" :stat="stat" />
             </div>
             <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">Finanzas</h1>
-            <div class="grid grid-cols-5 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
                 <CardInfo v-for="finance in finances" :stat="finance" />
             </div>
             <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">Servicios</h1>
-            <div class="grid grid-cols-5 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
                 <CardInfo v-for="service in services" :stat="service" />
             </div>
         </div>
