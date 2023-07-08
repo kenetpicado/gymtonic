@@ -104,7 +104,7 @@ const isNew = ref(true);
 
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
-    { name: 'Empleados', route: 'dashboard.employees.index' },
+    { name: 'Personal', route: 'dashboard.employees.index' },
     { name: 'Pagos', route: 'dashboard.employees.expenditures.index', params: [props.employee.id] },
 ]
 

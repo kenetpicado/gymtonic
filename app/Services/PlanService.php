@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Customer;
 use App\Models\Income;
 use App\Models\Plan;
 use App\Models\Service;
@@ -12,7 +13,14 @@ class PlanService
     {
         return [
             'plans' => Plan::query()
-                ->with(['customer:id,name', 'service'])
+                ->addSelect([
+                    'service_name' => Service::select('name')
+                        ->whereColumn('id', 'plans.service_id')
+                        ->limit(1),
+                    'customer_name' => Customer::select('name')
+                        ->whereColumn('id', 'plans.customer_id')
+                        ->limit(1),
+                ])
                 ->when(
                     $request->search,
                     fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))

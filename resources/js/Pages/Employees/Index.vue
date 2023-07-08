@@ -2,7 +2,7 @@
     <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
-                Nuevo Empleado
+                {{ isNew ? 'Nuevo' : 'Editar'}}
             </template>
             <template #content>
                 <div class="grid gap-6">
@@ -89,7 +89,7 @@ const isNew = ref(true);
 
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
-    { name: 'Empleados', route: 'dashboard.employees.index' },
+    { name: 'Personal', route: 'dashboard.employees.index' },
 ]
 
 const form = useForm({

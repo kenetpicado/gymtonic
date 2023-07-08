@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Concept;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class ConceptSeeder extends Seeder
 {
@@ -15,6 +16,10 @@ class ConceptSeeder extends Seeder
      */
     public function run()
     {
+        Schema::disableForeignKeyConstraints();
+
+        Concept::truncate();
+
         $concepts = [
             [
                 'name' => 'Bebidas',
@@ -60,5 +65,7 @@ class ConceptSeeder extends Seeder
         foreach ($concepts as $concept) {
             Concept::create($concept);
         }
+
+        Schema::enableForeignKeyConstraints();
     }
 }

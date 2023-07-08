@@ -2,7 +2,7 @@
     <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
-                Nuevo Servicio
+                {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
                 <InputForm text="Name" v-model="form.name"></InputForm>
@@ -15,8 +15,9 @@
                     {{ $page.props.errors['prices'] }}
                 </p>
 
-                <InputForm v-for="(period, index) in form.prices" :name="`prices.${index}.value`"
+                <InputForm v-for="(period, index) in savedPeriods" :name="`prices.${index}.value`"
                     :text="period.period_label" v-model="period.value" class="mt-4" type="number"></InputForm>
+
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
@@ -29,12 +30,12 @@
         </DialogModal>
 
         <TableSection>
-        <template #topbar>
-            <div></div>
-            <PrimaryButton type="button" @click="openModal = true">
-                Nuevo
-            </PrimaryButton>
-        </template>
+            <template #topbar>
+                <div></div>
+                <PrimaryButton type="button" @click="openModal = true">
+                    Nuevo
+                </PrimaryButton>
+            </template>
 
             <template #header>
                 <th>ID</th>
@@ -98,13 +99,15 @@ const props = defineProps({
         type: Object, required: true
     },
     periods: {
-        type: Array,
+        type: Object,
         required: true
     }
 })
 
 const openModal = ref(false)
 const isNew = ref(true)
+
+const savedPeriods = ref(props.periods)
 
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
@@ -115,31 +118,33 @@ const form = useForm({
     id: null,
     name: '',
     is_active: true,
-    prices: props.periods,
+    prices: []
 });
 
 async function editService(service) {
     form.id = service.id
     form.name = service.name
     form.is_active = Boolean(service.is_active)
+
+    savedPeriods.value.forEach(period => {
+        const price = service.prices.find(price => price.period === period.period)
+        period.value = price ? price.value : null
+    })
+
     isNew.value = false
-
-    form.prices = props.periods.map(({ period_label, period }) => ({
-        period_label, period, value: service.prices.find(price => price.period == period)?.value || null
-    }));
-
     openModal.value = true
 }
 
 function resetValues() {
     form.reset()
     form.clearErrors()
+    savedPeriods.value = props.periods
     isNew.value = true
     openModal.value = false
 }
 
 function saveService() {
-    form.prices = form.prices.filter(period => period.value)
+    form.prices = savedPeriods.value.filter(period => period.value)
 
     if (isNew.value) {
         form.post(route('dashboard.services.store'), {

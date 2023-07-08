@@ -65,7 +65,7 @@ const items = [
         icon: IconRun
     },
     {
-        name: 'Empleados',
+        name: 'Personal',
         route: 'dashboard.employees.index',
         icon: IconUsersGroup
     },

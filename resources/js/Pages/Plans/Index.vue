@@ -68,11 +68,11 @@
                     <td>
                         <div class="flex items-center gap-4">
                             <Checkbox v-model:checked="plan.selected" name="status" />
-                            <UserInformation :user="plan.customer" />
+                            <UserInformation :user="{ name: plan.customer_name }" />
                         </div>
                     </td>
                     <td>
-                        {{ plan.service.name }} ({{ plan.period }} dias)
+                        {{ plan.service_name }} ({{ plan.period }} dias)
                     </td>
                     <td>
                         <span class="badge-gray">
@@ -184,7 +184,7 @@ function initSelectedPlans() {
         .map(function (plan) {
             return {
                 id: plan.id,
-                customer: plan.customer.name,
+                customer: plan.customer_name,
                 end_date: plan.end_date
             }
         })

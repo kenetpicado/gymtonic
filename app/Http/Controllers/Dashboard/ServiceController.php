@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\PeriodEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceRequest;
 use App\Models\Service;
@@ -14,7 +13,7 @@ class ServiceController extends Controller
     {
         return inertia('Services/Index', [
             'services' => Service::with('prices')->paginate(10),
-            'periods' => PeriodEnum::get()
+            'periods' => Service::$periods,
         ]);
     }
 
