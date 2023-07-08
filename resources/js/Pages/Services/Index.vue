@@ -1,5 +1,6 @@
 <template>
     <AppLayout title="Dashboard" :breads="breads">
+
         <DialogModal :show="openModal">
             <template #title>
                 {{ isNew ? 'Nuevo' : 'Editar' }}
@@ -55,7 +56,7 @@
                     </td>
                     <td>
                         <span v-for="price in service.prices" class="badge-blue mr-1">
-                            {{ price.period_label }}: C$ {{ price.value }}
+                            {{ periodLabel[price.period] }}: C$ {{ price.value }}
                         </span>
                     </td>
                     <td>
@@ -107,7 +108,7 @@ const props = defineProps({
 const openModal = ref(false)
 const isNew = ref(true)
 
-const savedPeriods = ref(props.periods)
+let savedPeriods = props.periods
 
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
@@ -121,12 +122,19 @@ const form = useForm({
     prices: []
 });
 
+const periodLabel = {
+    1: 'Dia',
+    7: 'Semana',
+    15: 'Quincena',
+    30: 'Mes'
+}
+
 async function editService(service) {
     form.id = service.id
     form.name = service.name
     form.is_active = Boolean(service.is_active)
 
-    savedPeriods.value.forEach(period => {
+    savedPeriods.forEach(period => {
         const price = service.prices.find(price => price.period === period.period)
         period.value = price ? price.value : null
     })
@@ -138,13 +146,17 @@ async function editService(service) {
 function resetValues() {
     form.reset()
     form.clearErrors()
-    savedPeriods.value = props.periods
+
+    savedPeriods.forEach(period => {
+        delete period.value
+    })
+
     isNew.value = true
     openModal.value = false
 }
 
 function saveService() {
-    form.prices = savedPeriods.value.filter(period => period.value)
+    form.prices = savedPeriods.filter(period => period.value)
 
     if (isNew.value) {
         form.post(route('dashboard.services.store'), {
