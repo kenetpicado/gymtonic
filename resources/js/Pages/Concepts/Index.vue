@@ -6,7 +6,7 @@
             </template>
             <template #content>
                 <div class="grid gap-6">
-                    <InputForm text="Name" v-model="form.name"/>
+                    <InputForm text="Name" v-model="form.name" />
                 </div>
             </template>
             <template #footer>
@@ -30,7 +30,8 @@
             <template #header>
                 <th>#</th>
                 <th>Nombre</th>
-                <th>Flujo</th>
+                <th>Egresos</th>
+                <th>Ingresos</th>
                 <th>Acciones</th>
             </template>
             <template #body>
@@ -42,12 +43,14 @@
                         <ConceptInformation :concept="concept" />
                     </td>
                     <td>
-                        <div class="flex gap-4">
-                            <Link :href="route('dashboard.concepts.expenditures.index', concept.id)"
-                                class="inline-flex items-center rounded-full bg-red-50 p1 text-xs text-red-600">
-                            <IconArrowDown />
-                            </Link>
-                        </div>
+                        <Link :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos" class="text-red-500">
+                        <IconCurrencyDollarOff />
+                        </Link>
+                    </td>
+                    <td>
+                        <Link :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Ingresos" class="text-green-500">
+                        <IconMoneybag />
+                        </Link>
                     </td>
                     <td>
                         <IconPencil @click="editConcept(concept)" role="button" />
@@ -73,7 +76,7 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconArrowUp, IconArrowDown } from '@tabler/icons-vue';
+import { IconPencil, IconMoneybag, IconCurrencyDollarOff } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 import { toast } from "@/Use/toast.js";
 import ConceptInformation from '@/Components/ConceptInformation.vue';

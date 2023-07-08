@@ -212,7 +212,7 @@ watch(() => days.value, (value) => {
     };
 
     selectedPlans.value.forEach((plan) => {
-        plan.end_date = Carbon.create(plan.end_date).addDays(parseInt(value) + 1).format('Y-m-d');
+        plan.end_date = Carbon.create(plan.end_date).addDays(parseInt(value)).format('Y-m-d');
     })
 })
 

@@ -40,24 +40,25 @@
                 </template>
 
                 <template #description>
-                    Datos del plan del cliente
-                    <br>
                     <template v-if="customer">
-                        <p v-if="!customer.plan" class="mt-2 text-red-600">
+                        <div v-if="!customer.plan">
                             El usuario no tiene un plan creado, se procederá a crear uno nuevo con los datos ingresados.
-                        </p>
-                        <p v-if="customer.plan" class="mt-2">
+                        </div>
+                        <div v-else>
                             El usuario tiene un plan existente, se actualizará con los datos introducidos y también se
                             actualizará el ingreso correspondiente.
                             <span class="block mt-2"></span>
                             Si en cambio desea crear un nuevo plan
                             <br>
-                            <PrimaryButton class="mt-2"
+                            <PrimaryButton class="mt-4"
                                 @click="$inertia.visit(route('dashboard.plans.edit', customer.plan.id))">
                                 Haga click aqui
                             </PrimaryButton>
-                        </p>
+                        </div>
                     </template>
+                    <div v-else>
+                        Ingrese los datos del plan para el cliente.
+                    </div>
                 </template>
 
                 <template #form>
@@ -136,7 +137,7 @@ const form = useForm({
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
     { name: 'Clientes', route: 'dashboard.customers.index' },
-    { name: props.isNew ? 'Crear' : 'Editar' , route: 'dashboard.customers.create' },
+    { name: props.isNew ? 'Crear' : 'Editar', route: 'dashboard.customers.create' },
 ]
 
 const total = computed(() => {

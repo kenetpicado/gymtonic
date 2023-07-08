@@ -13,14 +13,13 @@
 
                 <template #description>
                     <template v-if="isCurrentActive">
-                        <div class="col-span-4 space-y-3 text-lg">
-                            <div>
-                                El plan se encuentra activo, por lo que se asume un pago adelantado.
-                            </div>
-                            <div>
-                                La fecha de fin del plan se actualizara en funcion de la fecha anterior:
-                                {{ Carbon.create(plan.end_date).format('d/m/Y') }} y el periodo seleccionado: {{ form.period }} dias.
-                            </div>
+                        <div>
+                            El plan se encuentra activo, por lo que se asume un pago adelantado.
+                        </div>
+                        <div>
+                            La fecha de fin del plan se actualizara en funcion de la fecha anterior:
+                            {{ Carbon.create(plan.end_date).format('d/m/Y') }} y el periodo seleccionado: {{ form.period }}
+                            dias.
                         </div>
                     </template>
                 </template>
