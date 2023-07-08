@@ -67,7 +67,7 @@
                     <SelectForm v-model="form.period" text="Period">
                         <option value="" disabled selected>Select a option</option>
                         <option v-for="price in prices" :value="price.period">
-                            {{ price.period_label }} - C$ {{ price.value }}
+                            {{ periodLabel[price.period] }} - C$ {{ price.value }}
                         </option>
                     </SelectForm>
                     <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
@@ -108,6 +108,7 @@ import { toast } from '@/Use/toast.js';
 import { Link } from '@inertiajs/vue3';
 import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
 import { Plan } from '@/Classes/Plan';
+import { periodLabel } from '@/Use/periodLabel';
 
 const props = defineProps({
     customer: {
@@ -148,10 +149,6 @@ const end_date = computed(() => {
     return Carbon.create(form.start_date).addPeriod(parseInt(form.period)).addDays(-1).format();
 });
 
-const end_date_label = computed(() => {
-    return Carbon.simpleFormat(end_date.value);
-});
-
 function saveCustomer() {
     form.price = total.value;
     form.end_date = end_date.value;
@@ -163,10 +160,7 @@ function saveCustomer() {
             onSuccess: () => {
                 toast.success('Cliente creado correctamente!');
                 router.get(route('dashboard.customers.index'));
-            },
-            onError: (err) => {
-                console.log(err);
-            },
+            }
         });
     } else {
         form.put(route('dashboard.customers.update', form.id), {

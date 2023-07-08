@@ -32,7 +32,7 @@
                     <SelectForm v-model="form.period" text="Period">
                         <option value="" disabled selected>Select a option</option>
                         <option v-for="price in prices" :value="price.period">
-                            {{ price.period_label }} - {{ price.value }} C$
+                            {{ periodLabel[price.period] }} - {{ price.value }} C$
                         </option>
                     </SelectForm>
                     <template v-if="!isCurrentActive">
@@ -72,7 +72,8 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
 import { toast } from '@/Use/toast.js';
 import { router, useForm } from '@inertiajs/vue3';
-import { computed, defineProps, ref } from 'vue';
+import { computed, ref } from 'vue';
+import { periodLabel } from '@/Use/periodLabel.js';
 
 const props = defineProps({
     services: {

@@ -94,6 +94,7 @@ import Checkbox from '@/Components/Checkbox.vue';
 import { toast } from '@/Use/toast.js';
 import TableSection from '@/Components/TableSection.vue';
 import { IconPencil } from '@tabler/icons-vue';
+import { periodLabel } from '@/Use/periodLabel.js';
 
 const props = defineProps({
     services: {
@@ -121,13 +122,6 @@ const form = useForm({
     is_active: true,
     prices: []
 });
-
-const periodLabel = {
-    1: 'Dia',
-    7: 'Semana',
-    15: 'Quincena',
-    30: 'Mes'
-}
 
 async function editService(service) {
     form.id = service.id
