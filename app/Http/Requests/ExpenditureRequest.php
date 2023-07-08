@@ -26,6 +26,7 @@ class ExpenditureRequest extends FormRequest
         return [
             'value' => 'required|numeric|gt:0',
             'concept' => 'required|string',
+            'quantity' => 'required|numeric|min:1',
             'description' => 'nullable|string',
             'expenditureable_id' => 'required|numeric',
             'expenditureable_type' => 'required|string',

@@ -1,19 +1,9 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Pagos: {{ concept.name }}
-            </h2>
-            <div>
-                <PrimaryButton type="button" @click="openModal = true">
-                    Nuevo
-                </PrimaryButton>
-            </div>
-        </template>
+    <AppLayout title="Dashboard" :breads="breads">
 
         <DialogModal :show="openModal">
             <template #title>
-                Nuevo Pago
+                {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
                 <div class="grid gap-6">
@@ -23,9 +13,7 @@
                     <InputForm text="Value" v-model="form.value" />
 
                     <div class="col-span-4 text-lg font-medium text-gray-900 mb-2">
-                        <h3>
-                            Total: C$ {{ total }}
-                        </h3>
+                        Total: C$ {{ total }}
                     </div>
                 </div>
             </template>
@@ -41,7 +29,12 @@
 
         <TableSection>
             <template #topbar>
-                <!-- <SearchComponent :url="route('dashboard.expenditures.index')" :only="['expenditures']"></SearchComponent> -->
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
+                    Pagos: {{ concept.name }}
+                </h2>
+                <PrimaryButton type="button" @click="openModal = true">
+                    Nuevo
+                </PrimaryButton>
             </template>
 
             <template #header>
@@ -49,6 +42,7 @@
                 <th>Concepto</th>
                 <th>Monto</th>
                 <th>Total</th>
+                <th>Actions</th>
             </template>
 
             <template #body>
@@ -72,9 +66,20 @@
                             C$ {{ (expenditure.value * expenditure.quantity).toLocaleString('en-US') }}
                         </span>
                     </td>
+                    <td>
+                        <div class="flex gap-4">
+                            <span tooltip="Editar" role="button" @click="edit(expenditure)">
+                                <IconPencil />
+                            </span>
+
+                            <span tooltip="Eliminar" role="button" @click="confirmDestroy(expenditure.id)">
+                                <IconTrash />
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr v-if="expenditures.data.length == 0">
-                    <td colspan="4" class="text-center">No data to display</td>
+                    <td colspan="5" class="text-center">No data to display</td>
                 </tr>
             </template>
 
@@ -96,9 +101,11 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import useNotify from '@/Use/notify.js';
 import { toast } from "@/Use/toast.js";
-import { useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { router, useForm } from '@inertiajs/vue3';
+import { IconPencil, IconTrash } from '@tabler/icons-vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
     concept: {
@@ -111,6 +118,12 @@ const props = defineProps({
 
 const openModal = ref(false)
 const isNew = ref(true);
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Conceptos', route: 'dashboard.concepts.index' },
+    { name: props.concept.name, route: 'dashboard.concepts.expenditures.index', params: [props.concept.id] },
+]
 
 const form = useForm({
     id: null,
@@ -125,6 +138,28 @@ const form = useForm({
 const total = computed(() => {
     return (form.quantity * form.value).toLocaleString('en-US')
 })
+
+function edit(expenditure) {
+    form.id = expenditure.id;
+    form.quantity = expenditure.quantity;
+    form.value = expenditure.value;
+    form.concept = expenditure.concept;
+    form.description = expenditure.description;
+    isNew.value = false;
+    openModal.value = true;
+}
+
+function confirmDestroy(id) {
+    useNotify().confirm(() => {
+        router.delete(route('dashboard.expenditures.destroy', id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success('Pago eliminado correctamente!')
+            },
+        });
+    }, '¿Estás seguro de eliminar este pago?')
+}
 
 function saveExpenditure() {
     if (isNew.value) {

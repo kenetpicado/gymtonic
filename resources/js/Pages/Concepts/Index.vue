@@ -43,7 +43,7 @@
                         <ConceptInformation :concept="concept" />
                     </td>
                     <td>
-                        <Link :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos" class="text-red-500">
+                        <Link :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos" class="text-pink-600">
                         <IconCurrencyDollarOff />
                         </Link>
                     </td>

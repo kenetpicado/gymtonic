@@ -29,4 +29,11 @@ class ExpenditureController extends Controller
 
         return back();
     }
+
+    public function destroy($expenditure_id)
+    {
+        Expenditure::where('id', $expenditure_id)->delete();
+
+        return back();
+    }
 }
