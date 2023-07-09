@@ -2,31 +2,33 @@
     <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
-                Nuevo Concepto
+                {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
                 <div class="flex flex-col gap-6">
                     <InputForm text="Name" v-model="form.name" />
 
-                    <label class="flex items-center">
-                        <Checkbox v-model:checked="form.has_income" name="is_active" />
-                        <span class="ml-2 text-sm text-gray-600">Ingresos</span>
-                    </label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="flex items-center">
+                            <Checkbox v-model:checked="form.has_income" name="is_active" />
+                            <span class="ml-2 text-sm text-gray-600">Ingresos</span>
+                        </label>
 
-                    <label class="flex items-center">
-                        <Checkbox v-model:checked="form.notify_income" name="is_active" />
-                        <span class="ml-2 text-sm text-gray-600">Notificaciones de ingresos</span>
-                    </label>
+                        <label class="flex items-center">
+                            <Checkbox v-model:checked="form.has_expenditure" name="is_active" />
+                            <span class="ml-2 text-sm text-gray-600">Egresos</span>
+                        </label>
 
-                    <label class="flex items-center">
-                        <Checkbox v-model:checked="form.has_expenditure" name="is_active" />
-                        <span class="ml-2 text-sm text-gray-600">Egresos</span>
-                    </label>
+                        <label class="flex items-center">
+                            <Checkbox v-model:checked="form.notify_income" name="is_active" />
+                            <span class="ml-2 text-sm text-gray-600">Notificaciones</span>
+                        </label>
 
-                    <label class="flex items-center">
-                        <Checkbox v-model:checked="form.notify_expenditure" name="is_active" />
-                        <span class="ml-2 text-sm text-gray-600">Notificaciones de egresos</span>
-                    </label>
+                        <label class="flex items-center">
+                            <Checkbox v-model:checked="form.notify_expenditure" name="is_active" />
+                            <span class="ml-2 text-sm text-gray-600">Notificaciones</span>
+                        </label>
+                    </div>
                 </div>
             </template>
             <template #footer>
@@ -92,7 +94,7 @@
 <script setup>
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -123,6 +125,22 @@ const form = useForm({
     notify_income: false,
     has_expenditure: true,
     notify_expenditure: false,
+})
+
+watch(() => [form.notify_income, form.notify_expenditure], ([income, expenditure]) => {
+    if (income)
+        form.has_income = true
+
+    if (expenditure)
+        form.has_expenditure = true
+})
+
+watch(() => [form.has_income, form.has_expenditure], ([income, expenditure]) => {
+    if (!income)
+        form.notify_income = false
+
+    if (!expenditure)
+        form.notify_expenditure = false
 })
 
 const breads = [
