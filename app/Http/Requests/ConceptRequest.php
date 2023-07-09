@@ -25,6 +25,10 @@ class ConceptRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'has_income' => 'required|boolean',
+            'notify_income' => 'required|boolean',
+            'has_expenditure' => 'required|boolean',
+            'notify_expenditure' => 'required|boolean',
         ];
     }
 }

@@ -12,7 +12,23 @@
 </template>
 
 <script setup>
-import { IconDroplet, IconBottle, IconBolt, IconWifi, IconShoppingCart, IconBrandFacebook, IconUserDollar, IconSpray, IconBarbell, IconInfoCircle, IconStack } from '@tabler/icons-vue';
+import {
+    IconDroplet,
+    IconBottle,
+    IconBolt,
+    IconWifi,
+    IconShoppingCart,
+    IconBrandFacebook,
+    IconUserDollar,
+    IconSpray,
+    IconBarbell,
+    IconInfoCircle,
+    IconStack,
+    IconFile,
+    IconPill,
+    IconActivity,
+    IconFileDollar
+} from '@tabler/icons-vue';
 
 const props = defineProps({
     concept: {
@@ -32,6 +48,10 @@ const conceptComponents = {
     Limpieza: IconUserDollar,
     'Articulos de limpieza': IconSpray,
     'Equipo y maquinaria': IconBarbell,
+    Papeleria: IconFile,
+    Suplementos: IconPill,
+    Servicios: IconActivity,
+    Impuestos: IconFileDollar
 }
 
 </script>

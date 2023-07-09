@@ -67,7 +67,6 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SearchComponent from '@/Components/SearchComponent.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { defineProps } from 'vue';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 

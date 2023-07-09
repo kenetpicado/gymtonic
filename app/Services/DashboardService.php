@@ -23,7 +23,7 @@ class DashboardService
 
             'expenditures_month' => DB::table('expenditures')
                 ->where('created_at', '>=', $firstDayOfMonth)
-                ->select(DB::raw('SUM(value * quantity) as total'))
+                ->select(DB::raw('COALESCE(SUM(value * quantity), 0)as total'))
                 ->value('total'),
 
             'customers' => DB::table('customers')->groupBy('gender')->get(['gender', DB::raw('count(*) as total')])

@@ -74,7 +74,6 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SearchComponent from '@/Components/SearchComponent.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { defineProps } from 'vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
 import { IconPencil, IconEye, IconHistory, IconWeight } from '@tabler/icons-vue';

@@ -16,19 +16,18 @@ class ConceptSeeder extends Seeder
      */
     public function run()
     {
-        Schema::disableForeignKeyConstraints();
-
-        Concept::truncate();
-
         $concepts = [
             [
                 'name' => 'Bebidas',
+                'has_income' => true
             ],
             [
                 'name' => 'Tienda',
+                'has_income' => true
             ],
             [
                 'name' => 'Suplementos',
+                'has_income' => true
             ],
             [
                 'name' => 'Agua',
@@ -65,7 +64,5 @@ class ConceptSeeder extends Seeder
         foreach ($concepts as $concept) {
             Concept::create($concept);
         }
-
-        Schema::enableForeignKeyConstraints();
     }
 }

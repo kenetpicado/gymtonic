@@ -5,8 +5,28 @@
                 Nuevo Concepto
             </template>
             <template #content>
-                <div class="grid gap-6">
+                <div class="flex flex-col gap-6">
                     <InputForm text="Name" v-model="form.name" />
+
+                    <label class="flex items-center">
+                        <Checkbox v-model:checked="form.has_income" name="is_active" />
+                        <span class="ml-2 text-sm text-gray-600">Ingresos</span>
+                    </label>
+
+                    <label class="flex items-center">
+                        <Checkbox v-model:checked="form.notify_income" name="is_active" />
+                        <span class="ml-2 text-sm text-gray-600">Notificaciones de ingresos</span>
+                    </label>
+
+                    <label class="flex items-center">
+                        <Checkbox v-model:checked="form.has_expenditure" name="is_active" />
+                        <span class="ml-2 text-sm text-gray-600">Egresos</span>
+                    </label>
+
+                    <label class="flex items-center">
+                        <Checkbox v-model:checked="form.notify_expenditure" name="is_active" />
+                        <span class="ml-2 text-sm text-gray-600">Notificaciones de egresos</span>
+                    </label>
                 </div>
             </template>
             <template #footer>
@@ -43,12 +63,14 @@
                         <ConceptInformation :concept="concept" />
                     </td>
                     <td>
-                        <Link :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos" class="text-pink-600">
+                        <Link v-if="concept.has_expenditure"
+                            :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos" class="text-pink-600">
                         <IconCurrencyDollarOff />
                         </Link>
                     </td>
                     <td>
-                        <Link :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Ingresos" class="text-green-500">
+                        <Link v-if="concept.has_income"
+                            :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Ingresos" class="text-green-500">
                         <IconMoneybag />
                         </Link>
                     </td>
@@ -82,6 +104,8 @@ import { toast } from "@/Use/toast.js";
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import { usePage } from '@inertiajs/vue3';
 import ThePaginator from '@/Components/ThePaginator.vue';
+import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
+import Checkbox from '@/Components/Checkbox.vue';
 
 const props = defineProps({
     concepts: {
@@ -95,6 +119,10 @@ const isNew = ref(true);
 const form = useForm({
     id: null,
     name: '',
+    has_income: false,
+    notify_income: false,
+    has_expenditure: true,
+    notify_expenditure: false,
 })
 
 const breads = [
@@ -105,6 +133,10 @@ const breads = [
 function editConcept(concept) {
     form.id = concept.id;
     form.name = concept.name;
+    form.has_income = Boolean(concept.has_income),
+    form.notify_income = Boolean(concept.notify_income),
+    form.has_expenditure = Boolean(concept.has_expenditure),
+    form.notify_expenditure = Boolean(concept.notify_expenditure),
     isNew.value = false;
     openModal.value = true;
 }

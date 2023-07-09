@@ -9,7 +9,13 @@ class Concept extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'has_income',
+        'notify_income',
+        'has_expenditure',
+        'notify_expenditure'
+    ];
 
     public function expenditures()
     {
