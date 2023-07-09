@@ -7,10 +7,8 @@
             </template>
             <template #content>
                 <InputForm text="Name" v-model="form.name"></InputForm>
-                <label class="flex items-center mt-3 mb-4">
-                    <Checkbox v-model:checked="form.is_active" name="is_active" />
-                    <span class="ml-2 text-sm text-gray-600">Active</span>
-                </label>
+                <Checkbox v-model:checked="form.is_active" text="Active" />
+
                 <h4 class="font-bold text-lg">Precios</h4>
                 <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors['prices']">
                     {{ $page.props.errors['prices'] }}

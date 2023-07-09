@@ -9,25 +9,10 @@
                     <InputForm text="Name" v-model="form.name" />
 
                     <div class="grid grid-cols-2 gap-4">
-                        <label class="flex items-center">
-                            <Checkbox v-model:checked="form.has_income" name="is_active" />
-                            <span class="ml-2 text-sm text-gray-600">Ingresos</span>
-                        </label>
-
-                        <label class="flex items-center">
-                            <Checkbox v-model:checked="form.has_expenditure" name="is_active" />
-                            <span class="ml-2 text-sm text-gray-600">Egresos</span>
-                        </label>
-
-                        <label class="flex items-center">
-                            <Checkbox v-model:checked="form.notify_income" name="is_active" />
-                            <span class="ml-2 text-sm text-gray-600">Notificaciones</span>
-                        </label>
-
-                        <label class="flex items-center">
-                            <Checkbox v-model:checked="form.notify_expenditure" name="is_active" />
-                            <span class="ml-2 text-sm text-gray-600">Notificaciones</span>
-                        </label>
+                        <Checkbox v-model:checked="form.has_income" text="Ingresos" />
+                        <Checkbox v-model:checked="form.has_expenditure" text="Egresos" />
+                        <Checkbox v-model:checked="form.notify_income" text="Notificaciones" />
+                        <Checkbox v-model:checked="form.notify_expenditure" text="Notificaciones" />
                     </div>
                 </div>
             </template>

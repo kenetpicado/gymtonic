@@ -8,10 +8,10 @@ const props = defineProps({
         type: [Array, Boolean],
         default: false,
     },
-    value: {
+    text: {
         type: String,
-        default: null,
-    },
+        default: ''
+    }
 });
 
 const proxyChecked = computed({
@@ -25,12 +25,14 @@ const proxyChecked = computed({
 });
 </script>
 
-
 <template>
-    <input
-        v-model="proxyChecked"
-        type="checkbox"
-        :value="value"
-        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-    >
+    <label class="flex items-center">
+            <input
+            v-model="proxyChecked"
+            type="checkbox"
+            :value="true"
+            class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+        >
+        <span class="ml-2 text-sm text-gray-600">{{ text }}</span>
+    </label>
 </template>
