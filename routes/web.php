@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\ConceptController;
 use App\Http\Controllers\Dashboard\ConceptExpenditureController;
+use App\Http\Controllers\Dashboard\ConceptIncomeController;
 use App\Http\Controllers\Dashboard\CustomerController;
 use App\Http\Controllers\Dashboard\CustomerWeightController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -37,13 +38,13 @@ Route::middleware(['auth:sanctum'])
 
         Route::resource('customers', CustomerController::class)->except(['show', 'destroy']);
 
-        Route::resource('customers.weights', CustomerWeightController::class)->except(['show', 'create']);
+        Route::resource('customers.weights', CustomerWeightController::class)->except(['show', 'create', 'edit']);
 
         Route::get('customers/{customer}/history', IncomeHistoryController::class)->name('customers.history');
 
         Route::resource('services', ServiceController::class)->only(['index', 'store', 'update']);
 
-        Route::resource('plans', PlanController::class);
+        Route::resource('plans', PlanController::class)->only(['index', 'edit', 'update']);
 
         Route::put('plans-extend', ExtendPlanController::class)->name('plans.extend');
 
@@ -55,7 +56,8 @@ Route::middleware(['auth:sanctum'])
 
         Route::resource('expenditures', ExpenditureController::class);
 
-        Route::resource('concepts', ConceptController::class);
+        Route::resource('concepts', ConceptController::class)->only(['index', 'store', 'udpate']);
 
         Route::resource('concepts.expenditures', ConceptExpenditureController::class)->only(['index']);
+        Route::resource('concepts.incomes', ConceptIncomeController::class)->only(['index']);
     });

@@ -21,4 +21,9 @@ class Concept extends Model
     {
         return $this->morphMany(Expenditure::class, 'expenditureable');
     }
+
+    public function incomes()
+    {
+        return $this->morphMany(Income::class, 'incomeable');
+    }
 }

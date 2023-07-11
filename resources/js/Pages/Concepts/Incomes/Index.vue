@@ -21,7 +21,7 @@
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveExpenditure">
+                <PrimaryButton type="button" @click="saveIncome">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -30,7 +30,7 @@
         <TableSection>
             <template #topbar>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                    Pagos: {{ concept.name }}
+                    Ingresos: {{ concept.name }}
                 </h2>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
@@ -46,45 +46,45 @@
             </template>
 
             <template #body>
-                <tr v-for="(expenditure, index) in expenditures.data" class="hover:bg-gray-50">
+                <tr v-for="(income, index) in incomes.data" class="hover:bg-gray-50">
                     <td>
-                        <DateColumn :date="expenditure.created_at" />
+                        <DateColumn :date="income.created_at" />
                     </td>
                     <td>
-                        <ConceptInfo :type="expenditure" />
+                        <ConceptInfo :type="income" />
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
-                            C$ {{ (expenditure.value).toLocaleString('en-US') }}
+                            C$ {{ (income.value).toLocaleString('en-US') }}
                         </div>
-                        <div class="text-gray-400" v-if="expenditure.quantity > 1">
-                            Cant. {{ expenditure.quantity }}
+                        <div class="text-gray-400" v-if="income.quantity > 1">
+                            Cant. {{ income.quantity }}
                         </div>
                     </td>
                     <td>
-                        <span class="badge-danger">
-                            C$ {{ (expenditure.value * expenditure.quantity).toLocaleString('en-US') }}
+                        <span class="badge-success">
+                            C$ {{ (income.value * income.quantity).toLocaleString('en-US') }}
                         </span>
                     </td>
                     <td>
                         <div class="flex gap-4">
-                            <span tooltip="Editar" role="button" @click="edit(expenditure)">
+                            <span tooltip="Editar" role="button" @click="edit(income)">
                                 <IconPencil />
                             </span>
 
-                            <span tooltip="Eliminar" role="button" @click="confirmDestroy(expenditure.id)">
+                            <span tooltip="Eliminar" role="button" @click="confirmDestroy(income.id)">
                                 <IconTrash />
                             </span>
                         </div>
                     </td>
                 </tr>
-                <tr v-if="expenditures.data.length == 0">
+                <tr v-if="incomes.data.length == 0">
                     <td colspan="5" class="text-center">No data to display</td>
                 </tr>
             </template>
 
             <template #paginator>
-                <ThePaginator :links="expenditures.links"></ThePaginator>
+                <ThePaginator :links="incomes.links"></ThePaginator>
             </template>
         </TableSection>
 
@@ -111,7 +111,7 @@ const props = defineProps({
     concept: {
         type: Object, required: true
     },
-    expenditures: {
+    incomes: {
         type: Object, required: true
     }
 })
@@ -122,7 +122,7 @@ const isNew = ref(true);
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
     { name: 'Conceptos', route: 'dashboard.concepts.index' },
-    { name: props.concept.name, route: 'dashboard.concepts.expenditures.index', params: [props.concept.id] },
+    { name: props.concept.name, route: 'dashboard.concepts.incomes.index', params: [props.concept.id] },
 ]
 
 const form = useForm({
@@ -131,52 +131,52 @@ const form = useForm({
     value: 0,
     concept: '',
     description: '',
-    expenditureable_id: props.concept.id,
-    expenditureable_type: 'App\\Models\\Concept'
+    incomeable_id: props.concept.id,
+    incomeable_type: 'App\\Models\\Concept'
 })
 
 const total = computed(() => {
     return (form.quantity * form.value).toLocaleString('en-US')
 })
 
-function edit(expenditure) {
-    form.id = expenditure.id;
-    form.quantity = expenditure.quantity;
-    form.value = expenditure.value;
-    form.concept = expenditure.concept;
-    form.description = expenditure.description;
+function edit(income) {
+    form.id = income.id;
+    form.quantity = income.quantity;
+    form.value = income.value;
+    form.concept = income.concept;
+    form.description = income.description;
     isNew.value = false;
     openModal.value = true;
 }
 
 function confirmDestroy(id) {
     useNotify().confirm(() => {
-        router.delete(route('dashboard.expenditures.destroy', id), {
+        router.delete(route('dashboard.incomes.destroy', id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Pago eliminado correctamente!')
+                toast.success('Ingreso eliminado correctamente!')
             },
         });
     }, '¿Estás seguro de eliminar este pago?')
 }
 
-function saveExpenditure() {
+function saveIncome() {
     if (isNew.value) {
-        form.post(route('dashboard.expenditures.store'), {
+        form.post(route('dashboard.incomes.store'), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Pago creado correctamente!')
+                toast.success('Ingreso creado correctamente!')
                 resetValues()
             },
         });
     } else {
-        form.put(route('dashboard.expenditures.update', form.id), {
+        form.put(route('dashboard.incomes.update', form.id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Pago actualizado correctamente!')
+                toast.success('Ingreso actualizado correctamente!')
                 resetValues()
             },
         });

@@ -30,11 +30,11 @@
                         <DateColumn :date="income.created_at" />
                     </td>
                     <td>
-                        <span v-if="!income.incomeable_type" class="text-sm text-gray-400 italic">
-                            None
-                        </span>
                         <UserInformation v-if="income.incomeable_type == 'App\\Models\\Customer'"
                             :user="income.incomeable" />
+
+                        <ConceptInformation v-if="income.incomeable_type == 'App\\Models\\Concept'"
+                            :concept="income.incomeable" />
                     </td>
                     <td>
                         <ConceptInfo :type="income" />
@@ -76,6 +76,7 @@ import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
+import ConceptInformation from '@/Components/ConceptInformation.vue';
 import ConceptInfo from '@/Components/ConceptInfo.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 

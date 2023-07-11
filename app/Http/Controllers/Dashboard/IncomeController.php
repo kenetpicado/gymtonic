@@ -27,4 +27,11 @@ class IncomeController extends Controller
 
         return back();
     }
+
+    public function update(IncomeRequest $request, Income $income)
+    {
+        $income->update($request->validated());
+
+        return back();
+    }
 }

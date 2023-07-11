@@ -24,11 +24,13 @@ class IncomeRequest extends FormRequest
     public function rules()
     {
         return [
+            'value' => 'required|numeric|gt:0',
             'concept' => 'required|string',
-            'description' => 'nullable|string',
-            'amount' => 'required|numeric|min:0',
             'quantity' => 'required|numeric|min:1',
-            'discount' => 'nullable|numeric|min:0',
+            'description' => 'nullable|string',
+            'incomeable_id' => 'required|numeric',
+            'incomeable_type' => 'required|string',
+            'created_at' => 'nullable|date'
         ];
     }
 }

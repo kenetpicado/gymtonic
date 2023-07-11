@@ -57,7 +57,7 @@
                     </td>
                     <td>
                         <Link v-if="concept.has_income"
-                            :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Ingresos" class="text-green-500">
+                            :href="route('dashboard.concepts.incomes.index', concept.id)" tooltip="Ingresos" class="text-green-500">
                         <IconMoneybag />
                         </Link>
                     </td>
@@ -91,7 +91,6 @@ import { toast } from "@/Use/toast.js";
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import { usePage } from '@inertiajs/vue3';
 import ThePaginator from '@/Components/ThePaginator.vue';
-import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
 import Checkbox from '@/Components/Checkbox.vue';
 
 const props = defineProps({

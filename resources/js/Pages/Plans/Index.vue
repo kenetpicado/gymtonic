@@ -37,10 +37,7 @@
             <template #topbar>
                 <div class="flex items-center gap-4">
                     <SearchComponent @search="searchPlans" />
-                    <div>
-                        <Checkbox v-model:checked="checkBox" name="status" />
-                        <span class="ml-2 text-sm text-gray-600">Activos</span>
-                    </div>
+                    <Checkbox v-model:checked="checkBox" text="Activos" />
                 </div>
 
                 <div class="flex gap-2 items-center">
