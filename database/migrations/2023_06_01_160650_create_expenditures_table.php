@@ -18,7 +18,7 @@ return new class extends Migration
             $table->nullableMorphs('expenditureable');
             $table->double('value');
             $table->integer('quantity')->default(1);
-            $table->string('concept');
+            $table->string('concept')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
         });

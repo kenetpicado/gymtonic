@@ -1,26 +1,25 @@
 <template>
     <AppLayout title="Customer">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Incomes
-            </h2>
-        </template>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="saveIncome">
                 <template #title>
-                    Income Information
+                    Informacion del Ingreso
                 </template>
 
                 <template #description>
-                    Set the income's information.
+                    Ingrese los datos del nuevo ingreso
                 </template>
 
                 <template #form>
-                    <InputForm text="Concept" v-model="form.concept"></InputForm>
-                    <InputForm text="Description (optional)" name="description" v-model="form.description"></InputForm>
-                    <InputForm text="Amount" v-model="form.amount"></InputForm>
-                    <InputForm text="Quantity" v-model="form.quantity" type="number"></InputForm>
-                    <InputForm text="Discount" v-model="form.discount"></InputForm>
+                    <SelectForm text="Concept" v-model="form.concept">
+                        <option selected value="">Ninguno</option>
+                        <option v-for="concept in concepts">{{ concept.name }}</option>
+                    </SelectForm>
+                    <InputForm text="Or write another" v-model="form.concept"/>
+                    <InputForm text="Description (optional)" name="description" v-model="form.description"/>
+                    <InputForm text="Quantity" v-model="form.quantity" type="number"/>
+                    <InputForm text="Value" v-model="form.value"/>
+                    <InputForm text="Discount" v-model="form.discount"/>
 
                     <div class="col-span-4 text-lg font-medium text-gray-900">
                         Total: C$ {{ total }}
@@ -29,10 +28,10 @@
 
                 <template #actions>
                     <SecondaryButton @click="$inertia.visit(route('dashboard.incomes.index'))">
-                        Cancel
+                        Cancelar
                     </SecondaryButton>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Save
+                        Guardar
                     </PrimaryButton>
                 </template>
             </FormSection>
@@ -48,21 +47,31 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import SelectForm from "@/Components/Form/SelectForm.vue"
+
+const props = defineProps({
+    concepts: {
+        type: Object, required: true
+    },
+})
 
 const form = useForm({
-    amount: 0,
+    id: null,
     quantity: 1,
+    value: 0,
+    discount: 0,
     concept: '',
     description: '',
-    discount: 0,
+    incomeable_id: null,
+    incomeable_type: null
 })
 
 const total = computed(() => {
-    if (isNaN(form.amount) || isNaN(form.quantity)) {
+    if (isNaN(form.value) || isNaN(form.quantity)) {
         return 0
     }
 
-    return form.amount * form.quantity - form.discount
+    return form.value * form.quantity - form.discount
 })
 
 function saveIncome() {

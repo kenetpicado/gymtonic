@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IncomeRequest;
+use App\Models\Concept;
 use App\Models\Income;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,9 @@ class IncomeController extends Controller
 
     public function create()
     {
-        return inertia('Incomes/Create');
+        return inertia('Incomes/Create', [
+            'concepts' => Concept::all(['id', 'name'])
+        ]);
     }
 
     public function store(IncomeRequest $request)

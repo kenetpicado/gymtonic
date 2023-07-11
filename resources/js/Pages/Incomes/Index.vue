@@ -1,25 +1,17 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                Incomes
-            </h2>
-            <div>
-                <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.incomes.create'))">
-                    New
-                </PrimaryButton>
-            </div>
-        </template>
-
+    <AppLayout title="Dashboard" :breads="breads">
         <TableSection>
             <template #topbar>
                 <SearchComponent :url="route('dashboard.incomes.index')" :only="['incomes']"></SearchComponent>
+                <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.incomes.create'))">
+                    Nuevo
+                </PrimaryButton>
             </template>
 
             <template #header>
                 <th>Fecha</th>
                 <th>Tipo</th>
-                <th>Concepto</th>
+                <th>Description</th>
                 <th>Monto</th>
                 <th>Total</th>
             </template>
@@ -35,9 +27,13 @@
 
                         <ConceptInformation v-if="income.incomeable_type == 'App\\Models\\Concept'"
                             :concept="income.incomeable" />
+
+                        <span v-if="!income.incomeable_type">
+                            {{ income.concept }}
+                        </span>
                     </td>
                     <td>
-                        <ConceptInfo :type="income" />
+                         {{ income.description }}
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
@@ -83,7 +79,12 @@ import DateColumn from '@/Components/DateColumn.vue';
 const props = defineProps({
     incomes: {
         type: Object, required: true
-    }
+    },
 })
+
+const breads = [
+    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Ingresos', route: 'dashboard.incomes.index' },
+]
 
 </script>

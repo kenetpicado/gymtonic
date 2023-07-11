@@ -7,8 +7,7 @@
             </template>
             <template #content>
                 <div class="grid gap-6">
-                    <InputForm text="Concept" v-model="form.concept" />
-                    <InputForm text="Description (optional)" v-model="form.description" />
+                    <InputForm text="Description" v-model="form.description" />
                     <InputForm text="Quantity" v-model="form.quantity" type="number" />
                     <InputForm text="Value" v-model="form.value" />
 
@@ -39,7 +38,7 @@
 
             <template #header>
                 <th>Fecha</th>
-                <th>Concepto</th>
+                <th>Descripcion</th>
                 <th>Monto</th>
                 <th>Total</th>
                 <th>Actions</th>
@@ -51,7 +50,7 @@
                         <DateColumn :date="income.created_at" />
                     </td>
                     <td>
-                        <ConceptInfo :type="income" />
+                        {{ income.description }}
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
@@ -92,7 +91,6 @@
 </template>
 
 <script setup>
-import ConceptInfo from '@/Components/ConceptInfo.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
@@ -129,7 +127,6 @@ const form = useForm({
     id: null,
     quantity: 1,
     value: 0,
-    concept: '',
     description: '',
     incomeable_id: props.concept.id,
     incomeable_type: 'App\\Models\\Concept'
@@ -143,7 +140,6 @@ function edit(income) {
     form.id = income.id;
     form.quantity = income.quantity;
     form.value = income.value;
-    form.concept = income.concept;
     form.description = income.description;
     isNew.value = false;
     openModal.value = true;
