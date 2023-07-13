@@ -3,8 +3,8 @@
         <div class="h-full px-3 py-4 overflow-y-auto">
             <div class="flex flex-col items-center mt-4 mb-6">
                 <div class="h-14 w-14">
-                    <img class="h-full w-full rounded-full object-cover object-center border-2"
-                        :src="useProfileUrl().get($page.props.auth.user.name )" alt="" />
+                    <img class="h-full w-full"
+                        src="/img/logo-ag.png" alt="" />
                 </div>
             </div>
             <ul class="space-y-2">
@@ -13,7 +13,7 @@
                         class="block text-xs text-gray-500 uppercase tracking-wider font-semibold mt-4 px-2">
                         {{ item.header }}
                     </span>
-                    <Link v-else :href="route(item.route)">
+                    <Link v-else :href="item.route">
                     <span class="flex items-center px-2 py-3 rounded-lg gap-4" :class="getClass(item.route)">
                         <component :is="item.icon ?? DEFAULT_ICON"></component>
                         <span>{{ item.name }}</span>
@@ -33,7 +33,7 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
-import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff } from '@tabler/icons-vue';
 import useProfileUrl from '@/Composables/useProfileUrl.js';
 
 const DEFAULT_ICON = IconUser;
@@ -48,7 +48,7 @@ const items = [
     },
     {
         name: 'Dashboard',
-        route: 'dashboard.index',
+        route: route('dashboard.index'),
         icon: IconHome
     },
     {
@@ -56,22 +56,22 @@ const items = [
     },
     {
         name: 'Clientes',
-        route: 'dashboard.customers.index',
+        route: route('dashboard.customers.index'),
         icon: IconUser
     },
     {
         name: 'Planes',
-        route: 'dashboard.plans.index',
+        route: route('dashboard.plans.index'),
         icon: IconRun
     },
     {
         name: 'Personal',
-        route: 'dashboard.employees.index',
+        route: route('dashboard.employees.index'),
         icon: IconUsersGroup
     },
     {
         name: 'Servicios',
-        route: 'dashboard.services.index',
+        route: route('dashboard.services.index'),
         icon: IconActivity
     },
     {
@@ -79,25 +79,30 @@ const items = [
     },
     {
         name: 'Conceptos',
-        route: 'dashboard.concepts.index',
+        route: route('dashboard.concepts.index'),
         icon: IconStack
     },
     {
         name: 'Ingresos',
-        route: 'dashboard.incomes.index',
+        route: route('dashboard.finances.index', 'incomes'),
         icon: IconMoneybag
+    },
+    {
+        name: 'Egresos',
+        route: route('dashboard.finances.index', 'expenditures'),
+        icon: IconCurrencyDollarOff
     },
     {
         header: 'Cuenta'
     },
     {
         name: 'Perfil',
-        route: 'profile.show',
+        route: route('profile.show',)
     },
 ]
 
-function getClass(routeName) {
-    return route().current(routeName)
+function getClass(fullRoute) {
+    return window.location.href == fullRoute
         ? 'bg-gray-800 text-white'
         : 'hover:bg-gray-100';
 }

@@ -7,6 +7,9 @@
         <div class="text-sm">
             <div class="font-medium text-gray-700">{{ user.name }}</div>
             <div class="text-gray-400" v-if="user.phone">{{ user.phone }}</div>
+            <div class="text-gray-400 text-xs mt-1" v-if="type">
+                {{ typeList[type] }}
+            </div>
         </div>
     </div>
 </template>
@@ -17,9 +20,17 @@ import useProfileUrl from '@/Composables/useProfileUrl.js';
 const props = defineProps({
     user: {
         type: Object, required: true
+    },
+    type: {
+        type: String, required: false
     }
 })
 
 const profileUrl = useProfileUrl();
+
+const typeList = {
+    "App\\Models\\Employee": "Empleado",
+    "App\\Models\\Customer": "Cliente"
+}
 
 </script>

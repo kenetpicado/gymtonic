@@ -18,4 +18,9 @@ class Expenditure extends Model
         'expenditureable_type',
         'created_at'
     ];
+
+    public function expenditureable()
+    {
+        return $this->morphTo();
+    }
 }

@@ -1,7 +1,8 @@
 <template>
     <div class="font-medium">
-        <div class="text-gray-700 mb-1">{{ Carbon.create(date).format('d/m/Y') }}</div>
-        <div class="text-gray-400 text-xs"> ({{ Carbon.create(date).diffForHumans() }})</div>
+        <span class="text-gray-700 mb-1" :tooltip="Carbon.create(date).diffForHumans()">
+            {{ Carbon.create(date).format('d/m/Y') }}
+        </span>
     </div>
 </template>
 

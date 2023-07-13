@@ -6,8 +6,8 @@
             </template>
             <template #content>
                 <div class="grid gap-6">
-                    <InputForm text="Value" v-model="form.value"></InputForm>
                     <InputForm text="Description (optional)" v-model="form.description"></InputForm>
+                    <InputForm text="Value" v-model="form.value"></InputForm>
                     <InputForm text="Date" v-model="form.created_at" type="date"></InputForm>
                 </div>
             </template>
@@ -37,6 +37,7 @@
             <template #header>
                 <th>Fecha</th>
                 <th>Concepto</th>
+                <th>Descripcion</th>
                 <th>Monto</th>
                 <th>Acciones</th>
             </template>
@@ -46,16 +47,12 @@
                     <td>
                         <DateColumn :date="payment.created_at" />
                     </td>
-                    <th>
-                        <div class="text-sm">
-                            <div class="font-medium text-gray-700 mb-1">
-                                {{ payment.concept }}
-                            </div>
-                            <div class="text-gray-400" v-if="payment.description">
-                                {{ payment.description }}
-                            </div>
-                        </div>
-                    </th>
+                    <td>
+                        {{ payment.concept }}
+                    </td>
+                    <td>
+                        {{ payment.description }}
+                    </td>
                     <td>
                         <span class="badge-blue">C$ {{ payment.value.toLocaleString('en-US') }}</span>
                     </td>
@@ -109,7 +106,9 @@ const breads = [
 ]
 
 const form = useForm({
+    id: null,
     value: 0,
+    quantity: 1,
     description: '',
     concept: 'Pago de salario',
     expenditureable_type: 'App\\Models\\Employee',
@@ -121,6 +120,7 @@ function editPayment(payment) {
     isNew.value = false;
     form.id = payment.id;
     form.value = payment.value;
+    form.quantity = payment.quantity;
     form.description = payment.description;
     form.concept = payment.concept;
     form.created_at = new Carbon(payment.created_at).format('Y-m-d');
@@ -135,7 +135,7 @@ function savePayment() {
             onSuccess: () => {
                 resetValues();
                 toast.success('Pago guardado correctamente!');
-            }
+            },
         });
     } else {
         form.put(route('dashboard.expenditures.update', form.id), {

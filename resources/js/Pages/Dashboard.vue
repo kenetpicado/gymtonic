@@ -93,7 +93,7 @@ const finances = [
         icon: IconMoneybag,
     },
     {
-        title: 'Gastos ' + MONHT,
+        title: 'Egresos ' + MONHT,
         value: 'C$ ' + props.expenditures_month,
         icon: IconCurrencyDollarOff,
     },
