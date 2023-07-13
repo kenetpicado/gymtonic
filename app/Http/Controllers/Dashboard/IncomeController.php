@@ -10,20 +10,6 @@ use Illuminate\Http\Request;
 
 class IncomeController extends Controller
 {
-    public function index()
-    {
-        return inertia('Incomes/Index', [
-            'incomes' => Income::orderBy('id','desc')->with('incomeable:id,name')->paginate(10)
-        ]);
-    }
-
-    public function create()
-    {
-        return inertia('Incomes/Create', [
-            'concepts' => Concept::all(['id', 'name'])
-        ]);
-    }
-
     public function store(IncomeRequest $request)
     {
         Income::create($request->validated());
