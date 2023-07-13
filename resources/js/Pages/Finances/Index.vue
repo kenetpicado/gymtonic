@@ -54,7 +54,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="badge-blue">
+                        <span :class="[type == 'incomes' ? 'badge-blue' : 'badge-danger']">
                             C$ {{ (finance.value * finance.quantity).toLocaleString('en-US') }}
                         </span>
                     </td>

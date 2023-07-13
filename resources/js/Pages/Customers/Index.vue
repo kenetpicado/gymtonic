@@ -50,7 +50,7 @@
                             <IconPencil />
                             </Link>
 
-                            <Link :href="route('dashboard.customers.history', customer.id)" tooltip="Historial">
+                            <Link :href="route('dashboard.customers.show', customer.id)" tooltip="Historial">
                             <IconHistory />
                             </Link>
                         </div>

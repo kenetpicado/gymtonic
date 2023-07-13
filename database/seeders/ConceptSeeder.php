@@ -59,6 +59,11 @@ class ConceptSeeder extends Seeder
             [
                 'name' => 'Servicios',
             ],
+            [
+                'name' => 'Otros',
+                'has_income' => true,
+                'has_expenditure' => true
+            ],
         ];
 
         foreach ($concepts as $concept) {

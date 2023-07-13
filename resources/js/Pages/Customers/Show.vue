@@ -52,7 +52,7 @@ const props = defineProps({
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
     { name: 'Clientes', route: 'dashboard.customers.index' },
-    { name: 'Historial', route: 'dashboard.customers.history', params: [ props.customer.id ] },
+    { name: 'Ver', route: 'dashboard.customers.show', params: [ props.customer.id ] },
 ]
 
 </script>

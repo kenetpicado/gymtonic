@@ -12,7 +12,6 @@ use App\Http\Controllers\Dashboard\ExpenditureController;
 use App\Http\Controllers\Dashboard\ExtendPlanController;
 use App\Http\Controllers\Dashboard\FinanceController;
 use App\Http\Controllers\Dashboard\IncomeController;
-use App\Http\Controllers\Dashboard\IncomeHistoryController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\ServiceController;
 use Illuminate\Foundation\Application;
@@ -37,11 +36,9 @@ Route::middleware(['auth:sanctum'])
     ->group(function () {
         Route::get('', DashboardController::class)->name('index');
 
-        Route::resource('customers', CustomerController::class)->except(['show', 'destroy']);
+        Route::resource('customers', CustomerController::class)->except(['destroy']);
 
         Route::resource('customers.weights', CustomerWeightController::class)->except(['show', 'create', 'edit']);
-
-        Route::get('customers/{customer}/history', IncomeHistoryController::class)->name('customers.history');
 
         Route::resource('services', ServiceController::class)->only(['index', 'store', 'update']);
 
