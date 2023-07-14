@@ -102,7 +102,7 @@ const isNew = ref(true);
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
     { name: 'Personal', route: 'dashboard.employees.index' },
-    { name: 'Pagos', route: 'dashboard.employees.expenditures.index', params: [props.employee.id] },
+    { name: 'Pagos', route: 'dashboard.employees.show', params: [props.employee.id] },
 ]
 
 const form = useForm({

@@ -7,7 +7,6 @@ use App\Http\Controllers\Dashboard\CustomerController;
 use App\Http\Controllers\Dashboard\CustomerWeightController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EmployeeController;
-use App\Http\Controllers\Dashboard\EmployeeExpenditureController;
 use App\Http\Controllers\Dashboard\ExpenditureController;
 use App\Http\Controllers\Dashboard\ExtendPlanController;
 use App\Http\Controllers\Dashboard\FinanceController;
@@ -46,9 +45,7 @@ Route::middleware(['auth:sanctum'])
 
         Route::put('plans-extend', ExtendPlanController::class)->name('plans.extend');
 
-        Route::resource('employees', EmployeeController::class)->only(['index', 'store', 'update']);
-
-        Route::resource('employees.expenditures', EmployeeExpenditureController::class)->only(['index']);
+        Route::resource('employees', EmployeeController::class)->except(['destroy', 'create', 'edit']);
 
         Route::get('finances/{type}', [FinanceController::class, 'index'])->name('finances.index');
         Route::get('finances/{type}/create', [FinanceController::class, 'create'])->name('finances.create');

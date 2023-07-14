@@ -34,9 +34,12 @@
                             {{ periodLabel[price.period] }} - {{ price.value }} C$
                         </option>
                     </SelectForm>
+
                     <template v-if="!isCurrentActive">
-                        <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
+                        <Checkbox v-model:checked="startFromLast" text="Continuar el plan anterior" class="col-span-4" />
+                        <InputForm v-if="!startFromLast" text="Start Date" v-model="form.start_date" type="date"></InputForm>
                     </template>
+
                     <InputForm text="End Date" v-model="end_date" type="date" disabled></InputForm>
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
@@ -73,6 +76,7 @@ import { toast } from '@/Use/toast.js';
 import { router, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { periodLabel } from '@/Use/periodLabel.js';
+import Checkbox from '@/Components/Checkbox.vue';
 
 const props = defineProps({
     services: {
@@ -87,7 +91,9 @@ const props = defineProps({
 })
 
 const prices = ref([])
+const startFromLast = ref(false)
 const form = useForm(new Plan(props.plan, props.services[0].id, props.isCurrentActive));
+let startFromDate = null;
 
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
@@ -100,11 +106,20 @@ const total = computed(() => {
 });
 
 const end_date = computed(() => {
-    const date = new Carbon(props.isCurrentActive ? form.end_date : form.start_date).addPeriod(parseInt(form.period)).addDays(-1);
 
     if (props.isCurrentActive) {
-        date.addDays();
+        startFromDate = form.end_date
+    } else {
+        startFromDate = startFromLast.value ? form.end_date : form.start_date;
     }
+
+    const date = new Carbon(startFromDate)
+        .addPeriod(parseInt(form.period))
+        .addDays(props.isCurrentActive || startFromLast.value ? 0 : -1);
+
+    // if (props.isCurrentActive || startFromLast.value) {
+    //     date.addDays();
+    // }
 
     return date.format('Y-m-d');
 });

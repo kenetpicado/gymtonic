@@ -48,7 +48,7 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <Link :href="route('dashboard.employees.expenditures.index', employee.id)">
+                            <Link :href="route('dashboard.employees.show', employee.id)">
                             <IconCurrencyDollar />
                             </Link>
 
