@@ -22,6 +22,9 @@
                             dias.
                         </div>
                     </template>
+                    <div v-else>
+                        Ingrese los datos del plan para el cliente.
+                    </div>
                 </template>
 
                 <template #form>
@@ -107,19 +110,14 @@ const total = computed(() => {
 
 const end_date = computed(() => {
 
-    if (props.isCurrentActive) {
+    if (props.isCurrentActive || startFromLast.value)
         startFromDate = form.end_date
-    } else {
-        startFromDate = startFromLast.value ? form.end_date : form.start_date;
-    }
+    else
+        startFromDate = form.start_date;
 
     const date = new Carbon(startFromDate)
         .addPeriod(parseInt(form.period))
         .addDays(props.isCurrentActive || startFromLast.value ? 0 : -1);
-
-    // if (props.isCurrentActive || startFromLast.value) {
-    //     date.addDays();
-    // }
 
     return date.format('Y-m-d');
 });
