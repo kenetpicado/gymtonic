@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ConceptExpenditureController extends Controller
 {
-    public function index(Concept $concept)
+    public function __invoke(Concept $concept)
     {
         return inertia('Concepts/Expenditures/Index', [
             'concept' => $concept,

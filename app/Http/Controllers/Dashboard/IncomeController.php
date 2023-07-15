@@ -17,9 +17,9 @@ class IncomeController extends Controller
         return back();
     }
 
-    public function update(IncomeRequest $request, Income $income)
+    public function update(IncomeRequest $request, $income)
     {
-        $income->update($request->validated());
+        Income::where('id', $income)->update($request->validated());
 
         return back();
     }

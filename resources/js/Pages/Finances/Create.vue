@@ -29,7 +29,6 @@
                     <div class="col-span-4 text-lg font-medium text-gray-900">
                         Total: C$ {{ total }}
                     </div>
-                    <pre>{{form}}</pre>
                 </template>
 
                 <template #actions>

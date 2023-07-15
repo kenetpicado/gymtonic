@@ -55,6 +55,6 @@ Route::middleware(['auth:sanctum'])
 
         Route::resource('concepts', ConceptController::class)->only(['index', 'store', 'udpate']);
 
-        Route::resource('concepts.expenditures', ConceptExpenditureController::class)->only(['index']);
+        Route::get('concepts/{concept}/expenditures', ConceptExpenditureController::class)->name('concepts.expenditures.index');
         Route::resource('concepts.incomes', ConceptIncomeController::class)->only(['index']);
     });

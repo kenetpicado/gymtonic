@@ -93,7 +93,7 @@
                         </div>
                     </td>
                     <td>
-                        <Link :href="route('dashboard.plans.edit', plan.id)" tooltip="Pagar">
+                        <Link :href="route('dashboard.plans.edit', plan.id)" tooltip="Nuevo plan">
                             <IconCurrencyDollar/>
                         </Link>
                     </td>

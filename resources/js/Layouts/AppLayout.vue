@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import Sidebar from './Sidebar.vue';
 import { IconChevronRight } from '@tabler/icons-vue';
+import { getAvatarUrl } from "@/Use/helpers.js"
 
 defineProps({
     title: String,
@@ -37,6 +38,12 @@ function getClass(routeName) {
                             </Link>
                         </li>
                     </ol>
+                    <div>
+                        <div class="h-10 w-10">
+                            <img class="h-full w-full rounded-full object-cover object-center" :src="getAvatarUrl($page.props.auth.user.name)"
+                                alt="" />
+                        </div>
+                    </div>
                 </div>
             </header>
 

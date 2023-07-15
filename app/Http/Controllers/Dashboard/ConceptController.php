@@ -23,9 +23,9 @@ class ConceptController extends Controller
         return back();
     }
 
-    public function update(ConceptRequest $request, Concept $concept)
+    public function update(ConceptRequest $request, $concept)
     {
-        $concept->update($request->validated());
+        Concept::where('id', $concept)->update($request->validated());
 
         return back();
     }

@@ -31,9 +31,9 @@ class EmployeeController extends Controller
         return redirect()->route('dashboard.employees.index');
     }
 
-    public function update(EmployeeRequest $request, Employee $employee)
+    public function update(EmployeeRequest $request, $employee)
     {
-        $employee->update($request->validated());
+        Employee::where('id', $employee)->update($request->validated());
 
         return redirect()->route('dashboard.employees.index');
     }
