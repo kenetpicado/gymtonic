@@ -31,13 +31,16 @@
                             	:user="finance.incomeable" :type="finance.incomeable_type"/>
                     	</template>
 
-                    	<template v-if="finance.expenditureable">
+                    	<template v-else-if="finance.expenditureable">
                     		<ConceptInformation v-if="finance.expenditureable_type == 'App\\Models\\Concept'"
 	                            :concept="finance.expenditureable" />
 
                     		<UserInformation v-else
                             	:user="finance.expenditureable" :type="finance.expenditureable_type" />
                     	</template>
+                        <div v-else class="font-normal text-gray-900 ">
+                            {{ finance.concept }}
+                        </div>
                     </td>
                     <td>
                          {{ finance.description }}

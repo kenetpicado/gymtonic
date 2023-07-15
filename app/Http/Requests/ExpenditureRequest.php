@@ -25,11 +25,11 @@ class ExpenditureRequest extends FormRequest
     {
         return [
             'value' => 'required|numeric|gt:0',
-            'concept' => 'nullable',
+            'concept' => 'required_without:expenditureable_id',
             'quantity' => 'required|numeric|min:1',
             'description' => 'nullable|string',
-            'expenditureable_id' => 'required|numeric',
-            'expenditureable_type' => 'required|string',
+            'expenditureable_id' => 'nullable|numeric',
+            'expenditureable_type' => 'nullable|string',
             'created_at' => 'nullable|date'
         ];
     }

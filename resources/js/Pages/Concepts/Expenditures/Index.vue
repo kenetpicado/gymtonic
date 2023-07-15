@@ -29,7 +29,7 @@
         <TableSection>
             <template #topbar>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                    Pagos: {{ concept.name }}
+                    Egresos: {{ concept.name }}
                 </h2>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo

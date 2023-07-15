@@ -25,11 +25,11 @@ class IncomeRequest extends FormRequest
     {
         return [
             'value' => 'required|numeric|gt:0',
-            'concept' => 'nullable',
+            'concept' => 'required_without:incomeable_id',
             'quantity' => 'required|numeric|min:1',
             'description' => 'nullable|string',
-            'incomeable_id' => 'required|numeric',
-            'incomeable_type' => 'required|string',
+            'incomeable_id' => 'nullable|numeric',
+            'incomeable_type' => 'nullable|string',
             'created_at' => 'nullable|date'
         ];
     }
