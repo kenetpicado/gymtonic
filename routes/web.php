@@ -48,13 +48,16 @@ Route::middleware(['auth:sanctum'])
         Route::resource('employees', EmployeeController::class)->except(['destroy', 'create', 'edit']);
 
         Route::get('finances/{type}', [FinanceController::class, 'index'])->name('finances.index');
+
         Route::get('finances/{type}/create', [FinanceController::class, 'create'])->name('finances.create');
 
         Route::resource('incomes', IncomeController::class)->only(['store', 'update']);
+
         Route::resource('expenditures', ExpenditureController::class)->only(['store', 'update', 'destroy']);
 
         Route::resource('concepts', ConceptController::class)->only(['index', 'store', 'udpate']);
 
         Route::get('concepts/{concept}/expenditures', ConceptExpenditureController::class)->name('concepts.expenditures.index');
+
         Route::resource('concepts.incomes', ConceptIncomeController::class)->only(['index']);
     });

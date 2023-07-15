@@ -10,15 +10,15 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th>Plan ID</th>
-                            <th>Customer</th>
-                            <th>End date</th>
+                            <th>Cliente</th>
+                            <th>Finaliza</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                         <tr v-for="plan in selectedPlans">
                             <td>{{ plan.id }}</td>
                             <td>{{ plan.customer }}</td>
-                            <td>{{ Carbon.simpleFormat(plan.end_date) }}</td>
+                            <td>{{ Carbon.create(plan.end_date).format('d/m/Y') }}</td>
                         </tr>
                     </tbody>
                 </table>
