@@ -26,7 +26,7 @@ class DashboardService
                 ->select(DB::raw('COALESCE(SUM(value * quantity), 0)as total'))
                 ->value('total'),
 
-            'customers' => DB::table('customers')->groupBy('gender')->get(['gender', DB::raw('count(*) as total')])
+            'customers' => DB::table('customers')->groupBy('gender')->get(['gender', DB::raw('count(*) as total')]),
         ];
     }
 }

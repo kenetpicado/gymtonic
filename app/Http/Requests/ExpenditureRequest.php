@@ -30,7 +30,7 @@ class ExpenditureRequest extends FormRequest
             'description' => 'nullable|string',
             'expenditureable_id' => 'nullable|numeric',
             'expenditureable_type' => 'nullable|string',
-            'created_at' => 'nullable|date'
+            'created_at' => 'nullable|date',
         ];
     }
 }

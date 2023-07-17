@@ -13,7 +13,7 @@ class CustomerService
         return [
             'customers' => DB::table('customers')
                 ->when($request->search, function ($query, $search) {
-                    $query->where('name', 'like', "%" . $search . "%");
+                    $query->where('name', 'like', '%'.$search.'%');
                 })
                 ->select(
                     'id',
@@ -69,7 +69,7 @@ class CustomerService
             $income->update([
                 'amount' => $plan->amount,
                 'discount' => $plan->discount,
-                'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+                'description' => $plan->service()->value('name').', '.$plan->period.' dia(s)',
             ]);
         }
     }

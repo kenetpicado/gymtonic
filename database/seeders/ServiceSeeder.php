@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Service;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ServiceSeeder extends Seeder
@@ -35,7 +34,7 @@ class ServiceSeeder extends Seeder
                         'period' => '30',
                         'value' => 300,
                     ],
-                ]
+                ],
             ],
             [
                 'name' => 'Zumba',
@@ -44,7 +43,7 @@ class ServiceSeeder extends Seeder
                         'period' => '30',
                         'value' => 350,
                     ],
-                ]
+                ],
             ],
             [
                 'name' => 'Zumba + Pesas',
@@ -53,13 +52,13 @@ class ServiceSeeder extends Seeder
                         'period' => '30',
                         'value' => 550,
                     ],
-                ]
+                ],
             ],
         ];
 
         foreach ($services as $service) {
             $created = Service::create([
-                'name' => $service['name']
+                'name' => $service['name'],
             ]);
 
             $created->prices()->createMany($service['prices']);

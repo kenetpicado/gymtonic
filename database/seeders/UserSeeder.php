@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -24,7 +23,7 @@ class UserSeeder extends Seeder
                 'name' => 'Josiel Alonso',
                 'email' => 'josielalonso@gmail.com',
                 'password' => bcrypt('password'),
-            ]
+            ],
         ];
 
         foreach ($users as $user) {

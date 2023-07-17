@@ -16,7 +16,7 @@ class Expenditure extends Model
         'description',
         'expenditureable_id',
         'expenditureable_type',
-        'created_at'
+        'created_at',
     ];
 
     public function expenditureable()

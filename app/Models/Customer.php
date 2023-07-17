@@ -13,7 +13,7 @@ class Customer extends Model
         'name',
         'phone',
         'birth_date',
-        'gender'
+        'gender',
     ];
 
     public function plan()
@@ -23,11 +23,11 @@ class Customer extends Model
 
     public function weights()
     {
-        return $this->hasMany(Weight::class)->orderBy('id','desc');
+        return $this->hasMany(Weight::class)->orderBy('id', 'desc');
     }
 
     public function incomes()
     {
-        return $this->morphMany(Income::class, 'incomeable')->orderBy('id','desc');
+        return $this->morphMany(Income::class, 'incomeable')->orderBy('id', 'desc');
     }
 }

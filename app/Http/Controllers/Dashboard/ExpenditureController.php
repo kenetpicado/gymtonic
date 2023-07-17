@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExpenditureRequest;
 use App\Models\Expenditure;
-use Illuminate\Http\Request;
 
 class ExpenditureController extends Controller
 {

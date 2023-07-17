@@ -14,7 +14,7 @@ class Concept extends Model
         'has_income',
         'notify_income',
         'has_expenditure',
-        'notify_expenditure'
+        'notify_expenditure',
     ];
 
     public function expenditures()

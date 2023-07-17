@@ -23,14 +23,14 @@ class PlanService
                 ])
                 ->when(
                     $request->search,
-                    fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', "%" . $request->search . "%"))
+                    fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', '%'.$request->search.'%'))
                 )
                 ->when(
                     $request->type == 'expired',
                     fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d'))->orderBy('end_date', 'desc'),
                     fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))->orderBy('end_date')
                 )
-                ->paginate(10)
+                ->paginate(10),
         ];
     }
 
@@ -51,7 +51,7 @@ class PlanService
             'value' => $plan->price,
             'discount' => $plan->discount,
             'concept' => 'Pago de plan',
-            'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+            'description' => $plan->service()->value('name').', '.$plan->period.' dia(s)',
             'incomeable_id' => $plan->customer_id,
             'incomeable_type' => 'App\Models\Customer',
         ]);
@@ -60,7 +60,7 @@ class PlanService
     public static function updateOrCreate($request): Plan
     {
         return Plan::updateOrCreate([
-            'customer_id' => $request['customer_id']
+            'customer_id' => $request['customer_id'],
         ], [
             'period' => $request['period'],
             'start_date' => $request['start_date'],
@@ -68,7 +68,7 @@ class PlanService
             'price' => $request['price'],
             'discount' => $request['discount'],
             'note' => $request['note'],
-            'service_id' => $request['service_id']
+            'service_id' => $request['service_id'],
         ]);
     }
 
@@ -80,7 +80,7 @@ class PlanService
 
         foreach ($plans as $plan) {
             $plan->update([
-                'end_date' => $requestCollection->where('id', $plan->id)->value('end_date')
+                'end_date' => $requestCollection->where('id', $plan->id)->value('end_date'),
             ]);
         }
     }

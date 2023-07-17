@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Concept;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Schema;
 
 class ConceptSeeder extends Seeder
 {
@@ -19,15 +17,15 @@ class ConceptSeeder extends Seeder
         $concepts = [
             [
                 'name' => 'Bebidas',
-                'has_income' => true
+                'has_income' => true,
             ],
             [
                 'name' => 'Tienda',
-                'has_income' => true
+                'has_income' => true,
             ],
             [
                 'name' => 'Suplementos',
-                'has_income' => true
+                'has_income' => true,
             ],
             [
                 'name' => 'Agua',
@@ -62,7 +60,7 @@ class ConceptSeeder extends Seeder
             [
                 'name' => 'Otros',
                 'has_income' => true,
-                'has_expenditure' => true
+                'has_expenditure' => true,
             ],
         ];
 

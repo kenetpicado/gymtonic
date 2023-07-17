@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ConceptRequest;
 use App\Models\Concept;
-use Illuminate\Http\Request;
 
 class ConceptController extends Controller
 {
     public function index()
     {
         return inertia('Concepts/Index', [
-            'concepts' => Concept::orderBy('name')->paginate()
+            'concepts' => Concept::orderBy('name')->paginate(),
         ]);
     }
 

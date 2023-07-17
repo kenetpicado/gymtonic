@@ -27,7 +27,7 @@ class ServiceRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('services')->ignore($this->id)
+                Rule::unique('services')->ignore($this->id),
             ],
             'is_active' => 'required|boolean',
             'prices' => 'required|array|min:1',

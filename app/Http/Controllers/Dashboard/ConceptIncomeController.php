@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Concept;
-use Illuminate\Http\Request;
 
 class ConceptIncomeController extends Controller
 {
@@ -12,7 +11,7 @@ class ConceptIncomeController extends Controller
     {
         return inertia('Concepts/Incomes/Index', [
             'concept' => $concept,
-            'incomes' => $concept->incomes()->orderBy('id', 'desc')->paginate(10)
+            'incomes' => $concept->incomes()->orderBy('id', 'desc')->paginate(10),
         ]);
     }
 }

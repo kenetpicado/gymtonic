@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Plan;
 use App\Services\PlanService;
 use Illuminate\Http\Request;
 

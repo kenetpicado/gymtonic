@@ -11,10 +11,10 @@ class Service extends Model
 
     protected $fillable = [
         'name',
-        'is_active'
+        'is_active',
     ];
 
-    public static $periods =  [
+    public static $periods = [
         [
             'period_label' => 'Dia',
             'period' => 1,
