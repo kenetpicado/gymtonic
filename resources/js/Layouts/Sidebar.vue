@@ -95,10 +95,10 @@ const items = [
     {
         header: 'Cuenta'
     },
-    {
-        name: 'Perfil',
-        route: route('profile.show',)
-    },
+    // {
+    //     name: 'Perfil',
+    //     route: route('profile.show',)
+    // },
 ]
 
 function getClass(fullRoute) {

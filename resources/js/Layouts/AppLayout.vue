@@ -39,10 +39,10 @@ function getClass(routeName) {
                         </li>
                     </ol>
                     <div>
-                        <div class="h-10 w-10">
+                        <!-- <div class="h-10 w-10">
                             <img class="h-full w-full rounded-full object-cover object-center" :src="getAvatarUrl($page.props.auth.user.name)"
                                 alt="" />
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </header>

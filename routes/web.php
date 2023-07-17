@@ -13,7 +13,6 @@ use App\Http\Controllers\Dashboard\FinanceController;
 use App\Http\Controllers\Dashboard\IncomeController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\ServiceController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,7 +28,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
 
-Route::middleware(['auth:sanctum'])
+// Route::middleware(['auth:sanctum'])
+Route::middleware([])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
