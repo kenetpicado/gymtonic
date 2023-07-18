@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleEnum;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -18,11 +19,13 @@ class UserSeeder extends Seeder
                 'name' => 'Kenet Picado',
                 'email' => 'kenetpicado1@gmail.com',
                 'password' => bcrypt('password'),
+                'role' => 'root'
             ],
             [
                 'name' => 'Josiel Alonso',
                 'email' => 'josielalonso@gmail.com',
                 'password' => bcrypt('password'),
+                'role' => RoleEnum::ADMINISTRADOR
             ],
         ];
 

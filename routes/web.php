@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\FinanceController;
 use App\Http\Controllers\Dashboard\IncomeController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\ServiceController;
+use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,4 +60,6 @@ Route::middleware(['auth'])
         Route::get('concepts/{concept}/expenditures', ConceptExpenditureController::class)->name('concepts.expenditures.index');
 
         Route::resource('concepts.incomes', ConceptIncomeController::class)->only(['index']);
-    });
+
+        Route::resource('users', UserController::class)->only(['index', 'store', 'update']);
+});

@@ -70,6 +70,14 @@ const items = [
         icon: IconUsersGroup
     },
     {
+        header: 'Sistema'
+    },
+    {
+        name: 'Usuarios',
+        route: route('dashboard.users.index'),
+        icon: IconUsersGroup
+    },
+    {
         name: 'Servicios',
         route: route('dashboard.services.index'),
         icon: IconActivity
@@ -95,6 +103,7 @@ const items = [
     {
         header: 'Cuenta'
     },
+
     // {
     //     name: 'Perfil',
     //     route: route('profile.show',)
