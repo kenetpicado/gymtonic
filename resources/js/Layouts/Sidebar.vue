@@ -34,7 +34,7 @@
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff } from '@tabler/icons-vue';
-import useProfileUrl from '@/Composables/useProfileUrl.js';
+import { getAvatarUrl } from "@/Use/helpers.js"
 
 const DEFAULT_ICON = IconUser;
 

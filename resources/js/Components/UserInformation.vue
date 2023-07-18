@@ -1,7 +1,7 @@
 <template>
     <div class="flex gap-3 font-normal text-gray-900 items-center">
         <div class="h-10 w-10">
-            <img class="h-full w-full rounded-full object-cover object-center" :src="profileUrl.get(user.name)"
+            <img class="h-full w-full rounded-full object-cover object-center" :src="getAvatarUrl(user.name)"
                 alt="" />
         </div>
         <div class="text-sm">
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import useProfileUrl from '@/Composables/useProfileUrl.js';
+import { getAvatarUrl } from "@/Use/helpers.js"
 
 const props = defineProps({
     user: {
@@ -25,8 +25,6 @@ const props = defineProps({
         type: String, required: false
     }
 })
-
-const profileUrl = useProfileUrl();
 
 const typeList = {
     "App\\Models\\Employee": "Empleado",
