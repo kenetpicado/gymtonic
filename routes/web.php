@@ -33,33 +33,48 @@ Route::middleware(['auth'])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
-        Route::get('', DashboardController::class)->name('index');
+        Route::get('', DashboardController::class)
+            ->name('index');
 
-        Route::resource('customers', CustomerController::class)->except(['destroy']);
+        Route::resource('customers', CustomerController::class)
+            ->except(['destroy']);
 
-        Route::resource('customers.weights', CustomerWeightController::class)->except(['show', 'create', 'edit']);
+        Route::resource('customers.weights', CustomerWeightController::class)
+            ->except(['show', 'create', 'edit']);
 
-        Route::resource('services', ServiceController::class)->only(['index', 'store', 'update']);
+        Route::resource('services', ServiceController::class)
+            ->only(['index', 'store', 'update']);
 
-        Route::resource('plans', PlanController::class)->only(['index', 'edit', 'update']);
+        Route::resource('plans', PlanController::class)
+            ->only(['index', 'edit', 'update']);
 
-        Route::put('plans-extend', ExtendPlanController::class)->name('plans.extend');
+        Route::put('plans-extend', ExtendPlanController::class)
+            ->name('plans.extend');
 
-        Route::resource('employees', EmployeeController::class)->except(['destroy', 'create', 'edit']);
+        Route::resource('employees', EmployeeController::class)
+            ->except(['destroy', 'create', 'edit']);
 
-        Route::get('finances/{type}', [FinanceController::class, 'index'])->name('finances.index');
+        Route::get('finances/{type}', [FinanceController::class, 'index'])
+            ->name('finances.index');
 
-        Route::get('finances/{type}/create', [FinanceController::class, 'create'])->name('finances.create');
+        Route::get('finances/{type}/create', [FinanceController::class, 'create'])
+            ->name('finances.create');
 
-        Route::resource('incomes', IncomeController::class)->only(['store', 'update']);
+        Route::resource('incomes', IncomeController::class)
+            ->only(['store', 'update']);
 
-        Route::resource('expenditures', ExpenditureController::class)->only(['store', 'update', 'destroy']);
+        Route::resource('expenditures', ExpenditureController::class)
+            ->only(['store', 'update', 'destroy']);
 
-        Route::resource('concepts', ConceptController::class)->only(['index', 'store', 'udpate']);
+        Route::resource('concepts', ConceptController::class)
+            ->only(['index', 'store', 'udpate']);
 
-        Route::get('concepts/{concept}/expenditures', ConceptExpenditureController::class)->name('concepts.expenditures.index');
+        Route::get('concepts/{concept}/expenditures', ConceptExpenditureController::class)
+            ->name('concepts.expenditures.index');
 
-        Route::resource('concepts.incomes', ConceptIncomeController::class)->only(['index']);
+        Route::resource('concepts.incomes', ConceptIncomeController::class)
+            ->only(['index']);
 
-        Route::resource('users', UserController::class)->only(['index', 'store', 'update']);
-});
+        Route::resource('users', UserController::class)
+            ->only(['index', 'store', 'update']);
+    });

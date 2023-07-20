@@ -83,7 +83,6 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInformation from '@/Components/ConceptInformation.vue';
-import ConceptInfo from '@/Components/ConceptInfo.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 
 const props = defineProps({

@@ -23,7 +23,6 @@ import {
     IconSpray,
     IconBarbell,
     IconInfoCircle,
-    IconStack,
     IconFile,
     IconPill,
     IconActivity,

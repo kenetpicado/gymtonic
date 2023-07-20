@@ -74,8 +74,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye, IconCurrencyDollar } from '@tabler/icons-vue';
-import { Link } from '@inertiajs/vue3';
+import { IconPencil} from '@tabler/icons-vue';
 import { toast } from "@/Use/toast.js";
 import SelectForm from '@/Components/Form/SelectForm.vue';
 
