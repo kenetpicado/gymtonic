@@ -33,7 +33,7 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
-import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff, IconBellZ } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff, IconBellZ, IconLayoutList } from '@tabler/icons-vue';
 import { getAvatarUrl } from "@/Use/helpers.js"
 
 const DEFAULT_ICON = IconUser;
@@ -104,6 +104,11 @@ const items = [
         name: 'Egresos',
         route: route('dashboard.finances.index', 'expenditures'),
         icon: IconCurrencyDollarOff
+    },
+    {
+        name: 'Resumen',
+        route: route('dashboard.summary.index'),
+        icon: IconLayoutList
     },
     {
         header: 'Cuenta'

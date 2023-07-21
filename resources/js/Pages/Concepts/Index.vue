@@ -49,7 +49,7 @@
                         <ConceptInformation :concept="concept" />
                     </td>
                     <td>
-                        <span class="badge-gray">
+                        <span class="badge-gray" v-if="concept.last_expenditure">
                             últ. pago:
                             <span class="font-semibold">
                                 {{ Carbon.create(concept.last_expenditure?.created_at).format('d de F') }}
