@@ -6,6 +6,7 @@ const DATE_UNITS = {
     minute: 60,
     second: 1,
 };
+
 export class Carbon {
     date;
 
@@ -81,7 +82,8 @@ export class Carbon {
             .replace("d", formatValue(this.date.getDate()))
             .replace("H", formatValue(this.date.getHours()))
             .replace("i", formatValue(this.date.getMinutes()))
-            .replace("s", formatValue(this.date.getSeconds()));
+            .replace("s", formatValue(this.date.getSeconds()))
+            .replace("F", this.monthName())
     }
 
     static simpleFormat(dateString, format = "d/m/Y") {

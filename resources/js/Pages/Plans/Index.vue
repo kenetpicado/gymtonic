@@ -54,7 +54,7 @@
             <template #header>
                 <th>Cliente</th>
                 <th>Servicio</th>
-                <th>Periodo</th>
+                <th>Expira</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </template>
@@ -71,11 +71,8 @@
                         {{ plan.service_name }} ({{ plan.period }} dias)
                     </td>
                     <td>
-                        <span class="badge-gray">
-                            {{ Carbon.simpleFormat(plan.start_date) }}
-                        </span>
                         <span class="badge-blue" :tooltip="Carbon.create(plan.end_date).diffForHumans()">
-                            {{ Carbon.simpleFormat(plan.end_date) }}
+                            {{ Carbon.create(plan.end_date).format("d de F") }}
                         </span>
                     </td>
                     <td>
