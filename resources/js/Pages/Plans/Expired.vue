@@ -18,7 +18,6 @@
                 <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
                     <td>
                         <div class="flex items-center gap-4">
-                            <Checkbox v-model:checked="plan.selected" name="status" />
                             <UserInformation :user="{ name: plan.customer_name }" />
                         </div>
                     </td>
@@ -53,11 +52,9 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import SearchComponent from '@/Components/SearchComponent.vue';
-import Checkbox from '@/Components/Checkbox.vue';
 import { Carbon } from '@/Classes/Carbon.js';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
-import { IconCurrencyDollar } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
