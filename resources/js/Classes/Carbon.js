@@ -53,6 +53,10 @@ export class Carbon {
         return months[this.date.getMonth()];
     }
 
+    month() {
+        return this.date.getMonth() + 1;
+    }
+
     addMonth(month = 1) {
         this.date.setMonth(this.date.getMonth() + month);
         return this;

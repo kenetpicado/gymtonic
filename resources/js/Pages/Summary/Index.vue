@@ -11,15 +11,12 @@
             </template>
 
             <template #body>
-                <tr v-for="month in monthList" class="hover:bg-gray-50" >
+                <tr v-for="month in monthList.slice(0, MONTH)" class="hover:bg-gray-50">
                     <td>
                         {{ month.id }}
                     </td>
                     <td>
                         {{ month.name }}
-                        <span v-if="MONTH == month.name" class="font-bold">
-                            (ACTUAL)
-                        </span>
                     </td>
                     <td>
                         <span class="badge-success">
@@ -36,6 +33,13 @@
                             {{ getRenevue(month.id) }}
                         </span>
                     </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="font-bold">Total</td>
+                    <td class="font-bold">C$ {{ totalIncome.toLocaleString() }}</td>
+                    <td class="font-bold">C$ {{ totalExpenditure.toLocaleString()  }}</td>
+                    <td class="font-bold">C$ {{ (totalIncome - totalExpenditure).toLocaleString() }}</td>
                 </tr>
             </template>
         </TableSection>
@@ -63,7 +67,7 @@ const breads = [
     { name: 'Resumen', route: 'dashboard.summary.index' },
 ]
 
-const MONTH = new Carbon().monthName()
+const MONTH = new Carbon().month()
 
 const monthList = [
     { id: 1, name: 'Enero' },
@@ -86,8 +90,6 @@ function findIncome(month) {
     if (income) {
         return 'C$ ' + income.total.toLocaleString()
     }
-
-    return 'C$ 0'
 }
 
 function findExpenditure(month) {
@@ -96,19 +98,21 @@ function findExpenditure(month) {
     if (expenditure) {
         return 'C$ ' + expenditure.total.toLocaleString()
     }
-
-    return 'C$ 0'
 }
 
 function getRenevue(month) {
-    const income = props.incomes.find(income => income.month === month)
-    const expenditure = props.expenditures.find(expenditure => expenditure.month === month)
+    const income = props.incomes.find(income => income.month === month)?.total ?? 0
+    const expenditure = props.expenditures.find(expenditure => expenditure.month === month)?.total ?? 0
 
-    if (income && expenditure) {
-        return 'C$ ' + (income.total - expenditure.total).toLocaleString()
-    }
-
-    return 'C$ 0'
+    return 'C$ ' + (income - expenditure).toLocaleString()
 }
+
+const totalIncome = props.incomes.reduce((acc, income) => {
+    return acc + income.total;
+}, 0);
+
+const totalExpenditure = props.expenditures.reduce((acc, expenditure) => {
+    return acc + expenditure.total;
+}, 0);
 
 </script>
