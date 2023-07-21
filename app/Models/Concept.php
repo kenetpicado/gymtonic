@@ -24,4 +24,9 @@ class Concept extends Model
     {
         return $this->morphMany(Income::class, 'incomeable');
     }
+
+    public function lastExpenditure()
+    {
+        return $this->morphOne(Expenditure::class, 'expenditureable')->orderByDesc('created_at');
+    }
 }

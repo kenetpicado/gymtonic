@@ -12,7 +12,7 @@ const form = useForm({
 });
 
 const updatePassword = () => {
-    form.put(route('user-password.update'), {
+    form.put(route('password.update'), {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
@@ -29,18 +29,17 @@ const updatePassword = () => {
 <template>
     <FormSection @submitted="updatePassword">
         <template #title>
-            Update Password
+            Actualizar contrasena
         </template>
 
         <template #description>
-            Ensure your account is using a long, random password to stay secure.
+            Asegurese de que su cuenta este usando una contrasena larga y aleatoria para mantenerse seguro.
         </template>
 
         <template #form>
-            <InputForm text="Current Password" v-model="form.current_password"/>
-            <InputForm text="New Password" name="password" v-model="form.password"/>
-            <InputForm text="Confirm Password" name="password_confirmation" v-model="form.password_confirmation"/>
-            <pre>{{form}}</pre>
+            <InputForm text="Current Password" v-model="form.current_password" type="password"/>
+            <InputForm text="New Password" name="password" v-model="form.password" type="password"/>
+            <InputForm text="Confirm Password" name="password_confirmation" v-model="form.password_confirmation" type="password"/>
         </template>
 
         <template #actions>

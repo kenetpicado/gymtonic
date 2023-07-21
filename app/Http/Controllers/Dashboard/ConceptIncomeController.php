@@ -11,7 +11,7 @@ class ConceptIncomeController extends Controller
     {
         return inertia('Concepts/Incomes/Index', [
             'concept' => $concept,
-            'incomes' => $concept->incomes()->orderBy('id', 'desc')->paginate(10),
+            'incomes' => $concept->incomes()->latest()->paginate(10),
         ]);
     }
 }

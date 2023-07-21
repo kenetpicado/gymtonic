@@ -6,7 +6,7 @@ import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfile
 
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
-    { name: 'Perfil', route: 'dashboard.plans.index' },
+    { name: 'Perfil', route: 'dashboard.profile.index' },
 ]
 
 </script>
@@ -14,7 +14,7 @@ const breads = [
 <template>
     <AppLayout title="Profile" :breads="breads">
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-            <UpdateProfileInformationForm :user="$page.props.auth.user" />
+            <UpdateProfileInformationForm :user="$page.props.user" />
 
             <SectionBorder />
 

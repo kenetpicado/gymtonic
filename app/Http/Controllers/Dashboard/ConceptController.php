@@ -10,8 +10,13 @@ class ConceptController extends Controller
 {
     public function index()
     {
+        $concept = Concept::query()
+            ->with('lastExpenditure')
+            ->orderBy('name')
+            ->paginate();
+
         return inertia('Concepts/Index', [
-            'concepts' => Concept::orderBy('name')->paginate(),
+            'concepts' => $concept,
         ]);
     }
 

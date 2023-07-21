@@ -17,6 +17,6 @@ class Employee extends Model
 
     public function payments()
     {
-        return $this->morphMany(Expenditure::class, 'expenditureable')->orderBy('id', 'desc');
+        return $this->morphMany(Expenditure::class, 'expenditureable')->latest();
     }
 }

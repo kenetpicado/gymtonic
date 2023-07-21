@@ -35,6 +35,7 @@
             <template #header>
                 <th>#</th>
                 <th>Nombre</th>
+                <th>Estado</th>
                 <th>Egresos</th>
                 <th>Ingresos</th>
                 <th>Acciones</th>
@@ -48,14 +49,23 @@
                         <ConceptInformation :concept="concept" />
                     </td>
                     <td>
+                        <span class="badge-gray">
+                            últ. pago:
+                            <span class="font-semibold">
+                                {{ Carbon.create(concept.last_expenditure?.created_at).format('d de F') }}
+                            </span>
+                        </span>
+                    </td>
+                    <td>
                         <Link v-if="concept.has_expenditure"
-                            :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos" class="text-pink-600">
+                            :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos"
+                            class="text-pink-600">
                         <IconCurrencyDollarOff />
                         </Link>
                     </td>
                     <td>
-                        <Link v-if="concept.has_income"
-                            :href="route('dashboard.concepts.incomes.index', concept.id)" tooltip="Ingresos" class="text-green-500">
+                        <Link v-if="concept.has_income" :href="route('dashboard.concepts.incomes.index', concept.id)"
+                            tooltip="Ingresos" class="text-green-500">
                         <IconMoneybag />
                         </Link>
                     </td>
@@ -77,7 +87,7 @@
 <script setup>
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -90,6 +100,7 @@ import ConceptInformation from '@/Components/ConceptInformation.vue';
 import { usePage } from '@inertiajs/vue3';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import { Carbon } from '@/Classes/Carbon.js';
 
 const props = defineProps({
     concepts: {

@@ -108,11 +108,10 @@ const items = [
     {
         header: 'Cuenta'
     },
-
-    // {
-    //     name: 'Perfil',
-    //     route: route('profile.show',)
-    // },
+    {
+        name: 'Perfil',
+        route: route('dashboard.profile.index')
+    },
 ]
 
 function getClass(fullRoute) {

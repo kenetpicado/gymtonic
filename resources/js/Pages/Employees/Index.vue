@@ -2,7 +2,7 @@
     <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
-                {{ isNew ? 'Nuevo' : 'Editar'}}
+                {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
                 <div class="grid gap-6">
@@ -47,12 +47,14 @@
                         {{ employee.schedule }}
                     </td>
                     <td>
-                        <div class="flex gap-2">
-                            <Link :href="route('dashboard.employees.show', employee.id)">
+                        <div class="flex gap-3">
+                            <Link :href="route('dashboard.employees.show', employee.id)" tooltip="Pagos">
                             <IconCurrencyDollar />
                             </Link>
 
-                            <IconPencil @click="editEmployee(employee)" role="button" />
+                            <span role="button" tooltip="Editar" @click="editEmployee(employee)">
+                                <IconPencil />
+                            </span>
                         </div>
                     </td>
                 </tr>

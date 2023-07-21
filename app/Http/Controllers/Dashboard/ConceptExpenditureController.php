@@ -11,7 +11,7 @@ class ConceptExpenditureController extends Controller
     {
         return inertia('Concepts/Expenditures/Index', [
             'concept' => $concept,
-            'expenditures' => $concept->expenditures()->orderBy('id', 'desc')->paginate(10),
+            'expenditures' => $concept->expenditures()->latest()->paginate(10),
         ]);
     }
 }

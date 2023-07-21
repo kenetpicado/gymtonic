@@ -35,6 +35,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'urlPrev' => url()->previous(),
+            'user' => auth()->user()
         ]);
     }
 }

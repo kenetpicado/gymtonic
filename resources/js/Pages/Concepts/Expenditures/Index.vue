@@ -9,7 +9,8 @@
                 <div class="grid gap-6">
                     <InputForm text="Description" v-model="form.description" />
                     <InputForm text="Quantity" v-model="form.quantity" type="number" />
-                    <InputForm text="Value" v-model="form.value" />
+                    <InputForm text="Value" v-model="form.value" type="number" />
+                    <InputForm text="Created at" v-model="form.created_at" type="date" />
 
                     <div class="col-span-4 text-lg font-medium text-gray-900 mb-2">
                         Total: C$ {{ total }}
@@ -104,6 +105,7 @@ import { toast } from "@/Use/toast.js";
 import { router, useForm } from '@inertiajs/vue3';
 import { IconPencil, IconTrash } from '@tabler/icons-vue';
 import { computed, ref } from 'vue';
+import { Carbon } from '@/Classes/Carbon.js';
 
 const props = defineProps({
     concept: {
@@ -128,6 +130,7 @@ const form = useForm({
     quantity: 1,
     value: 0,
     description: '',
+    created_at: Carbon.today(),
     expenditureable_id: props.concept.id,
     expenditureable_type: 'App\\Models\\Concept'
 })

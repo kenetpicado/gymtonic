@@ -65,7 +65,7 @@ const serviceList = [
 const stats = [
     {
         title: 'Clientes',
-        value: customers_total,
+        value: customers_total.toLocaleString('en-US'),
         icon: IconUser,
     },
     {
@@ -89,17 +89,17 @@ const stats = [
 const finances = [
     {
         title: 'Ingresos ' + MONHT,
-        value: 'C$ ' + props.incomes_month.total,
+        value: 'C$ ' + props.incomes_month.total.toLocaleString('en-US'),
         icon: IconMoneybag,
     },
     {
         title: 'Egresos ' + MONHT,
-        value: 'C$ ' + props.expenditures_month,
+        value: 'C$ ' + props.expenditures_month.toLocaleString('en-US'),
         icon: IconCurrencyDollarOff,
     },
     {
         title: 'Ganancias ' + MONHT,
-        value: 'C$ ' + (props.incomes_month.total - props.expenditures_month),
+        value: 'C$ ' + (props.incomes_month.total - props.expenditures_month).toLocaleString('en-US'),
         icon: IconCurrencyDollar,
     },
     {

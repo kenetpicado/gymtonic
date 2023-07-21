@@ -1,8 +1,7 @@
 <script setup>
-import { Link, router, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import FormSection from '@/Components/FormSection.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import InputForm from "@/Components/Form/InputForm.vue"
 import { toast } from "@/Use/toast.js"
 
@@ -16,11 +15,14 @@ const form = useForm({
 });
 
 const updateProfileInformation = () => {
-    form.put(route('user-profile-information.update'), {
+    form.post(route('dashboard.profile.store'), {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
             toast.success('Perfil actualizado correctamente!!');
+        },
+        onError: (err) => {
+            console.log(err)
         },
     });
 };
