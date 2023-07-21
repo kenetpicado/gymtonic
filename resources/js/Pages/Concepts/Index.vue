@@ -9,10 +9,8 @@
                     <InputForm text="Name" v-model="form.name" />
 
                     <div class="grid grid-cols-2 gap-4">
-                        <Checkbox v-model:checked="form.has_income" text="Ingresos" />
                         <Checkbox v-model:checked="form.has_expenditure" text="Egresos" />
-                        <Checkbox v-model:checked="form.notify_income" text="Notificaciones" />
-                        <Checkbox v-model:checked="form.notify_expenditure" text="Notificaciones" />
+                        <Checkbox v-model:checked="form.has_income" text="Ingresos" />
                     </div>
                 </div>
             </template>
@@ -106,25 +104,7 @@ const form = useForm({
     id: null,
     name: '',
     has_income: false,
-    notify_income: false,
     has_expenditure: true,
-    notify_expenditure: false,
-})
-
-watch(() => [form.notify_income, form.notify_expenditure], ([income, expenditure]) => {
-    if (income)
-        form.has_income = true
-
-    if (expenditure)
-        form.has_expenditure = true
-})
-
-watch(() => [form.has_income, form.has_expenditure], ([income, expenditure]) => {
-    if (!income)
-        form.notify_income = false
-
-    if (!expenditure)
-        form.notify_expenditure = false
 })
 
 const breads = [
@@ -136,9 +116,7 @@ function editConcept(concept) {
     form.id = concept.id;
     form.name = concept.name;
     form.has_income = Boolean(concept.has_income),
-    form.notify_income = Boolean(concept.notify_income),
     form.has_expenditure = Boolean(concept.has_expenditure),
-    form.notify_expenditure = Boolean(concept.notify_expenditure),
     isNew.value = false;
     openModal.value = true;
 }

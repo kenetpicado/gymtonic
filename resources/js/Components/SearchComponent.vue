@@ -1,14 +1,14 @@
 <template>
     <div style="width: 17rem;">
         <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block w-full"
-            type="search" placeholder="Search" @input="onInput($event.target.value)" />
+            type="search" placeholder="Search" @input="onInput($event.target.value)" :value="queryParam.search" />
     </div>
 </template>
 
 <script setup>
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
 
 const props = defineProps({
     url: {
@@ -23,6 +23,13 @@ const props = defineProps({
 
 const queryParam = reactive({
     search: ''
+})
+
+onMounted(() => {
+    const search = new URLSearchParams(window.location.search).get('search')
+    if (search) {
+        queryParam.search = search
+    }
 })
 
 const emit = defineEmits(['search'])

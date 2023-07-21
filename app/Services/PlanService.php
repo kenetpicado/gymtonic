@@ -9,7 +9,7 @@ use App\Models\Service;
 
 class PlanService
 {
-    public function index($request): array
+    public function index($request, $type = null): array
     {
         return [
             'plans' => Plan::query()
@@ -26,7 +26,7 @@ class PlanService
                     fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', '%'.$request->search.'%'))
                 )
                 ->when(
-                    $request->type == 'expired',
+                    $type == 'expired',
                     fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d'))->orderBy('end_date', 'desc'),
                     fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))->orderBy('end_date')
                 )

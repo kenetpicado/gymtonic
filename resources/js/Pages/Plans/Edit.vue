@@ -8,7 +8,7 @@
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="submit">
                 <template #title>
-                    Informacion del Plan
+                    Informacion del plan
                 </template>
 
                 <template #description>
@@ -23,7 +23,7 @@
                         </div>
                     </template>
                     <div v-else>
-                        Ingrese los datos del plan para el cliente.
+                        Actualizar los datos del plan para el cliente.
                     </div>
                 </template>
 
@@ -53,7 +53,7 @@
                 </template>
 
                 <template #actions>
-                    <SecondaryButton @click="$inertia.visit(route('dashboard.plans.index'))">
+                    <SecondaryButton @click="$inertia.visit($page.props.urlPrev)">
                         Cancelar
                     </SecondaryButton>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

@@ -17,9 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('has_income')->default(false);
-            $table->boolean('notify_income')->default(false);
             $table->boolean('has_expenditure')->default(true);
-            $table->boolean('notify_expenditure')->default(false);
             $table->timestamps();
         });
     }

@@ -3,8 +3,7 @@
         <div class="h-full px-3 py-4 overflow-y-auto">
             <div class="flex flex-col items-center mt-4 mb-6">
                 <div class="h-14 w-14">
-                    <img class="h-full w-full"
-                        src="/img/logo-ag.png" alt="" />
+                    <img class="h-full w-full" src="/img/logo-ag.png" alt="" />
                 </div>
             </div>
             <ul class="space-y-2">
@@ -21,7 +20,8 @@
                     </Link>
                 </li>
                 <li>
-                    <span @click="logout" class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-indigo-50" role="button">
+                    <span @click="logout" class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-indigo-50"
+                        role="button">
                         <IconLogout></IconLogout>
                         <span>Logout</span>
                     </span>
@@ -33,7 +33,7 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
-import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff, IconBellZ } from '@tabler/icons-vue';
 import { getAvatarUrl } from "@/Use/helpers.js"
 
 const DEFAULT_ICON = IconUser;
@@ -63,6 +63,11 @@ const items = [
         name: 'Planes',
         route: route('dashboard.plans.index'),
         icon: IconRun
+    },
+    {
+        name: 'Expirados',
+        route: route('dashboard.plans.expired'),
+        icon: IconBellZ
     },
     {
         name: 'Personal',

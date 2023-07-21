@@ -37,7 +37,6 @@
             <template #topbar>
                 <div class="flex items-center gap-4">
                     <SearchComponent @search="searchPlans" />
-                    <Checkbox v-model:checked="checkBox" text="Activos" />
                 </div>
 
                 <div class="flex gap-2 items-center">
@@ -84,11 +83,8 @@
                             <span v-if="plan.end_date == TODAY" class="badge-danger">
                                 ULTIMO DIA!
                             </span>
-                            <span v-else-if="checkBox" class="badge-success">
+                            <span v-else class="badge-success">
                                 Activo
-                            </span>
-                            <span v-else class="badge-gray">
-                                Expirado {{ Carbon.create(plan.end_date).diffForHumans() }}
                             </span>
                         </div>
                     </td>
@@ -135,7 +131,6 @@ const props = defineProps({
     },
 })
 
-const checkBox = ref(true);
 const openModal = ref(false);
 const days = ref(null);
 const notify = useNotify();
@@ -151,11 +146,6 @@ const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
     { name: 'Planes', route: 'dashboard.plans.index' },
 ]
-
-watch(() => checkBox.value, (value) => {
-    queryParams.type = value ? 'active' : 'expired';
-    getFilteredPlans();
-})
 
 function searchPlans(value) {
     queryParams.search = value;
