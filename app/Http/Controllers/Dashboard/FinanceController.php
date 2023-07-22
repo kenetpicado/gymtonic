@@ -6,15 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Concept;
 use App\Models\Expenditure;
 use App\Models\Income;
+use Illuminate\Http\Request;
 
 class FinanceController extends Controller
 {
-    public function index($type)
+    public function index(Request $request, $type)
     {
         if ($type == 'incomes') {
-            $finances = Income::orderBy('id', 'desc')->with('incomeable:id,name')->paginate(10);
+            $finances = Income::orderBy('id', 'desc')
+                ->when($request->search, function($query) use ($request) {
+                    $query->whereHas('incomeable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
+                })
+                ->with('incomeable:id,name')
+                ->paginate(10);
         } else {
-            $finances = Expenditure::orderBy('id', 'desc')->with('expenditureable:id,name')->paginate(10);
+            $finances = Expenditure::orderBy('id', 'desc')
+                ->when($request->search, function($query) use ($request) {
+                    $query->whereHas('expenditureable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
+                })
+                ->with('expenditureable:id,name')
+                ->paginate(10);
         }
 
         return inertia('Finances/Index', [

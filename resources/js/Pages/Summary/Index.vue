@@ -2,6 +2,13 @@
     <AppLayout title="Dashboard" :breads="breads">
 
         <TableSection>
+            <template #topbar>
+                <SelectForm v-model="queryParams.model_id" text="Model">
+                    <option selected value="">Todos</option>
+                    <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
+                </SelectForm>
+            </template>
+
             <template #header>
                 <th>ID</th>
                 <th>Mes</th>
@@ -29,7 +36,7 @@
                         </span>
                     </td>
                     <td>
-                        <span class="badge-blue">
+                        <span :class="[ getRenevue(month.id).includes('-') ? 'badge-danger' : 'badge-blue']">
                             {{ getRenevue(month.id) }}
                         </span>
                     </td>
@@ -51,12 +58,19 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import { Carbon } from '@/Classes/Carbon.js';
+import SelectForm from '@/Components/Form/SelectForm.vue'
+import { ref, watch, reactive, computed } from 'vue'
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     incomes: {
         type: Object, required: true
     },
     expenditures: {
+        type: Object,
+        required: true
+    },
+    concepts: {
         type: Object,
         required: true
     },
@@ -68,6 +82,10 @@ const breads = [
 ]
 
 const MONTH = new Carbon().month()
+
+const queryParams = reactive({
+    model_id: '',
+})
 
 const monthList = [
     { id: 1, name: 'Enero' },
@@ -90,6 +108,8 @@ function findIncome(month) {
     if (income) {
         return 'C$ ' + income.total.toLocaleString()
     }
+
+    return 'C$ 0'
 }
 
 function findExpenditure(month) {
@@ -98,6 +118,8 @@ function findExpenditure(month) {
     if (expenditure) {
         return 'C$ ' + expenditure.total.toLocaleString()
     }
+
+    return 'C$ 0'
 }
 
 function getRenevue(month) {
@@ -107,12 +129,25 @@ function getRenevue(month) {
     return 'C$ ' + (income - expenditure).toLocaleString()
 }
 
-const totalIncome = props.incomes.reduce((acc, income) => {
-    return acc + income.total;
-}, 0);
+const totalIncome = computed(() => props.incomes.reduce((acc, income) => acc + income.total, 0));
 
-const totalExpenditure = props.expenditures.reduce((acc, expenditure) => {
-    return acc + expenditure.total;
-}, 0);
+const totalExpenditure = computed(() => props.expenditures.reduce((acc, expenditure) => acc + expenditure.total, 0));
+
+watch(() => queryParams.model_id, (value) => {
+    getFilteredSummary()
+})
+
+function getFilteredSummary() {
+    if (queryParams.model_id === '') {
+        delete queryParams.model_id;
+    }
+
+    router.get(route('dashboard.summary.index'), queryParams, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['incomes', 'expenditures'],
+        replace: true,
+    });
+}
 
 </script>
