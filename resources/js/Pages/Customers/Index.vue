@@ -26,12 +26,16 @@
                         {{ customer.id }}
                     </td>
                     <th>
-                        <UserInformation :user="customer" :hasStars="true" />
+                        <UserInformation :user="customer" />
                     </th>
                     <td>
-                        <span v-if="customer.stars" class="flex text-amber-500 gap-1">
+                        <span v-if="customer.stars" class="flex text-amber-500 gap-1" @click="addStarsInput(customer.id)"
+                            role="button">
                             <IconStarFilled size="16" />
                             <span>{{ customer.stars }}</span>
+                        </span>
+                        <span v-else role="button" @click="addStarsInput(customer.id)">
+                            <IconStar size="16" />
                         </span>
                     </td>
                     <td>
@@ -83,8 +87,9 @@ import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconHistory, IconWeight, IconStarFilled } from '@tabler/icons-vue';
+import { IconPencil, IconHistory, IconWeight, IconStarFilled, IconStar } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
+import { addStarsInput } from "@/Use/alert.js"
 
 const props = defineProps({
     customers: {
