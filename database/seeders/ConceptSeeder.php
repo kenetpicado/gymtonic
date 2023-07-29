@@ -58,6 +58,11 @@ class ConceptSeeder extends Seeder
                 'name' => 'Servicios',
             ],
             [
+                'name' => 'Planes diarios',
+                'has_income' => true,
+                'has_expenditure' => false,
+            ],
+            [
                 'name' => 'Otros',
                 'has_income' => true,
                 'has_expenditure' => true,

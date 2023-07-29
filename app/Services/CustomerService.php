@@ -67,7 +67,7 @@ class CustomerService
 
         if ($income) {
             $income->update([
-                'amount' => $plan->amount,
+                'value' => $plan->price,
                 'discount' => $plan->discount,
                 'description' => $plan->service()->value('name').', '.$plan->period.' dia(s)',
             ]);

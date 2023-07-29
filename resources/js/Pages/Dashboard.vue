@@ -79,7 +79,7 @@ const stats = [
         icon: IconGenderFemale,
     },
     {
-        title: 'Planes',
+        title: 'Clientes activos',
         value: plans_total,
         icon: IconRun,
     },
@@ -98,14 +98,14 @@ const finances = [
         icon: IconCurrencyDollarOff,
     },
     {
-        title: 'Ganancias ' + MONHT,
-        value: 'C$ ' + (props.incomes_month.total - props.expenditures_month).toLocaleString('en-US'),
-        icon: IconCurrencyDollar,
-    },
-    {
         title: 'Descuentos ' + MONHT,
         value: 'C$ ' + props.incomes_month.discount,
         icon: IconGift,
+    },
+    {
+        title: 'Ganancias ' + MONHT,
+        value: 'C$ ' + (props.incomes_month.total - props.expenditures_month).toLocaleString('en-US'),
+        icon: IconCurrencyDollar,
     },
 ]
 

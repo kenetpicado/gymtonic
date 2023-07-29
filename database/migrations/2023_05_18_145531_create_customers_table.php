@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
             $table->string('name');
             $table->integer('phone')->nullable();
             $table->date('birth_date');

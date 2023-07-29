@@ -24,83 +24,31 @@
             </template>
         </DialogModal>
 
-        <TableSection>
-            <template #topbar>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between mb-6 gap-4">
                 <div></div>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
                 </PrimaryButton>
-            </template>
-
-            <template #header>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Egresos</th>
-                <th>Ingresos</th>
-                <th>Acciones</th>
-            </template>
-            <template #body>
-                <tr v-for="(concept, index) in concepts.data" class="hover:bg-gray-50">
-                    <td>
-                        {{ index + 1 }}
-                    </td>
-                    <td>
-                        <ConceptInformation :concept="concept" />
-                    </td>
-                    <td>
-                        <span class="badge-gray" v-if="concept.last_expenditure">
-                            últ. pago:
-                            <span class="font-semibold">
-                                {{ Carbon.create(concept.last_expenditure?.created_at).format('d de F') }}
-                            </span>
-                        </span>
-                    </td>
-                    <td>
-                        <Link v-if="concept.has_expenditure"
-                            :href="route('dashboard.concepts.expenditures.index', concept.id)" tooltip="Egresos"
-                            class="text-pink-600">
-                        <IconCurrencyDollarOff />
-                        </Link>
-                    </td>
-                    <td>
-                        <Link v-if="concept.has_income" :href="route('dashboard.concepts.incomes.index', concept.id)"
-                            tooltip="Ingresos" class="text-green-500">
-                        <IconMoneybag />
-                        </Link>
-                    </td>
-                    <td>
-                        <IconPencil @click="editConcept(concept)" role="button" />
-                    </td>
-                </tr>
-                <tr v-if="concepts.data.length == 0">
-                    <td colspan="4" class="text-center">No data to display</td>
-                </tr>
-            </template>
-            <template #paginator>
-                <ThePaginator :links="concepts.links"></ThePaginator>
-            </template>
-        </TableSection>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+                <ConceptCard v-for="(concept, index) in concepts.data" :concept="concept" @onEdit="editConcept(concept)" />
+            </div>
+        </div>
     </AppLayout>
 </template>
 
 <script setup>
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
+import Checkbox from '@/Components/Checkbox.vue';
+import ConceptCard from '@/Components/ConceptCard.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
-import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconMoneybag, IconCurrencyDollarOff } from '@tabler/icons-vue';
-import { Link } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
 import { toast } from "@/Use/toast.js";
-import ConceptInformation from '@/Components/ConceptInformation.vue';
-import { usePage } from '@inertiajs/vue3';
-import ThePaginator from '@/Components/ThePaginator.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import { Carbon } from '@/Classes/Carbon.js';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps({
     concepts: {
@@ -127,8 +75,8 @@ function editConcept(concept) {
     form.id = concept.id;
     form.name = concept.name;
     form.has_income = Boolean(concept.has_income),
-    form.has_expenditure = Boolean(concept.has_expenditure),
-    isNew.value = false;
+        form.has_expenditure = Boolean(concept.has_expenditure),
+        isNew.value = false;
     openModal.value = true;
 }
 

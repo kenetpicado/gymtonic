@@ -12,45 +12,12 @@
 </template>
 
 <script setup>
-import {
-    IconDroplet,
-    IconBottle,
-    IconBolt,
-    IconWifi,
-    IconShoppingCart,
-    IconBrandFacebook,
-    IconUserDollar,
-    IconSpray,
-    IconBarbell,
-    IconInfoCircle,
-    IconFile,
-    IconPill,
-    IconActivity,
-    IconFileDollar
-} from '@tabler/icons-vue';
+import { conceptComponents, DEFAULT_ICON } from '@/Use/conceptIcons';
 
 const props = defineProps({
     concept: {
         type: Object, required: true
     }
 })
-
-const DEFAULT_ICON = IconInfoCircle;
-
-const conceptComponents = {
-    Agua: IconDroplet,
-    Bebidas: IconBottle,
-    Energia: IconBolt,
-    Internet: IconWifi,
-    Tienda: IconShoppingCart,
-    Publicidad: IconBrandFacebook,
-    Limpieza: IconUserDollar,
-    'Articulos de limpieza': IconSpray,
-    'Equipo y maquinaria': IconBarbell,
-    Papeleria: IconFile,
-    Suplementos: IconPill,
-    Servicios: IconActivity,
-    Impuestos: IconFileDollar
-}
 
 </script>
