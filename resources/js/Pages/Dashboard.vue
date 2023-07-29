@@ -22,6 +22,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import CardInfo from '@/Components/CardInfo.vue';
 import { Carbon } from '@/Classes/Carbon.js';
 import { IconUser, IconRun, IconGenderMale, IconGenderFemale, IconCurrencyDollarOff, IconCurrencyDollar, IconGift, IconMoneybag, IconActivity } from '@tabler/icons-vue';
+import { IconMoodSad } from '@tabler/icons-vue';
 
 const props = defineProps({
     incomes_month: {
@@ -32,21 +33,21 @@ const props = defineProps({
         type: Number,
         required: true,
     },
-    customers: {
-        type: Object,
+    customers_count: {
+        type: Number,
         required: true,
     },
     plans: {
         type: Object,
         required: true,
-    }
+    },
+    active_customers: {
+        type: Object,
+        required: true,
+    },
 })
 
 const MONHT = Carbon.now().monthName();
-
-const customers_total = props.customers.reduce((acc, customer) => {
-    return acc + customer.total;
-}, 0);
 
 const plans_total = props.plans.reduce((acc, plan) => {
     return acc + plan.total;
@@ -65,25 +66,29 @@ const serviceList = [
 const stats = [
     {
         title: 'Clientes',
-        value: customers_total.toLocaleString('en-US'),
+        value: props.customers_count.toLocaleString('en-US'),
         icon: IconUser,
-    },
-    {
-        title: 'Hombres',
-        value: props.customers.filter(customer => customer.gender == 'M')[0]?.total ?? 0,
-        icon: IconGenderMale,
-    },
-    {
-        title: 'Mujeres',
-        value: props.customers.filter(customer => customer.gender == 'F')[0]?.total ?? 0,
-        icon: IconGenderFemale,
     },
     {
         title: 'Clientes activos',
         value: plans_total,
         icon: IconRun,
     },
-
+    {
+        title: 'Hombres',
+        value: props.active_customers.filter(customer => customer.gender == 'M')[0]?.total ?? 0,
+        icon: IconGenderMale,
+    },
+    {
+        title: 'Mujeres',
+        value: props.active_customers.filter(customer => customer.gender == 'F')[0]?.total ?? 0,
+        icon: IconGenderFemale,
+    },
+    {
+        title: 'Clientes inactivos',
+        value: props.customers_count - plans_total,
+        icon: IconMoodSad,
+    },
 ]
 
 const finances = [
