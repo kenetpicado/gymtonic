@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\IncomeController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\ServiceController;
+use App\Http\Controllers\Dashboard\StarController;
 use App\Http\Controllers\Dashboard\SummaryController;
 use App\Http\Controllers\Dashboard\UpdatePasswordController;
 use App\Http\Controllers\Dashboard\UserController;
@@ -93,4 +94,7 @@ Route::middleware(['auth'])
 
         Route::get('summary', SummaryController::class)
             ->name('summary.index');
+
+        Route::put('stars/{customer}', StarController::class)
+            ->name('stars.update');
     });

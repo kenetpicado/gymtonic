@@ -15,11 +15,13 @@ class CustomerService
                 ->when($request->search, function ($query, $search) {
                     $query->where('name', 'like', '%'.$search.'%');
                 })
+                ->leftJoin('stars', 'customers.id', '=', 'stars.customer_id')
                 ->select(
-                    'id',
+                    'customers.id',
                     'name',
                     'phone',
                     'gender',
+                    'stars.value as stars',
                     DB::raw('(SELECT COUNT(*) FROM plans WHERE customer_id = customers.id AND end_date >= NOW()) as active_plans')
                 )
                 ->orderByDesc('id')

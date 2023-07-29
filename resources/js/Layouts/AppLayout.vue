@@ -54,3 +54,10 @@ function getClass(routeName) {
 
     </div>
 </template>
+
+<style>
+.swal2-popup .swal2-styled {
+    border-radius: 0.375rem !important;
+}
+
+</style>

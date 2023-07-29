@@ -14,6 +14,7 @@
             <template #header>
                 <th>ID</th>
                 <th>Nombre</th>
+                <th>Estrellas</th>
                 <th>Genero</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -25,8 +26,14 @@
                         {{ customer.id }}
                     </td>
                     <th>
-                        <UserInformation :user="customer" />
+                        <UserInformation :user="customer" :hasStars="true" />
                     </th>
+                    <td>
+                        <span v-if="customer.stars" class="flex text-amber-500 gap-1">
+                            <IconStarFilled size="16" />
+                            <span>{{ customer.stars }}</span>
+                        </span>
+                    </td>
                     <td>
                         <span :class="[customer.gender == 'F' ? 'badge-pink' : 'badge-blue']">
                             {{ customer.gender }}
@@ -76,7 +83,7 @@ import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye, IconHistory, IconWeight } from '@tabler/icons-vue';
+import { IconPencil, IconHistory, IconWeight, IconStarFilled } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({

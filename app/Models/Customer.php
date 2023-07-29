@@ -30,4 +30,9 @@ class Customer extends Model
     {
         return $this->morphMany(Income::class, 'incomeable')->orderBy('id', 'desc');
     }
+
+    public function star()
+    {
+        return $this->hasOne(Star::class);
+    }
 }
