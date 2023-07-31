@@ -9,7 +9,7 @@ export function confirmAlert(onDone, message = "Are you sure?") {
         title: "Confirm",
         text: message,
         showCancelButton: true,
-        confirmButtonText: "Yes. I'm sure",
+        confirmButtonText: "Si, estoy seguro",
         confirmButtonColor: "#4f46e5",
     }).then((result) => {
         if (result.isConfirmed) {

@@ -76,6 +76,10 @@
                     <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
                     <InputForm text="Note" v-model="form.note"></InputForm>
 
+                    <div class="block col-span-4">
+                        <Checkbox v-model:checked="form.save_note" text="Guardar en notas" />
+                    </div>
+
                     <div class="col-span-4 text-lg font-medium text-gray-900">
                         Total: C$ {{ total }}
                     </div>
@@ -110,6 +114,7 @@ import { Link } from '@inertiajs/vue3';
 import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
 import { Plan } from '@/Classes/Plan';
 import { periodLabel } from '@/Use/periodLabel';
+import Checkbox from '@/Components/Checkbox.vue';
 
 const props = defineProps({
     customer: {

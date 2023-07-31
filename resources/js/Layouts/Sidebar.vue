@@ -35,6 +35,7 @@
 import { Link, router } from '@inertiajs/vue3';
 import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff, IconBellZ, IconLayoutList } from '@tabler/icons-vue';
 import { getAvatarUrl } from "@/Use/helpers.js"
+import { IconNote } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
 
@@ -86,6 +87,11 @@ const items = [
         name: 'Servicios',
         route: route('dashboard.services.index'),
         icon: IconActivity
+    },
+    {
+        name: 'Notas',
+        route: route('dashboard.notes.index'),
+        icon: IconNote
     },
     {
         header: 'Finanzas'

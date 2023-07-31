@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlanRequest extends FormRequest
+class NoteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,8 @@ class PlanRequest extends FormRequest
     public function rules()
     {
         return [
-            'period' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-            'price' => 'required|numeric',
-            'discount' => 'required|numeric|min:0',
-            'note' => 'nullable|string',
-            'service_id' => 'required',
-            'save_note' => 'nullable|boolean'
+            'text' => ['required', 'string', 'max:255'],
+            'is_done' => ['required', 'boolean'],
         ];
     }
 }

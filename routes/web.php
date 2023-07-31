@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\ExpiredPlanController;
 use App\Http\Controllers\Dashboard\ExtendPlanController;
 use App\Http\Controllers\Dashboard\FinanceController;
 use App\Http\Controllers\Dashboard\IncomeController;
+use App\Http\Controllers\Dashboard\NoteController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\ServiceController;
@@ -97,4 +98,7 @@ Route::middleware(['auth'])
 
         Route::put('stars/{customer}', StarController::class)
             ->name('stars.update');
+
+        Route::resource('notes', NoteController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
     });

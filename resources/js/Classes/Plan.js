@@ -9,6 +9,7 @@ export class Plan {
     discount;
     note;
     service_id;
+    save_note;
 
     TODAY;
 
@@ -30,5 +31,6 @@ export class Plan {
         this.discount = plan?.discount ?? 0;
         this.note = plan?.note ?? "";
         this.service_id = plan?.service_id ?? service_id;
+        this.save_note = false;
     }
 }

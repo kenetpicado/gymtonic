@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Customer;
+use App\Models\Note;
 use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 
@@ -47,6 +48,12 @@ class CustomerService
     {
         $customer = Customer::create($request);
 
+        if ($request['note'] && $request['save_note']) {
+            Note::create([
+                'text' => $customer->name . ': ' . $request['note'],
+            ]);
+        }
+
         PlanService::updateOrCreate($request + ['customer_id' => $customer->id]);
     }
 
@@ -62,6 +69,12 @@ class CustomerService
     public function update(array $request, $customer): void
     {
         $customer->update($request);
+
+        if ($request['note'] && $request['save_note']) {
+            Note::create([
+                'text' => $customer->name . ': ' . $request['note'],
+            ]);
+        }
 
         $plan = PlanService::updateOrCreate($request + ['customer_id' => $customer->id]);
 

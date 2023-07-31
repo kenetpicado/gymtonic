@@ -26,7 +26,7 @@ class CustomerRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'phone' => 'nullable|numeric',
-            'birth_date' => 'required|date',
+            'birth_date' => 'nullable|date',
             'gender' => 'required|in:M,F',
             'period' => 'required',
             'start_date' => 'required|date',
@@ -35,6 +35,7 @@ class CustomerRequest extends FormRequest
             'discount' => 'required|numeric|min:0',
             'note' => 'nullable|string',
             'service_id' => 'required',
+            'save_note' => 'nullable|boolean'
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Customer;
 use App\Models\Income;
+use App\Models\Note;
 use App\Models\Plan;
 use App\Models\Service;
 
@@ -46,6 +47,12 @@ class PlanService
     public function update(array $request, Plan $plan): void
     {
         $plan->update($request);
+
+        if ($request['note'] && $request['save_note']) {
+            Note::create([
+                'text' => Customer::find($plan->customer_id)->value('name') . ': ' . $request['note'],
+            ]);
+        }
 
         Income::create([
             'value' => $plan->price,
