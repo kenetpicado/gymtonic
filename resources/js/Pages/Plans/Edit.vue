@@ -40,7 +40,7 @@
 
                     <template v-if="!isCurrentActive">
                         <Checkbox v-model:checked="startFromLast" text="Continuar el plan anterior" class="col-span-4" />
-                        <InputForm v-if="!startFromLast" text="Start Date" v-model="form.start_date" type="date"></InputForm>
+                        <InputForm v-if="!startFromLast" text="Start Date" v-model="form.start_date" type="date" />
                     </template>
 
                     <InputForm text="End Date" v-model="end_date" type="date" disabled></InputForm>

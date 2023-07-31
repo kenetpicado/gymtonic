@@ -3,14 +3,14 @@
         <div class="flex flex-col justify-between h-full">
             <div>
                 <div class="mb-2">
-                    <component :is="conceptComponents[concept.name] ?? DEFAULT_ICON" size="30" class="text-indigo-600" />
+                    <component :is="conceptComponents[concept.name] ?? DEFAULT_ICON" size="25" class="text-gray-400" />
                 </div>
-                <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">
+                <h5 class="mb-2 text-xl font-semibold tracking-tight text-gray-900">
                     {{ concept.name }}
                     <IconEdit class="inline-block w-4 h-4" @click="$emit('onEdit', concept)" role="button" />
                 </h5>
             </div>
-            <p v-if="concept.last_expenditure" class="mb-4 font-normal text-gray-500 mt-2">
+            <p v-if="concept.last_expenditure" class="mb-5 text-sm text-gray-500 mt-1">
                 últ. pago: {{ Carbon.create(concept.last_expenditure?.created_at).format('d de F') }}
             </p>
             <div class="flex gap-4">
