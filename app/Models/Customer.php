@@ -14,6 +14,8 @@ class Customer extends Model
         'phone',
         'birth_date',
         'gender',
+        'username',
+        'password',
     ];
 
     public function plan()

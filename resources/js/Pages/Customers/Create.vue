@@ -51,7 +51,7 @@
                             Si en cambio desea crear un nuevo plan
                             <br>
                             <PrimaryButton class="mt-4"
-                                @click="$inertia.visit(route('dashboard.plans.edit', customer.plan.id))">
+                                @click="$inertia.visit(route('dashboard.customers.plans.create', customer.id))">
                                 Haga click aqui
                             </PrimaryButton>
                         </div>

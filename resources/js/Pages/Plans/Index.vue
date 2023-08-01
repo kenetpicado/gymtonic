@@ -86,8 +86,8 @@
                         </div>
                     </td>
                     <td>
-                        <Link :href="route('dashboard.plans.edit', plan.id)" tooltip="Nuevo plan">
-                            <IconCurrencyDollar/>
+                        <Link :href="route('dashboard.customers.plans.create', plan.customer_id)" class="badge-blue">
+                            Pagar
                         </Link>
                     </td>
                 </tr>
@@ -119,7 +119,6 @@ import { Carbon } from '@/Classes/Carbon.js';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import useNotify from '@/Use/notify.js';
-import { IconCurrencyDollar } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({

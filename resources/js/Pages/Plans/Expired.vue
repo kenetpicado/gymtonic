@@ -30,7 +30,7 @@
                         </span>
                     </td>
                     <td>
-                        <Link :href="route('dashboard.plans.edit', plan.id)" class="badge-blue">
+                        <Link :href="route('dashboard.customers.plans.create', plan.customer_id)" class="badge-blue">
                             Renovar plan
                         </Link>
                     </td>

@@ -24,7 +24,7 @@ class PlanService
                 ])
                 ->when(
                     $request->search,
-                    fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', '%'.$request->search.'%'))
+                    fn ($query) => $query->whereHas('customer', fn ($query) => $query->where('name', 'LIKE', '%' . $request->search . '%'))
                 )
                 ->when(
                     $type == 'expired',
@@ -35,18 +35,11 @@ class PlanService
         ];
     }
 
-    public function edit($plan): array
+    public function update(array $request, Customer $customer): void
     {
-        return [
-            'services' => Service::with('prices')->get(['id', 'name']),
-            'plan' => $plan->load('customer'),
-            'isCurrentActive' => $plan->end_date >= now()->format('Y-m-d'),
-        ];
-    }
-
-    public function update(array $request, Plan $plan): void
-    {
-        $plan->update($request);
+        $plan = Plan::updateOrCreate([
+            'customer_id' => $customer->id,
+        ], $request);
 
         if ($request['note'] && $request['save_note']) {
             Note::create([
@@ -58,7 +51,7 @@ class PlanService
             'value' => $plan->price,
             'discount' => $plan->discount,
             'concept' => 'Pago de plan',
-            'description' => $plan->service()->value('name').', '.$plan->period.' dia(s)',
+            'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
             'incomeable_id' => $plan->customer_id,
             'incomeable_type' => 'App\Models\Customer',
         ]);

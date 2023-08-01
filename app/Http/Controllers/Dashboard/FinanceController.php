@@ -17,12 +17,24 @@ class FinanceController extends Controller
                 ->when($request->search, function($query) use ($request) {
                     $query->whereHas('incomeable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
                 })
+                ->when($request->from, function($query) use ($request) {
+                    $query->where('created_at', '>=', $request->from);
+                })
+                ->when($request->to, function($query) use ($request) {
+                    $query->where('created_at', '<=', $request->to);
+                })
                 ->with('incomeable:id,name')
                 ->paginate(10);
         } else {
             $finances = Expenditure::orderBy('id', 'desc')
                 ->when($request->search, function($query) use ($request) {
                     $query->whereHas('expenditureable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
+                })
+                ->when($request->from, function($query) use ($request) {
+                    $query->where('created_at', '>=', $request->from);
+                })
+                ->when($request->to, function($query) use ($request) {
+                    $query->where('created_at', '<=', $request->to);
                 })
                 ->with('expenditureable:id,name')
                 ->paginate(10);

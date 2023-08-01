@@ -53,6 +53,10 @@
                     </td>
                     <td>
                         <div class="flex gap-4">
+                            <Link :href="route('dashboard.customers.plans.create', customer.id)" class="badge-blue">
+                            Pagar
+                            </Link>
+
                             <Link :href="route('dashboard.customers.weights.index', customer.id)" tooltip="Pesos">
                             <IconWeight />
                             </Link>

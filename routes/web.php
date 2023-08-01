@@ -4,6 +4,7 @@ use App\Http\Controllers\Dashboard\ConceptController;
 use App\Http\Controllers\Dashboard\ConceptExpenditureController;
 use App\Http\Controllers\Dashboard\ConceptIncomeController;
 use App\Http\Controllers\Dashboard\CustomerController;
+use App\Http\Controllers\Dashboard\CustomerPlanController;
 use App\Http\Controllers\Dashboard\CustomerWeightController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EmployeeController;
@@ -45,6 +46,9 @@ Route::middleware(['auth'])
         Route::resource('customers', CustomerController::class)
             ->except(['destroy']);
 
+        Route::resource('customers.plans', CustomerPlanController::class)
+            ->only(['create', 'store']);
+
         Route::resource('customers.weights', CustomerWeightController::class)
             ->except(['show', 'create', 'edit']);
 
@@ -52,7 +56,7 @@ Route::middleware(['auth'])
             ->only(['index', 'store', 'update']);
 
         Route::resource('plans', PlanController::class)
-            ->only(['index', 'edit', 'update']);
+            ->only(['index']);
 
         Route::get('expired-plans', ExpiredPlanController::class)
             ->name('plans.expired');

@@ -9,6 +9,13 @@
                 </PrimaryButton>
             </template>
 
+            <template #options>
+                <div class="px-3 py-4 flex gap-4">
+                    <InputForm v-model="from" text="Desde" type="date" style="width: 17rem;" />
+                    <InputForm v-model="to" text="Hasta" type="date" style="width: 17rem;" />
+                </div>
+            </template>
+
             <template #header>
                 <th>Fecha</th>
                 <th>Concepto</th>
@@ -23,27 +30,25 @@
                         <DateColumn :date="finance.created_at" />
                     </td>
                     <td>
-                    	<template v-if="finance.incomeable">
-	                        <ConceptInformation v-if="finance.incomeable_type == 'App\\Models\\Concept'"
-	                            :concept="finance.incomeable" />
+                        <template v-if="finance.incomeable">
+                            <ConceptInformation v-if="finance.incomeable_type == 'App\\Models\\Concept'"
+                                :concept="finance.incomeable" />
 
-	                        <UserInformation v-else
-                            	:user="finance.incomeable" :type="finance.incomeable_type"/>
-                    	</template>
+                            <UserInformation v-else :user="finance.incomeable" :type="finance.incomeable_type" />
+                        </template>
 
-                    	<template v-else-if="finance.expenditureable">
-                    		<ConceptInformation v-if="finance.expenditureable_type == 'App\\Models\\Concept'"
-	                            :concept="finance.expenditureable" />
+                        <template v-else-if="finance.expenditureable">
+                            <ConceptInformation v-if="finance.expenditureable_type == 'App\\Models\\Concept'"
+                                :concept="finance.expenditureable" />
 
-                    		<UserInformation v-else
-                            	:user="finance.expenditureable" :type="finance.expenditureable_type" />
-                    	</template>
+                            <UserInformation v-else :user="finance.expenditureable" :type="finance.expenditureable_type" />
+                        </template>
                         <div v-else class="font-normal text-gray-900 ">
                             {{ finance.concept }}
                         </div>
                     </td>
                     <td>
-                         {{ finance.description }}
+                        {{ finance.description }}
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
@@ -84,19 +89,43 @@ import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import DateColumn from '@/Components/DateColumn.vue';
+import InputForm from '@/Components/Form/InputForm.vue';
+import { ref, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
+import { debounce } from 'lodash';
 
 const props = defineProps({
     finances: {
         type: Object, required: true
     },
     type: {
-    	type: String, required: true
+        type: String, required: true
     }
 })
 
+const from = ref(null)
+const to = ref(null)
+
+watch(() => [from.value, to.value], ([from_value, to_value]) => {
+    if (from_value && to_value) {
+        onFilter(from_value, to_value)
+    }
+})
+
+const onFilter = debounce((from_value, to_value) => {
+    router.get(route('dashboard.finances.index', props.type), {
+        from: from_value,
+        to: to_value
+    }, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['finances'],
+    })
+}, 500)
+
 const spanishType = {
-	incomes: "Ingresos",
-	expenditures: "Egresos"
+    incomes: "Ingresos",
+    expenditures: "Egresos"
 }
 
 const breads = [
