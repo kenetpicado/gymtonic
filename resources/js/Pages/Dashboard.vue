@@ -84,11 +84,6 @@ const stats = [
         value: props.active_customers.filter(customer => customer.gender == 'F')[0]?.total ?? 0,
         icon: IconGenderFemale,
     },
-    {
-        title: 'Clientes inactivos',
-        value: props.customers_count - plans_total,
-        icon: IconMoodSad,
-    },
 ]
 
 const finances = [
