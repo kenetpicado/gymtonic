@@ -189,8 +189,9 @@ function openModalToAddDays() {
 }
 
 watch(() => days.value, (value) => {
+    initSelectedPlans()
+
     if (!value) {
-        initSelectedPlans()
         return;
     };
 
