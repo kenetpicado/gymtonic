@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\RoleEnum;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -18,13 +19,13 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Kenet Picado',
                 'email' => 'kenetpicado1@gmail.com',
-                'password' => bcrypt('password'),
+                'password' => Hash::make('26051998'),
                 'role' => 'root'
             ],
             [
                 'name' => 'Josiel Alonso',
                 'email' => 'josielalonso@gmail.com',
-                'password' => bcrypt('password'),
+                'password' =>  Hash::make('jdUR73jdh'),
                 'role' => RoleEnum::ADMINISTRADOR
             ],
         ];
