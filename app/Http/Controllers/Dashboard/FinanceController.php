@@ -7,6 +7,7 @@ use App\Models\Concept;
 use App\Models\Expenditure;
 use App\Models\Income;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
@@ -58,5 +59,12 @@ class FinanceController extends Controller
             'type' => $type,
             'concepts' => $concepts,
         ]);
+    }
+
+    public function destroy(Request $request, $type)
+    {
+        DB::table($type)->where('id', $request->id)->delete();
+
+        return back();
     }
 }

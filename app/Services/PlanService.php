@@ -37,24 +37,28 @@ class PlanService
 
     public function update(array $request, Customer $customer): void
     {
-        $plan = Plan::updateOrCreate([
-            'customer_id' => $customer->id,
-        ], $request);
+        $plan = Plan::where('customer_id', $customer->id)->first();
+
+        if ($plan) {
+            $plan->update($request);
+
+            Income::create([
+                'value' => $plan->price,
+                'discount' => $plan->discount,
+                'concept' => 'Pago de plan',
+                'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+                'incomeable_id' => $plan->customer_id,
+                'incomeable_type' => 'App\Models\Customer',
+            ]);
+        } else {
+            Plan::create($request + ['customer_id' => $customer->id]);
+        }
 
         if ($request['note'] && $request['save_note']) {
             Note::create([
                 'text' => Customer::find($plan->customer_id)->value('name') . ': ' . $request['note'],
             ]);
         }
-
-        Income::create([
-            'value' => $plan->price,
-            'discount' => $plan->discount,
-            'concept' => 'Pago de plan',
-            'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
-            'incomeable_id' => $plan->customer_id,
-            'incomeable_type' => 'App\Models\Customer',
-        ]);
     }
 
     public static function updateOrCreate($request): Plan

@@ -73,6 +73,9 @@ Route::middleware(['auth'])
         Route::get('finances/{type}/create', [FinanceController::class, 'create'])
             ->name('finances.create');
 
+        Route::delete('finances/{type}/{id}', [FinanceController::class, 'destroy'])
+            ->name('finances.destroy');
+
         Route::resource('incomes', IncomeController::class)
             ->only(['store', 'update']);
 

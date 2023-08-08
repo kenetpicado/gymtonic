@@ -17,9 +17,7 @@
 
 <script setup>
 import { router } from "@inertiajs/vue3";
-import { computed } from "vue";
-//import prev icon
-//import next icon
+import { computed, reactive } from "vue";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-vue";
 
 const props = defineProps({
@@ -27,6 +25,10 @@ const props = defineProps({
         type: Object,
         required: false
     }
+});
+
+const queryParams = reactive({
+    search: null
 });
 
 const prevUrl = computed(() => {
@@ -42,7 +44,15 @@ const pageList = computed(() => {
 });
 
 function getThisPage(url) {
-    router.get(url, {}, {
+    const search = new URLSearchParams(window.location.search).get('search')
+
+    if (search) {
+        queryParams.search = search
+    } else {
+        delete queryParams.search
+    }
+
+    router.get(url, queryParams, {
         preserveState: true,
         preserveScroll: true
     });

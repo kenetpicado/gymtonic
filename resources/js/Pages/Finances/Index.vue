@@ -22,6 +22,7 @@
                 <th>Descripcion</th>
                 <th>Monto</th>
                 <th>Total</th>
+                <th>Actions</th>
             </template>
 
             <template #body>
@@ -66,6 +67,11 @@
                             C$ {{ (finance.value * finance.quantity).toLocaleString('en-US') }}
                         </span>
                     </td>
+                    <td>
+                        <span tooltip="Eliminar" role="button" @click="confirmDestroy(finance.id)">
+                            <IconTrash />
+                        </span>
+                    </td>
                 </tr>
                 <tr v-if="finances.data.length == 0">
                     <td colspan="6" class="text-center">No data to display</td>
@@ -93,6 +99,9 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import { ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
+import { IconTrash } from '@tabler/icons-vue';
+import { toast } from "@/Use/toast.js";
+import useNotify from '@/Use/notify.js';
 
 const props = defineProps({
     finances: {
@@ -132,5 +141,17 @@ const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
     { name: spanishType[props.type], route: 'dashboard.finances.index', params: props.type },
 ]
+
+function confirmDestroy(id) {
+    useNotify().confirm(() => {
+        router.delete(route('dashboard.finances.destroy', [props.type, id]), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success('Registro eliminado correctamente!')
+            },
+        });
+    }, '¿Estás seguro de eliminar este registro?')
+}
 
 </script>
