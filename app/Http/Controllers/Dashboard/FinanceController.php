@@ -13,36 +13,33 @@ class FinanceController extends Controller
 {
     public function index(Request $request, $type)
     {
+        $from = $request->from ?? date('Y-m-d');
+        $to = $request->to ?? date('Y-m-d');
+
         if ($type == 'incomes') {
             $finances = Income::orderBy('id', 'desc')
                 ->when($request->search, function($query) use ($request) {
                     $query->whereHas('incomeable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
                 })
-                ->when($request->from, function($query) use ($request) {
-                    $query->where('created_at', '>=', $request->from);
-                })
-                ->when($request->to, function($query) use ($request) {
-                    $query->where('created_at', '<=', $request->to);
-                })
+                ->when($from, fn($query) => $query->where('created_at', '>=', $from))
+                ->when($to, fn($query) => $query->where('created_at', '<=', $to))
                 ->with('incomeable:id,name')
-                ->paginate(10);
+                ->get();
         } else {
             $finances = Expenditure::orderBy('id', 'desc')
                 ->when($request->search, function($query) use ($request) {
                     $query->whereHas('expenditureable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
                 })
-                ->when($request->from, function($query) use ($request) {
-                    $query->where('created_at', '>=', $request->from);
-                })
-                ->when($request->to, function($query) use ($request) {
-                    $query->where('created_at', '<=', $request->to);
-                })
+                ->when($from, fn($query) => $query->where('created_at', '>=', $from))
+                ->when($to, fn($query) => $query->where('created_at', '<=', $to))
                 ->with('expenditureable:id,name')
-                ->paginate(10);
+                ->get();
         }
 
         return inertia('Finances/Index', [
             'type' => $type,
+            "from_date" => $from,
+            "to_date" => $to,
             'finances' => $finances,
         ]);
     }

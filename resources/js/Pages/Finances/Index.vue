@@ -14,6 +14,19 @@
                     <InputForm v-model="from" text="Desde" type="date" style="width: 17rem;" />
                     <InputForm v-model="to" text="Hasta" type="date" style="width: 17rem;" />
                 </div>
+                <div class="mx-4 mb-4">
+                    <template v-if="from == to">
+                        {{ props.type == "incomes" ? "Ingresos" : "Egresos" }} de hoy:
+                    </template>
+                    <template v-else>
+                        {{ props.type == "incomes" ? "Ingresos" : "Egresos" }} desde
+                        {{ Carbon.create(from).format("d de F") }} hasta el
+                        {{ Carbon.create(to).format("d de F")  }}:
+                    </template>
+                    <span class="badge-blue">
+                        C$ {{ total.toLocaleString() }}
+                    </span>
+                </div>
             </template>
 
             <template #header>
@@ -26,7 +39,7 @@
             </template>
 
             <template #body>
-                <tr v-for="(finance, index) in finances.data" class="hover:bg-gray-50">
+                <tr v-for="(finance, index) in finances" class="hover:bg-gray-50">
                     <td>
                         <DateColumn :date="finance.created_at" />
                     </td>
@@ -73,16 +86,11 @@
                         </span>
                     </td>
                 </tr>
-                <tr v-if="finances.data.length == 0">
+                <tr v-if="finances.length == 0">
                     <td colspan="6" class="text-center">No data to display</td>
                 </tr>
             </template>
-
-            <template #paginator>
-                <ThePaginator :links="finances.links"></ThePaginator>
-            </template>
         </TableSection>
-
     </AppLayout>
 </template>
 
@@ -96,12 +104,13 @@ import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import { IconTrash } from '@tabler/icons-vue';
 import { toast } from "@/Use/toast.js";
 import useNotify from '@/Use/notify.js';
+import { Carbon } from "@/Classes/Carbon";
 
 const props = defineProps({
     finances: {
@@ -109,11 +118,21 @@ const props = defineProps({
     },
     type: {
         type: String, required: true
+    },
+    from_date: {
+        type: String, required: true
+    },
+    to_date: {
+        type: String, required: true
     }
 })
 
-const from = ref(null)
-const to = ref(null)
+const from = ref(props.from_date)
+const to = ref(props.to_date)
+
+const total = computed(() => {
+    return props.finances.reduce((acc, finance) => acc + finance.value * finance.quantity, 0)
+})
 
 watch(() => [from.value, to.value], ([from_value, to_value]) => {
     if (from_value && to_value) {
