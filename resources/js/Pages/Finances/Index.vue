@@ -10,12 +10,8 @@
             </template>
 
             <template #options>
-                <div class="px-3 py-4 flex gap-4">
-                    <InputForm v-model="from" text="Desde" type="date" style="width: 17rem;" />
-                    <InputForm v-model="to" text="Hasta" type="date" style="width: 17rem;" />
-                </div>
-                <div class="mx-4 mb-4">
-                    <template v-if="from == to">
+                <div class="bg-indigo-100 border-l-4 border-indigo-600 text-indigo-600 p-4" role="alert">
+                  <template v-if="from == to">
                         {{ props.type == "incomes" ? "Ingresos" : "Egresos" }} de hoy:
                     </template>
                     <template v-else>
@@ -23,9 +19,11 @@
                         {{ Carbon.create(from).format("d de F") }} hasta el
                         {{ Carbon.create(to).format("d de F")  }}:
                     </template>
-                    <span class="badge-blue">
-                        C$ {{ total.toLocaleString() }}
-                    </span>
+                    C$ {{ total.toLocaleString() }}
+                </div>
+                <div class="px-3 py-4 flex gap-4">
+                    <InputForm v-model="from" text="Desde" type="date" style="width: 17rem;" />
+                    <InputForm v-model="to" text="Hasta" type="date" style="width: 17rem;" />
                 </div>
             </template>
 
