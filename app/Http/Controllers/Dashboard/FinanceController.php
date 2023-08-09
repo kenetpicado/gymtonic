@@ -18,20 +18,18 @@ class FinanceController extends Controller
 
         if ($type == 'incomes') {
             $finances = Income::orderBy('id', 'desc')
-                ->when($request->search, function($query) use ($request) {
-                    $query->whereHas('incomeable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
+                ->when($request->search, function ($query) use ($request) {
+                    $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
                 })
-                ->when($from, fn($query) => $query->where('created_at', '>=', $from))
-                ->when($to, fn($query) => $query->where('created_at', '<=', $to))
+                ->whereBetween('created_at', [$from  . " 00:00:00", $to . " 23:59:59"])
                 ->with('incomeable:id,name')
                 ->get();
         } else {
             $finances = Expenditure::orderBy('id', 'desc')
-                ->when($request->search, function($query) use ($request) {
-                    $query->whereHas('expenditureable', fn($query) => $query->where('name', 'like', "%{$request->search}%"));
+                ->when($request->search, function ($query) use ($request) {
+                    $query->whereHas('expenditureable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
                 })
-                ->when($from, fn($query) => $query->where('created_at', '>=', $from))
-                ->when($to, fn($query) => $query->where('created_at', '<=', $to))
+                ->whereBetween('created_at', [$from . " 00:00:00", $to . " 23:59:59"])
                 ->with('expenditureable:id,name')
                 ->get();
         }
