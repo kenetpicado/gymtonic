@@ -18,7 +18,7 @@
 
                     <InputForm text="Write custom" v-model="form.concept" :disabled="disableCustomConcept" name="concept"/>
 
-                    <InputForm text="Description (optional)" name="description" v-model="form.description"/>
+                    <InputForm text="Description (optional)" name="description" v-model="form.description" autocomplete="on"/>
 
                     <InputForm text="Quantity" v-model="form.quantity" type="number"/>
 

@@ -71,7 +71,7 @@
                         {{ plan.service_name }} ({{ plan.period }} dias)
                     </td>
                     <td>
-                        <span class="badge-blue" :tooltip="Carbon.create(plan.end_date).diffForHumans()">
+                        <span class="badge-blue" :tooltip="Carbon.create(plan.end_date + ' 23:59:00').diffForHumans()">
                             {{ Carbon.create(plan.end_date).format("d de F") }}
                         </span>
                     </td>

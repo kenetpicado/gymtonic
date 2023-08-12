@@ -7,7 +7,7 @@
             </template>
             <template #content>
                 <div class="grid gap-6">
-                    <InputForm text="Description" v-model="form.description" />
+                    <InputForm text="Description" v-model="form.description" autocomplete="on" />
                     <InputForm text="Quantity" v-model="form.quantity" type="number" />
                     <InputForm text="Value" v-model="form.value" type="number" />
                     <InputForm text="Created at" v-model="form.created_at" type="date" />

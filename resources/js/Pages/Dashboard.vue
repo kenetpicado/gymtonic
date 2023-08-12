@@ -5,7 +5,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
                 <CardInfo v-for="stat in stats" :stat="stat" />
             </div>
-            <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">Finanzas</h1>
+            <h1 class="block text-xs text-gray-500 uppercase tracking-wider font-semibold my-4">Finanzas: {{ MONHT }}</h1>
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
                 <CardInfo v-for="finance in finances" :stat="finance" />
             </div>
@@ -88,22 +88,22 @@ const stats = [
 
 const finances = [
     {
-        title: 'Ingresos ' + MONHT,
+        title: 'Ingresos',
         value: 'C$ ' + props.incomes_month.total.toLocaleString('en-US'),
         icon: IconMoneybag,
     },
     {
-        title: 'Egresos ' + MONHT,
+        title: 'Egresos',
         value: 'C$ ' + props.expenditures_month.toLocaleString('en-US'),
         icon: IconCurrencyDollarOff,
     },
     {
-        title: 'Descuentos ' + MONHT,
+        title: 'Descuentos',
         value: 'C$ ' + props.incomes_month.discount,
         icon: IconGift,
     },
     {
-        title: 'Ganancias ' + MONHT,
+        title: 'Ganancias',
         value: 'C$ ' + (props.incomes_month.total - props.expenditures_month).toLocaleString('en-US'),
         icon: IconCurrencyDollar,
     },

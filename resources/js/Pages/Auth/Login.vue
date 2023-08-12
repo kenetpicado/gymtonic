@@ -36,7 +36,7 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit">
-            <InputForm text="Email" v-model="form.email" autofocus required type="email" class="mb-1"/>
+            <InputForm text="Email" v-model="form.email" autofocus required type="email" class="mb-1" autocomplete="on"/>
             <InputForm text="Password" v-model="form.password" required type="password" class="mt-4"/>
 
             <div class="block mt-4">
