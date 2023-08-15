@@ -6,7 +6,7 @@
 
         <input :type="type" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus" :required="required"
             :autocomplete="autocomple"
-            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full transition duration-300 ease-in-out"
             :class="[disabled ? 'bg-gray-100' : '']" :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)">
 

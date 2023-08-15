@@ -1,6 +1,6 @@
 <template>
     <div style="width: 17rem;">
-        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block w-full"
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block w-full transition duration-300 ease-in-out"
             type="search" placeholder="Search" @input="onInput($event.target.value)" :value="queryParam.search" />
     </div>
 </template>
