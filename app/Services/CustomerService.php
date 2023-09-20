@@ -11,6 +11,8 @@ class CustomerService
 {
     public function index($request): array
     {
+        $now = now()->format('Y-m-d') . " 00:00:00";
+
         return [
             'customers' => DB::table('customers')
                 ->when($request->search, function ($query, $search) {
@@ -23,7 +25,7 @@ class CustomerService
                     'phone',
                     'gender',
                     'stars.value as stars',
-                    DB::raw('(SELECT COUNT(*) FROM plans WHERE customer_id = customers.id AND end_date >= NOW()) as active_plans')
+                    DB::raw("(SELECT COUNT(*) FROM plans WHERE customer_id = customers.id AND end_date >= '{$now}') as active_plans")
                 )
                 ->orderByDesc('id')
                 ->paginate(10),
