@@ -8,7 +8,7 @@
             </template>
 
             <template #header>
-                <th>ID</th>
+                <th>Transaccion</th>
                 <th>Concepto</th>
                 <th>Descripcion</th>
                 <th>Fecha</th>
@@ -17,7 +17,7 @@
             <template #body>
                 <tr v-for="(income, index) in customer.incomes" class="hover:bg-gray-50">
                     <td>
-                        {{ index + 1 }}
+                        #{{ income.id }}
                     </td>
                     <th>
                         {{ income.concept }}

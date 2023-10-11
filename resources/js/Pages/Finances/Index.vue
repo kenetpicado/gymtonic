@@ -28,6 +28,7 @@
             </template>
 
             <template #header>
+                <th>Transaccion</th>
                 <th>Fecha</th>
                 <th>Concepto</th>
                 <th>Descripcion</th>
@@ -38,6 +39,9 @@
 
             <template #body>
                 <tr v-for="(finance, index) in finances" class="hover:bg-gray-50">
+                    <td>
+                        #{{ finance.id }}
+                    </td>
                     <td>
                         <DateColumn :date="finance.created_at" />
                     </td>

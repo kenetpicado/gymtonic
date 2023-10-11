@@ -33,6 +33,6 @@ class CustomerPlanController extends Controller
     {
         (new PlanService)->update($request->validated(), $customer);
 
-        return redirect()->route('dashboard.plans.index');
+        return redirect()->route('dashboard.customers.index');
     }
 }

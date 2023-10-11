@@ -140,7 +140,6 @@ function submit() {
         preserveState: true,
         onSuccess: () => {
             toast.success('Plan created successfully!');
-            router.get(route('dashboard.plans.index'));
         },
     });
 }
