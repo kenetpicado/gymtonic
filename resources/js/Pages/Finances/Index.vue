@@ -3,7 +3,7 @@
 
         <TableSection>
             <template #topbar>
-                <SearchComponent :url="route('dashboard.finances.index', type)" :only="['finances']"></SearchComponent>
+                <SearchComponent @search="search"></SearchComponent>
                 <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.finances.create', type))">
                     Nuevo
                 </PrimaryButton>
@@ -11,19 +11,19 @@
 
             <template #options>
                 <div class="bg-indigo-100 border-l-4 border-indigo-600 text-indigo-600 p-4" role="alert">
-                  <template v-if="from == to">
+                    <template v-if="queryParams.from == queryParams.to">
                         {{ props.type == "incomes" ? "Ingresos" : "Egresos" }} de hoy:
                     </template>
                     <template v-else>
                         {{ props.type == "incomes" ? "Ingresos" : "Egresos" }} desde
-                        {{ Carbon.create(from).format("d de F") }} hasta el
-                        {{ Carbon.create(to).format("d de F")  }}:
+                        {{ Carbon.create(queryParams.from).format("d de F") }} hasta el
+                        {{ Carbon.create(queryParams.to).format("d de F") }}:
                     </template>
                     C$ {{ total.toLocaleString() }}
                 </div>
                 <div class="px-3 py-4 flex gap-4">
-                    <InputForm v-model="from" text="Desde" type="date" style="width: 17rem;" />
-                    <InputForm v-model="to" text="Hasta" type="date" style="width: 17rem;" />
+                    <InputForm v-model="queryParams.from" text="Desde" type="date" style="width: 17rem;" />
+                    <InputForm v-model="queryParams.to" text="Hasta" type="date" style="width: 17rem;" />
                 </div>
             </template>
 
@@ -106,7 +106,7 @@ import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import { IconTrash } from '@tabler/icons-vue';
@@ -129,29 +129,38 @@ const props = defineProps({
     }
 })
 
-const from = ref(props.from_date)
-const to = ref(props.to_date)
+const queryParams = reactive({
+    from: props.from_date,
+    to: props.to_date,
+    search: ''
+})
+
+const searchParams = new URLSearchParams(window.location.search);
+
+if (searchParams.get("search")) {
+    queryParams.search = searchParams.get("search");
+}
 
 const total = computed(() => {
     return props.finances.reduce((acc, finance) => acc + finance.value * finance.quantity, 0)
 })
 
-watch(() => [from.value, to.value], ([from_value, to_value]) => {
+watch(() => [queryParams.from, queryParams.to], ([from_value, to_value]) => {
     if (from_value && to_value) {
-        onFilter(from_value, to_value)
+        onFilter()
     }
 })
 
-const onFilter = debounce((from_value, to_value) => {
-    router.get(route('dashboard.finances.index', props.type), {
-        from: from_value,
-        to: to_value
-    }, {
+const onFilter = debounce(() => {
+    if (!queryParams.search)
+        delete queryParams.search
+
+    router.get(route('dashboard.finances.index', props.type), queryParams, {
         preserveState: true,
         preserveScroll: true,
         only: ['finances'],
     })
-}, 500)
+}, 200)
 
 const spanishType = {
     incomes: "Ingresos",
@@ -173,6 +182,11 @@ function confirmDestroy(id) {
             },
         });
     }, '¿Estás seguro de eliminar este registro?')
+}
+
+function search(value) {
+    queryParams.search = value
+    onFilter()
 }
 
 </script>
