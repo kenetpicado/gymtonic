@@ -2,17 +2,19 @@
     <AppLayout title="Dashboard" :breads="breads">
 
         <TableSection>
-            <template #topbar>
-                <SelectForm v-model="queryParams.model_id" text="Model">
-                    <option selected value="">Todos</option>
-                    <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
-                </SelectForm>
-                <SelectForm v-model="queryParams.year" text="Año">
-                    <option value="">Año en curso</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                </SelectForm>
+            <template #filters>
+                <div class="grid grid-cols-4 mb-6 gap-4">
+                    <SelectForm v-model="queryParams.model_id" text="Model">
+                        <option selected value="">Todos</option>
+                        <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
+                    </SelectForm>
+                    <SelectForm v-model="queryParams.year" text="Año">
+                        <option value="">Año en curso</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                    </SelectForm>
+                </div>
             </template>
 
             <template #header>

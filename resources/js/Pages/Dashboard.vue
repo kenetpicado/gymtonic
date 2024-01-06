@@ -18,11 +18,10 @@
 </template>
 
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import CardInfo from '@/Components/CardInfo.vue';
 import { Carbon } from '@/Classes/Carbon.js';
-import { IconUser, IconRun, IconGenderMale, IconGenderFemale, IconCurrencyDollarOff, IconCurrencyDollar, IconGift, IconMoneybag, IconActivity } from '@tabler/icons-vue';
-import { IconMoodSad } from '@tabler/icons-vue';
+import CardInfo from '@/Components/CardInfo.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { IconActivity, IconCurrencyDollar, IconCurrencyDollarOff, IconGenderFemale, IconGenderMale, IconGift, IconMoneybag, IconRun, IconUser } from '@tabler/icons-vue';
 
 const props = defineProps({
     incomes_month: {
@@ -49,18 +48,8 @@ const props = defineProps({
 
 const MONHT = Carbon.now().monthName();
 
-const plans_total = props.plans.reduce((acc, plan) => {
-    return acc + plan.total;
-}, 0);
-
 const breads = [
     { name: 'Dashboard', route: 'dashboard.index' },
-]
-
-const serviceList = [
-    "Pesas",
-    "Zumba",
-    "Zumba + Pesas"
 ]
 
 const stats = [
@@ -71,7 +60,7 @@ const stats = [
     },
     {
         title: 'Clientes activos',
-        value: plans_total,
+        value: props.plans.reduce((acc, plan) => (acc + plan.total), 0),
         icon: IconRun,
     },
     {
@@ -111,7 +100,7 @@ const finances = [
 
 const services = props.plans.map((plan) => {
     return {
-        title: serviceList[plan.service_id - 1],
+        title: plan.service.name,
         value: plan.total,
         icon: IconActivity,
     }

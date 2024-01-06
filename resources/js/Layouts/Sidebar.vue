@@ -1,19 +1,19 @@
 <template>
     <aside class="w-72 min-h-screen p-0 m-0 bg-white flex flex-col border">
         <div class="h-full px-3 py-4 overflow-y-auto">
-            <div class="flex flex-col items-center mt-4 mb-6">
+            <div class="flex flex-col items-center my-6">
                 <div class="h-14 w-14">
                     <img class="h-full w-full" src="/img/logo-ag.png" alt="" />
                 </div>
             </div>
-            <ul class="space-y-2">
+            <ul class="space-y-1">
                 <li v-for="item in items">
                     <span v-if="item.header"
-                        class="block text-xs text-gray-500 uppercase tracking-wider font-semibold mt-4 px-2">
+                        class="block text-xs text-gray-500 uppercase tracking-wider font-semibold mt-6 px-2">
                         {{ item.header }}
                     </span>
                     <Link v-else :href="item.route">
-                    <span class="flex items-center px-2 py-3 rounded-lg gap-4" :class="getClass(item.route)">
+                    <span class="flex items-center px-2 py-3 rounded-xl gap-4" :class="getClass(item.route)">
                         <component :is="item.icon ?? DEFAULT_ICON"></component>
                         <span>{{ item.name }}</span>
                     </span>
@@ -23,7 +23,7 @@
                     <span @click="logout" class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-indigo-50"
                         role="button">
                         <IconLogout></IconLogout>
-                        <span>Logout</span>
+                        <span>Salir</span>
                     </span>
                 </li>
             </ul>
@@ -34,7 +34,6 @@
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff, IconBellZ, IconLayoutList } from '@tabler/icons-vue';
-import { getAvatarUrl } from "@/Use/helpers.js"
 import { IconNote } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
@@ -45,10 +44,7 @@ const logout = () => {
 
 const items = [
     {
-        header: 'Inicio'
-    },
-    {
-        name: 'Dashboard',
+        name: 'Inicio',
         route: route('dashboard.index'),
         icon: IconHome
     },

@@ -11,13 +11,15 @@
                 </template>
 
                 <template #form>
-                    <InputForm text="Name" v-model="form.name"></InputForm>
-                    <InputForm text="Phone" v-model="form.phone" type="number"></InputForm>
-                    <InputForm text="Birth Date" v-model="form.birth_date" type="date"></InputForm>
-                    <SelectForm v-model="form.gender" text="Gender">
-                        <option value="F">Femenino</option>
-                        <option value="M">Masculino</option>
-                    </SelectForm>
+                    <div class="grid grid-cols-2 gap-6">
+                        <InputForm text="Name" v-model="form.name"></InputForm>
+                        <InputForm text="Phone" v-model="form.phone" type="number"></InputForm>
+                        <InputForm text="Birth Date" v-model="form.birth_date" type="date"></InputForm>
+                        <SelectForm v-model="form.gender" text="Gender">
+                            <option value="F">Femenino</option>
+                            <option value="M">Masculino</option>
+                        </SelectForm>
+                    </div>
                 </template>
 
                 <template #actions>

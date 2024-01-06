@@ -1,11 +1,11 @@
 <template>
-    <div class="col-span-6 sm:col-span-4">
+    <div class="w-full">
         <label class="block font-medium text-sm text-gray-700">
             {{ text }}
         </label>
 
         <select
-            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full transition duration-300 ease-in-out"
+            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm mt-1 block w-full transition duration-300 ease-in-out"
             :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
             <slot></slot>
         </select>

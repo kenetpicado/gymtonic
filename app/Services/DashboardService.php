@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Plan;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
@@ -16,9 +17,10 @@ class DashboardService
                 ->select(DB::raw('COALESCE(SUM(value * quantity), 0) as total, COALESCE(SUM(discount), 0) as discount'))
                 ->first(),
 
-            'plans' => DB::table('plans')
+            'plans' => Plan::query()
                 ->where('end_date', '>=', now()->format('Y-m-d'))
                 ->groupBy('service_id')
+                ->with('service:id,name')
                 ->get(['service_id', DB::raw('count(*) as total')]),
 
             'expenditures_month' => DB::table('expenditures')

@@ -25,6 +25,14 @@ export function watchForPrices (form, services, prices) {
     }, { immediate: true })
 }
 
-export function getAvatarUrl (name) {
-  return `https://ui-avatars.com/api/?name=${name}&rounded=true&size=256&background=eef2ff&color=4f46e5`
+export function getAvatarUrl (name, gender) {
+  let backgound = 'eef2ff'
+  let color = '4f46e5'
+
+  if (gender == 'F') {
+    backgound ="fdf2f8"
+    color = "db2777"
+  }
+
+  return `https://ui-avatars.com/api/?name=${name}&rounded=true&size=256&background=${backgound}&color=${color}`
 }

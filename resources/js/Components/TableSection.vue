@@ -1,9 +1,10 @@
 <template>
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex items-center mb-6 gap-4">
+            <div class="flex items-center justify-between mb-6 gap-4">
                 <slot name="topbar" />
             </div>
+            <slot name="filters" />
             <div class="bg-white overflow-hidden shadow-soft-xl sm:rounded-lg">
                 <slot name="options" />
                 <div class="overflow-hidden rounded-lg m-0">

@@ -18,7 +18,9 @@ class CustomerController extends Controller
 
     public function index(Request $request): Response
     {
-        return inertia('Customers/Index', $this->customerService->index($request));
+        return inertia('Customers/Index', [
+            'customers' => $this->customerService->getCustomers($request->all())
+        ]);
     }
 
     public function show(Customer $customer)

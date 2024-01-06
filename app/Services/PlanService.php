@@ -31,7 +31,7 @@ class PlanService
                     fn ($query) => $query->where('end_date', '<', now()->format('Y-m-d'))->orderBy('end_date', 'desc'),
                     fn ($query) => $query->where('end_date', '>=', now()->format('Y-m-d'))->orderBy('end_date')
                 )
-                ->paginate(10),
+                ->paginate(),
         ];
     }
 

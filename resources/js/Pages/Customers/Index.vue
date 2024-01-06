@@ -15,7 +15,6 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Estrellas</th>
-                <th>Genero</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </template>
@@ -36,11 +35,6 @@
                         </span>
                         <span v-else role="button" @click="addStarsInput(customer.id)">
                             <IconStar size="16" />
-                        </span>
-                    </td>
-                    <td>
-                        <span :class="[customer.gender == 'F' ? 'badge-pink' : 'badge-blue']">
-                            {{ customer.gender }}
                         </span>
                     </td>
                     <td>
