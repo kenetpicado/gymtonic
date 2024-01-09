@@ -1,29 +1,24 @@
 <template>
-    <AppLayout title="Dashboard" :breads="breads">
+    <AppLayout :title="spanishType[props.type]" :breads="breads">
 
         <TableSection>
             <template #topbar>
-                <SearchComponent @search="search"></SearchComponent>
+                <h1 class="text-2xl font-extrabold text-gray-600 col-span-2">
+                    {{ spanishType[props.type] }}
+                </h1>
                 <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.finances.create', type))">
                     Nuevo
                 </PrimaryButton>
             </template>
 
-            <template #options>
-                <div class="bg-indigo-100 border-l-4 border-indigo-600 text-indigo-600 p-4" role="alert">
-                    <template v-if="queryParams.from == queryParams.to">
-                        {{ props.type == "incomes" ? "Ingresos" : "Egresos" }} de hoy:
-                    </template>
-                    <template v-else>
-                        {{ props.type == "incomes" ? "Ingresos" : "Egresos" }} desde
-                        {{ Carbon.create(queryParams.from).format("d de F") }} hasta el
-                        {{ Carbon.create(queryParams.to).format("d de F") }}:
-                    </template>
-                    C$ {{ total.toLocaleString() }}
+            <template #filters>
+                <div class="grid grid-cols-4 mb-1 gap-4">
+                    <InputForm text="Buscar" v-model="queryParams.search" type="search" />
+                    <InputForm v-model="queryParams.from" text="Desde" type="date" />
+                    <InputForm v-model="queryParams.to" text="Hasta" type="date" />
                 </div>
-                <div class="px-3 py-4 flex gap-4">
-                    <InputForm v-model="queryParams.from" text="Desde" type="date" style="width: 17rem;" />
-                    <InputForm v-model="queryParams.to" text="Hasta" type="date" style="width: 17rem;" />
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-4">
+                    <CardInfo :stat="{ value: `C$ ${total.toLocaleString()}`, title: 'Total' }" />
                 </div>
             </template>
 
@@ -38,7 +33,7 @@
             </template>
 
             <template #body>
-                <tr v-for="(finance, index) in finances" class="hover:bg-gray-50">
+                <tr v-for="(finance, index) in finances.data" class="hover:bg-gray-50">
                     <td>
                         #{{ finance.id }}
                     </td>
@@ -88,9 +83,13 @@
                         </span>
                     </td>
                 </tr>
-                <tr v-if="finances.length == 0">
-                    <td colspan="6" class="text-center">No data to display</td>
+                <tr v-if="finances.data.length == 0">
+                    <td colspan="7" class="text-center">No data to display</td>
                 </tr>
+            </template>
+
+            <template #paginator>
+                <ThePaginator :links="finances.links" />
             </template>
         </TableSection>
     </AppLayout>
@@ -98,7 +97,6 @@
 
 <script setup>
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SearchComponent from '@/Components/SearchComponent.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
@@ -106,13 +104,15 @@ import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import { ref, watch, computed, reactive } from 'vue';
+import { watch, computed, reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import { IconTrash } from '@tabler/icons-vue';
 import { toast } from "@/Use/toast.js";
 import useNotify from '@/Use/notify.js';
 import { Carbon } from "@/Classes/Carbon";
+import { defineProps } from 'vue';
+import CardInfo from '@/Components/CardInfo.vue';
 
 const props = defineProps({
     finances: {
@@ -121,46 +121,34 @@ const props = defineProps({
     type: {
         type: String, required: true
     },
-    from_date: {
-        type: String, required: true
-    },
-    to_date: {
-        type: String, required: true
-    }
-})
-
-const queryParams = reactive({
-    from: props.from_date,
-    to: props.to_date,
-    search: ''
 })
 
 const searchParams = new URLSearchParams(window.location.search);
 
-if (searchParams.get("search")) {
-    queryParams.search = searchParams.get("search");
-}
+const queryParams = reactive({
+    from: searchParams.get("from") ?? Carbon.today(),
+    to: searchParams.get("to") ?? Carbon.today(),
+    search: searchParams.get("search") ?? '',
+})
 
 const total = computed(() => {
-    return props.finances.reduce((acc, finance) => acc + finance.value * finance.quantity, 0)
+    return props.finances.data.reduce((acc, finance) => acc + finance.value * finance.quantity, 0)
 })
 
-watch(() => [queryParams.from, queryParams.to], ([from_value, to_value]) => {
-    if (from_value && to_value) {
-        onFilter()
+const debouncedSearch = debounce(() => {
+    for (const key in queryParams) {
+        if (!queryParams[key])
+            delete queryParams[key]
     }
-})
-
-const onFilter = debounce(() => {
-    if (!queryParams.search)
-        delete queryParams.search
 
     router.get(route('dashboard.finances.index', props.type), queryParams, {
         preserveState: true,
         preserveScroll: true,
         only: ['finances'],
     })
-}, 200)
+}, 500)
+
+watch(() => queryParams, debouncedSearch, { deep: true })
 
 const spanishType = {
     incomes: "Ingresos",
@@ -182,11 +170,6 @@ function confirmDestroy(id) {
             },
         });
     }, '¿Estás seguro de eliminar este registro?')
-}
-
-function search(value) {
-    queryParams.search = value
-    onFilter()
 }
 
 </script>

@@ -31,7 +31,7 @@ const close = () => {
         @close="close"
     >
         <div class="px-6 py-4">
-            <div class="text-xl text-gray-900 uppercase font-bold">
+            <div class="text-xl text-gray-900 font-bold">
                 <slot name="title" />
             </div>
 

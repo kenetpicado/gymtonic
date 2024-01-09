@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Concept;
 use App\Models\Expenditure;
 use App\Models\Income;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,31 +14,29 @@ class FinanceController extends Controller
 {
     public function index(Request $request, $type)
     {
-        $from = $request->from ?? date('Y-m-d');
-        $to = $request->to ?? date('Y-m-d');
+        $from = ($request->from ?? Carbon::now()->format('Y-m-d')) . " 00:00:00";
+        $to = ($request->to ?? Carbon::now()->format('Y-m-d')) . " 23:59:59";
 
         if ($type == 'incomes') {
             $finances = Income::orderBy('id', 'desc')
                 ->when($request->search, function ($query) use ($request) {
                     $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
                 })
-                ->whereBetween('created_at', [$from  . " 00:00:00", $to . " 23:59:59"])
+                ->whereBetween('created_at', [$from, $to])
                 ->with('incomeable:id,name')
-                ->get();
+                ->paginate();
         } else {
             $finances = Expenditure::orderBy('id', 'desc')
                 ->when($request->search, function ($query) use ($request) {
                     $query->whereHas('expenditureable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
                 })
-                ->whereBetween('created_at', [$from . " 00:00:00", $to . " 23:59:59"])
+                ->whereBetween('created_at', [$from, $to])
                 ->with('expenditureable:id,name')
-                ->get();
+                ->paginate();
         }
 
         return inertia('Finances/Index', [
             'type' => $type,
-            "from_date" => $from,
-            "to_date" => $to,
             'finances' => $finances,
         ]);
     }

@@ -2,9 +2,15 @@
     <AppLayout title="Dashboard" :breads="breads">
 
         <TableSection>
+            <template #topbar>
+                <h1 class="text-2xl font-extrabold text-gray-600 col-span-2">
+                    Resumen
+                </h1>
+            </template>
+
             <template #filters>
                 <div class="grid grid-cols-4 mb-6 gap-4">
-                    <SelectForm v-model="queryParams.model_id" text="Model">
+                    <SelectForm v-model="queryParams.model_id" text="Concepto">
                         <option selected value="">Todos</option>
                         <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
                     </SelectForm>
@@ -44,12 +50,12 @@
                         </td>
                         <td>
                             <span class="badge-success">
-                                {{ findIncome(month.id) }}
+                                {{ findValue(month.id, 'income') }}
                             </span>
                         </td>
                         <td>
                             <span class="badge-danger">
-                                {{ findExpenditure(month.id) }}
+                                {{ findValue(month.id, 'expenditure') }}
                             </span>
                         </td>
                         <td>
@@ -112,9 +118,11 @@ const breads = [
     { name: 'Resumen', route: 'dashboard.summary.index' },
 ]
 
+const searchParams = new URLSearchParams(window.location.search)
+
 const queryParams = reactive({
-    model_id: '',
-    year: '',
+    model_id: searchParams.get('model_id') ?? '',
+    year: searchParams.get('year') ?? '',
 })
 
 const monthList = [
@@ -132,41 +140,17 @@ const monthList = [
     { id: 12, name: 'Diciembre' },
 ]
 
-const search = new URLSearchParams(window.location.search)
+function findValue(month, type) {
+    const data = type === 'income' ? props.incomes : props.expenditures;
+    const item = data.find(entry => entry.month === month);
 
-if (search.get('model_id')) {
-    queryParams.model_id = search.get('model_id')
-}
-
-if (search.get('year')) {
-    queryParams.year = search.get('year')
-}
-
-function findIncome(month) {
-    const income = props.incomes.find(income => income.month === month)
-
-    if (income) {
-        return 'C$ ' + income.total.toLocaleString()
-    }
-
-    return 'C$ 0'
-}
-
-function findExpenditure(month) {
-    const expenditure = props.expenditures.find(expenditure => expenditure.month === month)
-
-    if (expenditure) {
-        return 'C$ ' + expenditure.total.toLocaleString()
-    }
-
-    return 'C$ 0'
+    return item
+        ? `C$ ${item.total?.toLocaleString() ?? 0}`
+        : 'C$ 0';
 }
 
 function showRow(month) {
-    const income = props.incomes.find(income => income.month === month)
-    const expenditure = props.expenditures.find(expenditure => expenditure.month === month)
-
-    return income || expenditure
+    return props.incomes.some(income => income.month === month) || props.expenditures.some(expenditure => expenditure.month === month);
 }
 
 function getRenevue(month) {
@@ -177,20 +161,15 @@ function getRenevue(month) {
 }
 
 const totalIncome = computed(() => props.incomes.reduce((acc, income) => acc + income.total, 0));
-
 const totalExpenditure = computed(() => props.expenditures.reduce((acc, expenditure) => acc + expenditure.total, 0));
 
-watch(() => [queryParams.model_id, queryParams.year], ({ model_id, year }) => {
-    getFilteredSummary()
-})
+watch(queryParams, getFilteredSummary, { deep: true })
 
 function getFilteredSummary() {
-    if (queryParams.model_id === '') {
-        delete queryParams.model_id;
-    }
-
-    if (queryParams.year === '') {
-        delete queryParams.year;
+    for (const key in queryParams) {
+        if (queryParams[key] === '') {
+            delete queryParams[key]
+        }
     }
 
     router.get(route('dashboard.summary.index'), queryParams, {

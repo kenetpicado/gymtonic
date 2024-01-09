@@ -44,13 +44,15 @@ const pageList = computed(() => {
 });
 
 function getThisPage(url) {
-    const search = new URLSearchParams(window.location.search).get('search')
+    const searchParams = new URLSearchParams(window.location.search);
 
-    if (search) {
-        queryParams.search = search
-    } else {
-        delete queryParams.search
-    }
+    ['search', 'from', 'to', 'type'].forEach(item => {
+        const paramValue = searchParams.get(item);
+        if (paramValue !== null)
+            queryParams[item] = paramValue;
+        else
+            delete queryParams[item];
+    });
 
     router.get(url, queryParams, {
         preserveState: true,

@@ -1,7 +1,7 @@
 <template>
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-6 gap-4">
+            <div class="flex items-center justify-between mb-5 gap-4">
                 <slot name="topbar" />
             </div>
             <slot name="filters" />

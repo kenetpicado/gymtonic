@@ -2,7 +2,7 @@
     <AppLayout title="Dashboard" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
-                {{ isNew ? 'Nuevo' : 'Editar' }}
+                Concepto
             </template>
             <template #content>
                 <div class="flex flex-col gap-6">
@@ -26,7 +26,9 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between mb-6 gap-4">
-                <div></div>
+                <h1 class="text-2xl font-extrabold text-gray-600 col-span-2">
+                    Conceptos
+                </h1>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
                 </PrimaryButton>
