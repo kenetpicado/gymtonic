@@ -1,7 +1,7 @@
 <template>
     <AppLayout title="Customer">
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-            <FormSection @submitted="saveFinance">
+            <FormSection @submitted="save">
                 <template #title>
                     Informacion del {{ spanishType[type] }}
                 </template>
@@ -11,22 +11,24 @@
                 </template>
 
                 <template #form>
-                    <SelectForm text="Concept" v-model="dynamicModel" name="model_id">
+                    <SelectForm text="Concepto" v-model="dynamicModel" name="model_id">
                         <option selected value="">Ninguno</option>
                         <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
                     </SelectForm>
 
-                    <InputForm text="Write custom" v-model="form.concept" :disabled="disableCustomConcept" name="concept"/>
+                    <InputForm text="Personalizado" v-model="form.concept" :disabled="disableCustomConcept"
+                        name="concept" />
 
-                    <InputForm text="Description (optional)" name="description" v-model="form.description" autocomplete="on"/>
+                    <InputForm text="Descripcion (opcional)" name="description" v-model="form.description"
+                        autocomplete="on" />
 
-                    <InputForm text="Quantity" v-model="form.quantity" type="number"/>
+                    <InputForm text="Cantidad" name="quantity" v-model="form.quantity" type="number" />
 
-                    <InputForm text="Value" v-model="form.value"/>
+                    <InputForm text="Monto" name="value" v-model="form.value" type="number" />
 
-                    <InputForm v-if="type == 'incomes'" text="Discount" v-model="form.discount"/>
+                    <InputForm v-if="type == 'incomes'" text="Descuento" name="discount" v-model="form.discount" type="number" />
 
-                    <div class="col-span-4 text-lg font-medium text-gray-900">
+                    <div class="text-lg font-medium text-gray-900">
                         Total: C$ {{ total }}
                     </div>
                 </template>
@@ -63,8 +65,15 @@ const props = defineProps({
     },
 })
 
-const modelTypeId = props.type === 'incomes' ? { incomeable_id: null } : { expenditureable_id: null }
-const modelType = props.type === 'incomes' ? { incomeable_type: null } : { expenditureable_type: null }
+const model = props.type === 'incomes'
+    ? {
+        incomeable_id: null,
+        incomeable_type: null
+    }
+    : {
+        expenditureable_id: null,
+        expenditureable_type: null
+    }
 
 const form = useForm({
     id: null,
@@ -73,8 +82,7 @@ const form = useForm({
     discount: 0,
     concept: '',
     description: '',
-    ...modelTypeId,
-    ...modelType
+    ...model
 })
 
 const spanishType = {
@@ -90,7 +98,7 @@ const total = computed(() => {
     return form.value * form.quantity - form.discount
 })
 
-function saveFinance() {
+function save() {
     if (form.incomeable_id) {
         form.incomeable_type = "App\\Models\\Concept"
     }
