@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Dashboard" :breads="breads">
+    <AppLayout title="Resumen" :breads="breads">
 
         <TableSection>
             <template #topbar>
@@ -16,9 +16,7 @@
                     </SelectForm>
                     <SelectForm v-model="queryParams.year" text="Año">
                         <option value="">Año en curso</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
+                        <option v-for="y in years" :value="y">{{ y }}</option>
                     </SelectForm>
                 </div>
             </template>
@@ -34,8 +32,13 @@
             </template>
 
             <template #body>
-                <template v-for="month in monthList">
-                    <tr v-if="showRow(month.id)" class="hover:bg-gray-50">
+                <tr v-if="mapedResults.length == 0">
+                    <td colspan="7" class="text-center">
+                        No hay datos para mostrar
+                    </td>
+                </tr>
+                <template v-for="month in mapedResults">
+                    <tr class="hover:bg-gray-50">
                         <td>
                             {{ month.id }}
                         </td>
@@ -43,29 +46,29 @@
                             {{ month.name }}
                         </td>
                         <td>
-                            {{ clients.find(client => client.month === month.id)?.total ?? 0 }}
+                            {{ month.clients }}
                         </td>
                         <td>
-                            {{ plans.find(plan => plan.month === month.id)?.total ?? 0 }}
+                            {{ month.plans }}
                         </td>
                         <td>
                             <span class="badge-success">
-                                {{ findValue(month.id, 'income') }}
+                                {{ month.income }}
                             </span>
                         </td>
                         <td>
                             <span class="badge-danger">
-                                {{ findValue(month.id, 'expenditure') }}
+                                {{ month.expenditure }}
                             </span>
                         </td>
                         <td>
-                            <span :class="[getRenevue(month.id).includes('-') ? 'badge-danger' : 'badge-blue']">
-                                {{ getRenevue(month.id) }}
+                            <span :class="month.revenue_class">
+                                {{ month.renevue }}
                             </span>
                         </td>
                     </tr>
                 </template>
-                <tr class="bg-gray-50">
+                <tr class="bg-gray-50" v-if="mapedResults.length > 0">
                     <td></td>
                     <td class="font-bold">Total</td>
                     <td>
@@ -140,26 +143,6 @@ const monthList = [
     { id: 12, name: 'Diciembre' },
 ]
 
-function findValue(month, type) {
-    const data = type === 'income' ? props.incomes : props.expenditures;
-    const item = data.find(entry => entry.month === month);
-
-    return item
-        ? `C$ ${item.total?.toLocaleString() ?? 0}`
-        : 'C$ 0';
-}
-
-function showRow(month) {
-    return props.incomes.some(income => income.month === month) || props.expenditures.some(expenditure => expenditure.month === month);
-}
-
-function getRenevue(month) {
-    const income = props.incomes.find(income => income.month === month)?.total ?? 0
-    const expenditure = props.expenditures.find(expenditure => expenditure.month === month)?.total ?? 0
-
-    return 'C$ ' + (income - expenditure).toLocaleString()
-}
-
 const totalIncome = computed(() => props.incomes.reduce((acc, income) => acc + income.total, 0));
 const totalExpenditure = computed(() => props.expenditures.reduce((acc, expenditure) => acc + expenditure.total, 0));
 
@@ -179,5 +162,33 @@ function getFilteredSummary() {
         replace: true,
     });
 }
+
+const mapedResults = computed(() => {
+    const results = [];
+
+    for (const month of monthList) {
+        const income = props.incomes.find(income => income.month === month.id)?.total ?? 0
+        const expenditure = props.expenditures.find(expenditure => expenditure.month === month.id)?.total ?? 0
+
+        if (income === 0 && expenditure === 0) {
+            continue;
+        }
+
+        results.push({
+            id: month.id,
+            name: month.name,
+            clients: props.clients.find(client => client.month === month.id)?.total ?? 0,
+            plans: props.plans.find(plan => plan.month === month.id)?.total ?? 0,
+            income: 'C$ ' + income.toLocaleString(),
+            expenditure: 'C$ ' + expenditure.toLocaleString(),
+            renevue: 'C$ ' + (income - expenditure).toLocaleString(),
+            revenue_class: income - expenditure > 0 ? 'badge-success' : 'badge-danger',
+        })
+    }
+
+    return results;
+})
+
+const years = Array.from({ length: 4 }, (_, i) => new Date().getFullYear() - i).filter(year => year !== new Date().getFullYear())
 
 </script>
