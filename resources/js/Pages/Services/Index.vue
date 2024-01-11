@@ -6,22 +6,20 @@
                 {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
-                <InputForm text="Name" v-model="form.name"></InputForm>
-                <Checkbox v-model:checked="form.is_active" text="Active" class="my-3" />
-                <h4 class="font-bold text-lg">Precios</h4>
+                <InputForm text="Nombre" name="name" v-model="form.name"></InputForm>
+                <Checkbox v-model:checked="form.is_active" text="Activo" class="my-3" />
+                <h4 class="font-bold text-lg mb-3">Precios</h4>
                 <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors['prices']">
                     {{ $page.props.errors['prices'] }}
                 </p>
-
                 <InputForm v-for="(period, index) in savedPeriods" :name="`prices.${index}.value`"
-                    :text="period.period_label" v-model="period.value" class="mt-4" type="number"></InputForm>
-
+                    :text="period.period_label" v-model="period.value"  type="number"></InputForm>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveService">
+                <PrimaryButton type="button" @click="save">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -29,7 +27,7 @@
 
         <TableSection>
             <template #topbar>
-                <div></div>
+                <div class="text-2xl font-extrabold text-gray-600 col-span-2">Servicios</div>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
                 </PrimaryButton>
@@ -65,7 +63,7 @@
                         </span>
                     </td>
                     <td>
-                        <IconPencil role="button" @click="editService(service)" />
+                        <IconPencil role="button" @click="edit(service)" />
                     </td>
                 </tr>
             </template>
@@ -120,7 +118,7 @@ const form = useForm({
     prices: []
 });
 
-async function editService(service) {
+async function edit(service) {
     form.id = service.id
     form.name = service.name
     form.is_active = Boolean(service.is_active)
@@ -146,7 +144,7 @@ function resetValues() {
     openModal.value = false
 }
 
-function saveService() {
+function save() {
     form.prices = savedPeriods.filter(period => period.value)
 
     if (isNew.value) {

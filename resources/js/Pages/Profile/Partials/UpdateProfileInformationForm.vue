@@ -32,16 +32,16 @@ const updateProfileInformation = () => {
 <template>
     <FormSection @submitted="updateProfileInformation">
         <template #title>
-            Informacion del perfil
+            Información del perfil
         </template>
 
         <template #description>
-            Actualizar nombre y correo electronico.
+            Actualizar nombre y correo electrónico.
         </template>
 
         <template #form>
-            <InputForm text="Name" v-model="form.name"/>
-            <InputForm text="Email" v-model="form.email"/>
+            <InputForm text="Nombre" name="name" v-model="form.name"/>
+            <InputForm text="Correo" name="email" v-model="form.email"/>
         </template>
 
         <template #actions>

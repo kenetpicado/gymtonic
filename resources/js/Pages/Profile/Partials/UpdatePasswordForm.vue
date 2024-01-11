@@ -17,7 +17,7 @@ const updatePassword = () => {
         preserveState: true,
         onSuccess: () => {
             form.reset()
-            toast.success('Contrasena actualizada correctamente!!');
+            toast.success('Contraseña actualizada correctamente');
         },
         onError: (err) => {
             console.log(err)
@@ -29,17 +29,17 @@ const updatePassword = () => {
 <template>
     <FormSection @submitted="updatePassword">
         <template #title>
-            Actualizar contrasena
+            Actualizar contraseña
         </template>
 
         <template #description>
-            Asegurese de que su cuenta este usando una contrasena larga y aleatoria para mantenerse seguro.
+            Asegúrese que su cuenta este usando una contraseña larga y aleatoria para mantenerse seguro.
         </template>
 
         <template #form>
-            <InputForm text="Current Password" v-model="form.current_password" type="password"/>
-            <InputForm text="New Password" name="password" v-model="form.password" type="password"/>
-            <InputForm text="Confirm Password" name="password_confirmation" v-model="form.password_confirmation" type="password"/>
+            <InputForm text="Contraseña actual" v-model="form.current_password" type="password"/>
+            <InputForm text="Nueva contraseña" name="password" v-model="form.password" type="password"/>
+            <InputForm text="Confirmar contraseña" name="password_confirmation" v-model="form.password_confirmation" type="password"/>
         </template>
 
         <template #actions>
