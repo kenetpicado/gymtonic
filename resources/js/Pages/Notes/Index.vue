@@ -21,7 +21,7 @@
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveNote">
+                <PrimaryButton type="button" @click="save">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -29,24 +29,27 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between mb-6 gap-4">
-                <div></div>
+                <div class="text-2xl font-extrabold text-gray-600 col-span-2">Notas</div>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
                 </PrimaryButton>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+                <div v-if="notes.length == 0" class="text-gray-400">
+                    No hay notas
+                </div>
                 <div class="w-full p-6 bg-white shadow-soft-xl rounded-xl" v-for="(note, index) in notes">
                     <div class="flex flex-col justify-between h-full">
                         <div>
                             <div class="flex justify-between">
-                                <div class="mb-2">
+                                <div class="mb-2 lowercase text-gray-400">
                                     {{ Carbon.create(note.created_at).format("d de F, Y") }}
                                 </div>
                                 <IconCircleCheck v-if="!note.is_done" @click="markAsDone(note)" role="button" />
                                 <IconCircleCheckFilled v-else class="text-green-500" role="button"
                                     @click="markAsNotDone(note)" />
                             </div>
-                            <p class="mb-4 font-normal text-gray-500 mt-2" role="button" @click="editNote(note)">
+                            <p class="mb-4 font-normal text-gray-600 mt-2" role="button" @click="edit(note)">
                                 {{ note.text }}
                             </p>
                         </div>
@@ -90,7 +93,7 @@ const breads = [
     { name: 'Notas', route: 'dashboard.notes.index' },
 ]
 
-function editNote(note) {
+function edit(note) {
     form.id = note.id;
     form.text = note.text;
     isNew.value = false;
@@ -123,7 +126,7 @@ function confirmDelete(id) {
     }, '¿Estás seguro de eliminar esta nota?')
 }
 
-function saveNote() {
+function save() {
     if (isNew.value) {
         form.post(route('dashboard.notes.store'), {
             preserveScroll: true,
