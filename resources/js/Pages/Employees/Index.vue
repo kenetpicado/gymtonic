@@ -1,21 +1,20 @@
 <template>
-    <AppLayout title="Dashboard" :breads="breads">
+    <AppLayout title="Personal" :breads="breads">
+
         <DialogModal :show="openModal">
             <template #title>
                 {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
-                <div class="grid gap-6">
-                    <InputForm text="Name" v-model="form.name"></InputForm>
-                    <InputForm text="Phone" v-model="form.phone" type="number"></InputForm>
-                    <InputForm text="Schedule" v-model="form.schedule"></InputForm>
-                </div>
+                <InputForm text="Nombre" name="name" v-model="form.name"></InputForm>
+                <InputForm text="Celular" name="phone" v-model="form.phone" type="number"></InputForm>
+                <InputForm text="Horario" name="schedule" v-model="form.schedule"></InputForm>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveEmployee">
+                <PrimaryButton type="button" @click="save">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -23,7 +22,9 @@
 
         <TableSection>
             <template #topbar>
-                <div></div>
+                <div class="text-2xl font-extrabold text-gray-600">
+                    Personal
+                </div>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
                 </PrimaryButton>
@@ -52,7 +53,7 @@
                             <IconCurrencyDollar />
                             </Link>
 
-                            <span role="button" tooltip="Editar" @click="editEmployee(employee)">
+                            <span role="button" tooltip="Editar" @click="edit(employee)">
                                 <IconPencil />
                             </span>
                         </div>
@@ -76,7 +77,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconEye, IconCurrencyDollar } from '@tabler/icons-vue';
+import { IconPencil, IconCurrencyDollar } from '@tabler/icons-vue';
 import { Link } from '@inertiajs/vue3';
 import { toast } from "@/Use/toast.js";
 
@@ -101,7 +102,7 @@ const form = useForm({
     schedule: '',
 })
 
-function editEmployee(employee) {
+function edit(employee) {
     form.id = employee.id;
     form.name = employee.name;
     form.phone = employee.phone;
@@ -110,7 +111,7 @@ function editEmployee(employee) {
     openModal.value = true;
 }
 
-function saveEmployee() {
+function save() {
     if (isNew.value) {
         form.post(route('dashboard.employees.store'), {
             preserveScroll: true,

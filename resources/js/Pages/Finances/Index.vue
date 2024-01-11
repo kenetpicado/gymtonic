@@ -3,7 +3,7 @@
 
         <TableSection>
             <template #topbar>
-                <h1 class="text-2xl font-extrabold text-gray-600 col-span-2">
+                <h1 class="text-2xl font-extrabold text-gray-600">
                     {{ spanishType[props.type] }}
                 </h1>
                 <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.finances.create', type))">

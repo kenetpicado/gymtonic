@@ -1,21 +1,19 @@
 <template>
-    <AppLayout title="Dashboard" :breads="breads">
+    <AppLayout title="Pagos" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
-                Nuevo Pago
+                Nuevo
             </template>
             <template #content>
-                <div class="grid gap-6">
-                    <InputForm text="Description (optional)" v-model="form.description"></InputForm>
-                    <InputForm text="Value" v-model="form.value"></InputForm>
-                    <InputForm text="Date" v-model="form.created_at" type="date"></InputForm>
-                </div>
+                <InputForm text="Descripcion (opcional)" name="description" v-model="form.description"></InputForm>
+                <InputForm text="Monto" name="value" v-model="form.value" type="number"></InputForm>
+                <InputForm text="Fecha" name="created_at" v-model="form.created_at" type="date"></InputForm>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton payment="button" @click="savePayment">
+                <PrimaryButton payment="button" @click="save">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -24,11 +22,9 @@
         <TableSection>
 
             <template #topbar>
-                <div>
-                    <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
-                        Pagos: {{ employee.name }}
-                    </h2>
-                </div>
+                <h2 class="text-2xl font-extrabold text-gray-600">
+                    Pagos: {{ employee.name }}
+                </h2>
                 <PrimaryButton payment="button" @click="openModal = true">
                     Nuevo
                 </PrimaryButton>
@@ -57,7 +53,7 @@
                         <span class="badge-blue">C$ {{ payment.value.toLocaleString('en-US') }}</span>
                     </td>
                     <td>
-                        <IconPencil @click="editPayment(payment)" role="button" />
+                        <IconPencil @click="edit(payment)" role="button" />
                     </td>
                 </tr>
                 <tr v-if="payments.data.length == 0">
@@ -116,7 +112,7 @@ const form = useForm({
     created_at: Carbon.today(),
 })
 
-function editPayment(payment) {
+function edit(payment) {
     isNew.value = false;
     form.id = payment.id;
     form.value = payment.value;
@@ -127,7 +123,7 @@ function editPayment(payment) {
     openModal.value = true;
 }
 
-function savePayment() {
+function save() {
     if (isNew.value) {
         form.post(route('dashboard.expenditures.store'), {
             preserveScroll: true,
