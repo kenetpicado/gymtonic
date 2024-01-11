@@ -21,4 +21,11 @@ class IncomeController extends Controller
 
         return back();
     }
+
+    public function destroy($income)
+    {
+        Income::where('id', $income)->delete();
+
+        return back();
+    }
 }

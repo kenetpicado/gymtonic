@@ -27,14 +27,14 @@ export default function useNotify() {
         });
     }
 
-    function confirm(done, message = "Are you sure?") {
+    function confirm(done, message = "Estas seguro?") {
         Swal.fire({
             icon: "info",
             iconColor: "#4f46e5",
-            title: "Confirm",
+            title: "Confirmar",
             text: message,
             showCancelButton: true,
-            confirmButtonText: "Yes. I'm sure",
+            confirmButtonText: "Si, estoy seguro",
             confirmButtonColor: "#4f46e5",
         }).then((result) => {
             if (result.isConfirmed) {

@@ -77,7 +77,7 @@ Route::middleware(['auth'])
             ->name('finances.destroy');
 
         Route::resource('incomes', IncomeController::class)
-            ->only(['store', 'update']);
+            ->only(['store', 'update', 'destroy']);
 
         Route::resource('expenditures', ExpenditureController::class)
             ->only(['store', 'update', 'destroy']);

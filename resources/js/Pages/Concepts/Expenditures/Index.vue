@@ -6,22 +6,20 @@
                 {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
-                <div class="grid gap-6">
-                    <InputForm text="Description" v-model="form.description" autocomplete="on" />
-                    <InputForm text="Quantity" v-model="form.quantity" type="number" />
-                    <InputForm text="Value" v-model="form.value" type="number" />
-                    <InputForm text="Created at" v-model="form.created_at" type="date" />
+                <InputForm text="Descripcion" name="description" v-model="form.description" autocomplete="on" />
+                <InputForm text="Cantidad" name="quantity" v-model="form.quantity" type="number" />
+                <InputForm text="Monto" name="value" v-model="form.value" type="number" />
+                <InputForm text="Fecha" name="created_at" v-model="form.created_at" type="date" />
 
-                    <div class="col-span-4 text-lg font-medium text-gray-900 mb-2">
-                        Total: C$ {{ total }}
-                    </div>
+                <div class="text-lg font-medium text-gray-900 mb-2">
+                    Total: C$ {{ total }}
                 </div>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveExpenditure">
+                <PrimaryButton type="button" @click="save">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -29,7 +27,7 @@
 
         <TableSection>
             <template #topbar>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight items-center">
+                <h2 class="text-2xl font-extrabold text-gray-600">
                     Egresos: {{ concept.name }}
                 </h2>
                 <PrimaryButton type="button" @click="openModal = true">
@@ -42,7 +40,7 @@
                 <th>Descripcion</th>
                 <th>Monto</th>
                 <th>Total</th>
-                <th>Actions</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
@@ -79,7 +77,9 @@
                     </td>
                 </tr>
                 <tr v-if="expenditures.data.length == 0">
-                    <td colspan="5" class="text-center">No data to display</td>
+                    <td colspan="5" class="text-center">
+                        No hay datos para mostrar
+                    </td>
                 </tr>
             </template>
 
@@ -160,7 +160,7 @@ function confirmDestroy(id) {
     }, '¿Estás seguro de eliminar este pago?')
 }
 
-function saveExpenditure() {
+function save() {
     if (isNew.value) {
         form.post(route('dashboard.expenditures.store'), {
             preserveScroll: true,

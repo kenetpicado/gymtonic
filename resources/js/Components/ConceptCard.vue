@@ -10,7 +10,7 @@
                     <IconEdit class="inline-block w-4 h-4" @click="$emit('onEdit', concept)" role="button" />
                 </h5>
             </div>
-            <p v-if="concept.last_expenditure" class="mb-5 text-sm text-gray-500 mt-1">
+            <p v-if="concept.last_expenditure" class="mb-5 text-sm text-gray-500 mt-1 lowercase">
                 últ. pago: {{ Carbon.create(concept.last_expenditure?.created_at).format('d de F') }}
             </p>
             <div class="flex gap-4">

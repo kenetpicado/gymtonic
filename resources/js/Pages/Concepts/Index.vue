@@ -1,24 +1,19 @@
 <template>
-    <AppLayout title="Dashboard" :breads="breads">
+    <AppLayout title="Concepto" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
                 Concepto
             </template>
             <template #content>
-                <div class="flex flex-col gap-6">
-                    <InputForm text="Name" v-model="form.name" />
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <Checkbox v-model:checked="form.has_expenditure" text="Egresos" />
-                        <Checkbox v-model:checked="form.has_income" text="Ingresos" />
-                    </div>
-                </div>
+                <InputForm text="Nombre" name="name" v-model="form.name" />
+                <Checkbox v-model:checked="form.has_expenditure" text="Egresos" />
+                <Checkbox v-model:checked="form.has_income" text="Ingresos" />
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveConcept">
+                <PrimaryButton type="button" @click="save">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -34,7 +29,7 @@
                 </PrimaryButton>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
-                <ConceptCard v-for="(concept, index) in concepts.data" :concept="concept" @onEdit="editConcept(concept)" />
+                <ConceptCard v-for="(concept, index) in concepts.data" :concept="concept" @onEdit="edit(concept)" />
             </div>
         </div>
     </AppLayout>
@@ -73,7 +68,7 @@ const breads = [
     { name: 'Conceptos', route: 'dashboard.concepts.index' },
 ]
 
-function editConcept(concept) {
+function edit(concept) {
     form.id = concept.id;
     form.name = concept.name;
     form.has_income = Boolean(concept.has_income),
@@ -82,7 +77,7 @@ function editConcept(concept) {
     openModal.value = true;
 }
 
-function saveConcept() {
+function save() {
     if (isNew.value) {
         form.post(route('dashboard.concepts.store'), {
             preserveScroll: true,

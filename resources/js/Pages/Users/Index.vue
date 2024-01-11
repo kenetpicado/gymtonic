@@ -23,7 +23,7 @@
 
         <TableSection>
             <template #topbar>
-                <div class="text-2xl font-extrabold text-gray-600 col-span-2">Usuarios</div>
+                <div class="text-2xl font-extrabold text-gray-600">Usuarios</div>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
                 </PrimaryButton>
