@@ -49,7 +49,7 @@ const props = defineProps({
 const MONHT = Carbon.now().monthName();
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
 ]
 
 const stats = [

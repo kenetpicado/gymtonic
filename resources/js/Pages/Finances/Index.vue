@@ -156,7 +156,7 @@ const spanishType = {
 }
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: spanishType[props.type], route: 'dashboard.finances.index', params: props.type },
 ]
 

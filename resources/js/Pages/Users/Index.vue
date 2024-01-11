@@ -1,23 +1,21 @@
 <template>
-    <AppLayout title="Dashboard" :breads="breads">
+    <AppLayout title="Usuarios" :breads="breads">
         <DialogModal :show="openModal">
             <template #title>
                 {{ isNew ? 'Nuevo' : 'Editar'}}
             </template>
             <template #content>
-                <div class="grid gap-6">
-                    <InputForm text="Name" v-model="form.name"></InputForm>
-                    <InputForm text="Email" v-model="form.email" type="email"></InputForm>
-                    <SelectForm text="Role" v-model="form.role">
+                    <InputForm text="Nombre" name="name" v-model="form.name"></InputForm>
+                    <InputForm text="Correo" name="email" v-model="form.email" type="email"></InputForm>
+                    <SelectForm text="Rol" name="role" v-model="form.role">
                     	<option v-for="role in roles">{{ role }}</option>
                     </SelectForm>
-                </div>
             </template>
             <template #footer>
                 <SecondaryButton @click="resetValues">
                     Cancelar
                 </SecondaryButton>
-                <PrimaryButton type="button" @click="saveUser">
+                <PrimaryButton type="button" @click="save">
                     Guardar
                 </PrimaryButton>
             </template>
@@ -34,7 +32,7 @@
             <template #header>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Email</th>
+                <th>Correo</th>
                 <th>Rol</th>
                 <th>Accciones</th>
             </template>
@@ -53,7 +51,7 @@
                     	<span class="badge-blue uppercase">{{ user.role }}</span>
                     </td>
                     <td>
-                        <IconPencil @click="edituser(user)" role="button" />
+                        <IconPencil @click="edit(user)" role="button" />
                     </td>
                 </tr>
                 <tr v-if="users.length == 0">
@@ -91,7 +89,7 @@ const openModal = ref(false)
 const isNew = ref(true);
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Usuarios', route: 'dashboard.users.index' },
 ]
 
@@ -102,7 +100,7 @@ const form = useForm({
     role: props.roles[props.roles.length - 1],
 })
 
-function edituser(user) {
+function edit(user) {
     form.id = user.id;
     form.name = user.name;
     form.email = user.email;
@@ -111,7 +109,7 @@ function edituser(user) {
     openModal.value = true;
 }
 
-function saveUser() {
+function save() {
     if (isNew.value) {
         form.post(route('dashboard.users.store'), {
             preserveScroll: true,

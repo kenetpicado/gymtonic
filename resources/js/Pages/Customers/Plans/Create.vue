@@ -106,7 +106,7 @@ const form = useForm(new Plan(props.plan, props.services[0].id, props.isCurrentA
 let startFromDate = null;
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Clientes', route: 'dashboard.customers.index' },
     { name: 'Pagar', route: 'dashboard.customers.plans.create', params: [props.customer.id] },
 ]

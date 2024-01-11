@@ -87,7 +87,7 @@ const openModal = ref(false)
 const isNew = ref(true);
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Clientes', route: 'dashboard.customers.index' },
     { name: 'Pesos', route: 'dashboard.customers.weights.index', params: [props.customer.id] },
 ]

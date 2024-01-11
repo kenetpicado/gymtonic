@@ -100,7 +100,7 @@ const openModal = ref(false)
 const isNew = ref(true);
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Personal', route: 'dashboard.employees.index' },
     { name: 'Pagos', route: 'dashboard.employees.show', params: [props.employee.id] },
 ]

@@ -103,7 +103,7 @@ const form = useForm(new Plan(props.plan, props.services[0].id, props.isCurrentA
 let startFromDate = null;
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Planes', route: 'dashboard.plans.index' },
     { name: 'Actualizar', route: 'dashboard.plans.edit', params: [form.plan_id] },
 ]

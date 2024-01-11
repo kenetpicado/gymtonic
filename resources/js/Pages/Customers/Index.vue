@@ -96,7 +96,7 @@ const props = defineProps({
 })
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Clientes', route: 'dashboard.customers.index' },
 ]
 

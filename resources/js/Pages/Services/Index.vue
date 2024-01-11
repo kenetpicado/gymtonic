@@ -109,7 +109,7 @@ const isNew = ref(true)
 let savedPeriods = props.periods
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Servicios', route: 'dashboard.services.index' },
 ]
 

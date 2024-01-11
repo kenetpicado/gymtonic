@@ -86,7 +86,7 @@ const form = useForm({
 })
 
 const breads = [
-    { name: 'Dashboard', route: 'dashboard.index' },
+    { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Notas', route: 'dashboard.notes.index' },
 ]
 
