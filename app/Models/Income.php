@@ -23,4 +23,11 @@ class Income extends Model
     {
         return $this->morphTo();
     }
+
+    public function scopeSearchIncomeable($query, $request)
+    {
+        return $query->when($request->search, function ($query) use ($request) {
+            $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
+        });
+    }
 }

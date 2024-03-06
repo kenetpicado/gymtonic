@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Concept;
+use App\Models\Customer;
 use App\Models\Expenditure;
 use App\Models\Income;
 use Carbon\Carbon;
@@ -19,19 +20,30 @@ class FinanceController extends Controller
 
         if ($type == 'incomes') {
             $finances = Income::orderBy('id', 'desc')
-                ->when($request->search, function ($query) use ($request) {
-                    $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
-                })
+                ->searchIncomeable($request)
                 ->whereBetween('created_at', [$from, $to])
                 ->with('incomeable:id,name')
                 ->paginate();
             $total = Income::query()
-                ->when($request->search, function ($query) use ($request) {
-                    $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
-                })
+                ->searchIncomeable($request)
                 ->selectRaw('sum(value * quantity) as amount')
                 ->whereBetween('created_at', [$from, $to])
                 ->first()?->amount ?? 0;
+            $plans_total = Income::query()
+                ->searchIncomeable($request)
+                ->where('incomeable_type', Customer::class)
+                ->whereBetween('created_at', [$from, $to])
+                ->count();
+
+            $concepts = Income::query()
+                ->searchIncomeable($request)
+                ->where('incomeable_type', Concept::class)
+                ->whereBetween('created_at', [$from, $to])
+                ->groupBy('incomeable_id')
+                ->selectRaw('count(*) as total, incomeable_id, MAX(incomeable_type) as incomeable_type')
+                ->with('incomeable:id,name')
+                ->get();
+
         } else {
             $finances = Expenditure::orderBy('id', 'desc')
                 ->when($request->search, function ($query) use ($request) {
@@ -47,11 +59,25 @@ class FinanceController extends Controller
                 ->selectRaw('sum(value * quantity) as amount')
                 ->whereBetween('created_at', [$from, $to])
                 ->first()?->amount ?? 0;
+            $plans_total = Expenditure::query()
+                ->where('expenditureable_type', Customer::class)
+                ->whereBetween('created_at', [$from, $to])
+                ->count();
+
+            $concepts = Expenditure::query()
+                ->where('expenditureable_type', Concept::class)
+                ->whereBetween('created_at', [$from, $to])
+                ->groupBy('expenditureable_id')
+                ->selectRaw('count(*) as total, expenditureable_id, MAX(expenditureable_type) as expenditureable_type')
+                ->with('expenditureable:id,name')
+                ->get();
         }
 
         return inertia('Finances/Index', [
             'type' => $type,
             'total' => $total,
+            'plans_total' => $plans_total,
+            'concepts' => $concepts ?? [],
             'finances' => $finances,
         ]);
     }

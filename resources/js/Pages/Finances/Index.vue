@@ -18,7 +18,10 @@
                     <InputForm v-model="queryParams.to" text="Hasta" type="date" />
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-4">
-                    <CardInfo :stat="{ value: `C$ ${total.toLocaleString()}`, title: 'Total' }" />
+                    <CardInfo v-for="stat in stats" :stat="stat" />
+                    <CardInfo
+                        v-for="stat in concepts.map(item => ({ title: item.incomeable?.name || item.expenditureable?.name, value: item.total }))"
+                        :stat="stat" />
                 </div>
             </template>
 
@@ -52,7 +55,8 @@
                             <ConceptInformation v-if="finance.expenditureable_type == 'App\\Models\\Concept'"
                                 :concept="finance.expenditureable" />
 
-                            <UserInformation v-else :user="finance.expenditureable" :type="finance.expenditureable_type" />
+                            <UserInformation v-else :user="finance.expenditureable"
+                                :type="finance.expenditureable_type" />
                         </template>
                         <div v-else class="font-normal text-gray-900 ">
                             {{ finance.concept }}
@@ -104,7 +108,7 @@ import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import { watch, reactive } from 'vue';
+import { watch, reactive, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import { IconTrash } from '@tabler/icons-vue';
@@ -113,6 +117,7 @@ import useNotify from '@/Use/notify.js';
 import { Carbon } from "@/Classes/Carbon";
 import { defineProps } from 'vue';
 import CardInfo from '@/Components/CardInfo.vue';
+import { isElement } from 'lodash';
 
 const props = defineProps({
     finances: {
@@ -123,6 +128,12 @@ const props = defineProps({
     },
     total: {
         type: Number, required: true
+    },
+    plans_total: {
+        type: Number, required: false
+    },
+    concepts: {
+        type: Object, required: false
     }
 })
 
@@ -143,7 +154,7 @@ const debouncedSearch = debounce(() => {
     router.get(route('dashboard.finances.index', props.type), queryParams, {
         preserveState: true,
         preserveScroll: true,
-        only: ['finances', 'total'],
+        only: ['finances', 'total', 'plans_total', 'concepts'],
     })
 }, 500)
 
@@ -170,5 +181,22 @@ function confirmDestroy(id) {
         });
     }, '¿Estás seguro de eliminar este registro?')
 }
+
+const stats = computed(() => {
+    return [
+        {
+            title: 'Total',
+            value: `C$ ${props.total.toLocaleString()}`
+        },
+        {
+            title: 'Registros',
+            value: `${props.finances.total}`
+        },
+        {
+            title: "Planes",
+            value: `${props.plans_total}`
+        }
+    ]
+})
 
 </script>
