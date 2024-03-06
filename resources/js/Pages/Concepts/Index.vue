@@ -72,8 +72,8 @@ function edit(concept) {
     form.id = concept.id;
     form.name = concept.name;
     form.has_income = Boolean(concept.has_income),
-        form.has_expenditure = Boolean(concept.has_expenditure),
-        isNew.value = false;
+    form.has_expenditure = Boolean(concept.has_expenditure),
+    isNew.value = false;
     openModal.value = true;
 }
 

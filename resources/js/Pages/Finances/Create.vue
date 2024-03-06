@@ -3,21 +3,17 @@
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="save">
                 <template #title>
-                    Informacion del {{ spanishType[type] }}
+                    Informacion del {{ types[type] }}
                 </template>
 
                 <template #description>
-                    Ingrese los datos del nuevo {{ spanishType[type] }}
+                    Ingrese los datos del nuevo {{ types[type] }}
                 </template>
 
                 <template #form>
-                    <SelectForm text="Concepto" v-model="dynamicModel" name="model_id">
-                        <option selected value="">Ninguno</option>
+                    <SelectForm text="Concepto" v-model="form.model_id" name="model_id" required>
                         <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
                     </SelectForm>
-
-                    <InputForm text="Personalizado" v-model="form.concept" :disabled="disableCustomConcept"
-                        name="concept" />
 
                     <InputForm text="Descripcion (opcional)" name="description" v-model="form.description"
                         autocomplete="on" />
@@ -65,16 +61,6 @@ const props = defineProps({
     },
 })
 
-const model = props.type === 'incomes'
-    ? {
-        incomeable_id: null,
-        incomeable_type: null
-    }
-    : {
-        expenditureable_id: null,
-        expenditureable_type: null
-    }
-
 const form = useForm({
     id: null,
     quantity: 1,
@@ -82,10 +68,10 @@ const form = useForm({
     discount: 0,
     concept: '',
     description: '',
-    ...model
+    model_id: '',
 })
 
-const spanishType = {
+const types = {
     incomes: "Ingreso",
     expenditures: "Egreso"
 }
@@ -99,44 +85,11 @@ const total = computed(() => {
 })
 
 function save() {
-    if (form.incomeable_id) {
-        form.incomeable_type = "App\\Models\\Concept"
-    }
-
-    if (form.expenditureable_id) {
-        form.expenditureable_type = "App\\Models\\Concept"
-    }
-
     form.post(route(`dashboard.${props.type}.store`), {
         onSuccess: () => {
             router.visit(route('dashboard.finances.index', props.type))
         }
     })
 }
-
-const disableCustomConcept = computed(() => {
-    if (form.incomeable_id || form.expenditureable_id)
-        return true;
-});
-
-const dynamicModel = computed({
-    get() {
-        if (props.type === 'incomes') {
-            return form.incomeable_id
-        } else {
-            return form.expenditureable_id
-        }
-    },
-
-    set(val) {
-        form.concept = ''
-
-        if (props.type === 'incomes') {
-            form.incomeable_id = val
-        } else {
-            form.expenditureable_id = val
-        }
-    },
-});
 
 </script>

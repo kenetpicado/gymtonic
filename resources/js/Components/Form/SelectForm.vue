@@ -6,7 +6,7 @@
 
         <select
             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm mt-1 block w-full transition duration-300 ease-in-out"
-            :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
+            :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :required="required">
             <slot></slot>
         </select>
 
@@ -29,6 +29,10 @@ const props = defineProps({
     name: {
         type: String, required: false
     },
+    required: {
+        type: Boolean,
+        default: false
+    }
 })
 
 const keyValue = computed(() => {

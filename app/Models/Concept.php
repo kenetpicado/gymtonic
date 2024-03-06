@@ -27,6 +27,6 @@ class Concept extends Model
 
     public function lastExpenditure()
     {
-        return $this->morphOne(Expenditure::class, 'expenditureable')->orderByDesc('created_at');
+        return $this->morphOne(Expenditure::class, 'expenditureable')->latest();
     }
 }

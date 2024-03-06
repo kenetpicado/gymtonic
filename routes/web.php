@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\Dashboard\ConceptController;
-use App\Http\Controllers\Dashboard\ConceptExpenditureController;
-use App\Http\Controllers\Dashboard\ConceptIncomeController;
 use App\Http\Controllers\Dashboard\CustomerController;
 use App\Http\Controllers\Dashboard\CustomerPlanController;
 use App\Http\Controllers\Dashboard\CustomerWeightController;
@@ -83,13 +81,7 @@ Route::middleware(['auth'])
             ->only(['store', 'update', 'destroy']);
 
         Route::resource('concepts', ConceptController::class)
-            ->only(['index', 'store', 'update']);
-
-        Route::get('concepts/{concept}/expenditures', ConceptExpenditureController::class)
-            ->name('concepts.expenditures.index');
-
-        Route::resource('concepts.incomes', ConceptIncomeController::class)
-            ->only(['index']);
+            ->only(['index', 'store', 'update', 'show']);
 
         Route::resource('users', UserController::class)
             ->only(['index', 'store', 'update']);

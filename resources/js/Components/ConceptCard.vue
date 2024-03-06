@@ -14,12 +14,12 @@
                 últ. pago: {{ Carbon.create(concept.last_expenditure?.created_at).format('d de F') }}
             </p>
             <div class="flex gap-4">
-                <Link v-if="concept.has_expenditure" tooltip="Ver los pagos"
-                    :href="route('dashboard.concepts.expenditures.index', concept.id)" class="badge-danger">
+                <Link v-if="concept.has_expenditure" tooltip="Ver los pagos" :data="{ type: 'expenditures' }"
+                    :href="route('dashboard.concepts.show', concept.id)" class="badge-danger">
                 Egresos
                 </Link>
-                <Link v-if="concept.has_income" tooltip="Ver los ingresos"
-                    :href="route('dashboard.concepts.incomes.index', concept.id)" class="badge-success">
+                <Link v-if="concept.has_income" tooltip="Ver los ingresos" :data="{ type: 'incomes' }"
+                    :href="route('dashboard.concepts.show', concept.id)" class="badge-success">
                 Ingresos
                 </Link>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Concept;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ExpenditureRequest extends FormRequest
@@ -14,6 +15,14 @@ class ExpenditureRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'expenditureable_id' => $this->model_id,
+            'expenditureable_type' => Concept::class
+        ]);
     }
 
     /**

@@ -6,13 +6,13 @@
                 {{ isNew ? 'Nuevo' : 'Editar' }}
             </template>
             <template #content>
-                <InputForm text="Descripcion" name="description" v-model="form.description" autocomplete="on" />
+                <InputForm text="Descripción" name="description" v-model="form.description" autocomplete="on" />
                 <InputForm text="Cantidad" name="quantity" v-model="form.quantity" type="number" />
                 <InputForm text="Monto" name="value" v-model="form.value" type="number" />
                 <InputForm text="Fecha" name="created_at" v-model="form.created_at" type="date" />
 
                 <div class="text-lg font-medium text-gray-900 mb-2">
-                    Total: C$ {{ total }}
+                    Total: C$ {{ (form.quantity * form.value).toLocaleString('en-US') }}
                 </div>
             </template>
             <template #footer>
@@ -26,9 +26,17 @@
         </DialogModal>
 
         <TableSection>
+            <template #filters>
+                <div class="grid grid-cols-4 mb-1 gap-4">
+                    <SelectForm text="Tipo" v-model="queryParams.type">
+                        <option v-for="(type, index) in types" :value="index">{{ type }}</option>
+                    </SelectForm>
+                </div>
+            </template>
+
             <template #topbar>
                 <h2 class="text-2xl font-extrabold text-gray-600">
-                    Egresos: {{ concept.name }}
+                    {{ types[type] }}: {{ concept.name }}
                 </h2>
                 <PrimaryButton type="button" @click="openModal = true">
                     Nuevo
@@ -44,39 +52,39 @@
             </template>
 
             <template #body>
-                <tr v-for="(expenditure, index) in expenditures.data" class="hover:bg-gray-50">
+                <tr v-for="(r, index) in records.data" class="hover:bg-gray-50">
                     <td>
-                        <DateColumn :date="expenditure.created_at" />
+                        <DateColumn :date="r.created_at" />
                     </td>
                     <td>
-                        {{ expenditure.description }}
+                        {{ r.description }}
                     </td>
                     <td>
                         <div class="font-medium text-gray-700">
-                            C$ {{ (expenditure.value).toLocaleString('en-US') }}
+                            C$ {{ (r.value).toLocaleString('en-US') }}
                         </div>
-                        <div class="text-gray-400" v-if="expenditure.quantity > 1">
-                            Cant. {{ expenditure.quantity }}
+                        <div class="text-gray-400" v-if="r.quantity > 1">
+                            Cant. {{ r.quantity }}
                         </div>
                     </td>
                     <td>
-                        <span class="badge-danger">
-                            C$ {{ (expenditure.value * expenditure.quantity).toLocaleString('en-US') }}
+                        <span :class="type == 'income' ? 'badge-success' : 'badge-danger'">
+                            C$ {{ (r.value * r.quantity).toLocaleString('en-US') }}
                         </span>
                     </td>
                     <td>
                         <div class="flex gap-4">
-                            <span tooltip="Editar" role="button" @click="edit(expenditure)">
+                            <span tooltip="Editar" role="button" @click="edit(r)">
                                 <IconPencil />
                             </span>
 
-                            <span tooltip="Eliminar" role="button" @click="confirmDestroy(expenditure.id)">
+                            <span tooltip="Eliminar" role="button" @click="confirmDestroy(r.id)">
                                 <IconTrash />
                             </span>
                         </div>
                     </td>
                 </tr>
-                <tr v-if="expenditures.data.length == 0">
+                <tr v-if="records.data.length == 0">
                     <td colspan="5" class="text-center">
                         No hay datos para mostrar
                     </td>
@@ -84,7 +92,7 @@
             </template>
 
             <template #paginator>
-                <ThePaginator :links="expenditures.links"></ThePaginator>
+                <ThePaginator :links="records.links"></ThePaginator>
             </template>
         </TableSection>
 
@@ -104,25 +112,40 @@ import useNotify from '@/Use/notify.js';
 import { toast } from "@/Use/toast.js";
 import { router, useForm } from '@inertiajs/vue3';
 import { IconPencil, IconTrash } from '@tabler/icons-vue';
-import { computed, ref } from 'vue';
+import {reactive, ref, watch} from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
+import SelectForm from "@/Components/Form/SelectForm.vue";
 
 const props = defineProps({
     concept: {
         type: Object, required: true
     },
-    expenditures: {
+    records: {
         type: Object, required: true
+    },
+    type: {
+        type: String, required: true
     }
 })
 
 const openModal = ref(false)
 const isNew = ref(true);
 
+const types = {
+    incomes: "Ingresos",
+    expenditures: "Egresos"
+}
+
+const searchParams = new URLSearchParams(window.location.search);
+
+const queryParams = reactive({
+    type: searchParams.get('type') ?? props.type
+})
+
 const breads = [
     { name: 'Inicio', route: 'dashboard.index' },
     { name: 'Conceptos', route: 'dashboard.concepts.index' },
-    { name: props.concept.name, route: 'dashboard.concepts.expenditures.index', params: [props.concept.id] },
+    { name: props.concept.name, route: 'dashboard.concepts.show', params: [props.concept.id] },
 ]
 
 const form = useForm({
@@ -131,51 +154,46 @@ const form = useForm({
     value: 0,
     description: '',
     created_at: Carbon.today(),
-    expenditureable_id: props.concept.id,
-    expenditureable_type: 'App\\Models\\Concept'
+    model_id: props.concept.id,
 })
 
-const total = computed(() => {
-    return (form.quantity * form.value).toLocaleString('en-US')
-})
-
-function edit(expenditure) {
-    form.id = expenditure.id;
-    form.quantity = expenditure.quantity;
-    form.value = expenditure.value;
-    form.description = expenditure.description;
+function edit(income) {
+    form.id = income.id;
+    form.quantity = income.quantity;
+    form.value = income.value;
+    form.description = income.description;
     isNew.value = false;
     openModal.value = true;
 }
 
 function confirmDestroy(id) {
     useNotify().confirm(() => {
-        router.delete(route('dashboard.expenditures.destroy', id), {
+        router.delete(route(`dashboard.${queryParams.type}.destroy`, id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Pago eliminado correctamente!')
+                toast.success('Registro eliminado correctamente!')
             },
         });
-    }, '¿Estás seguro de eliminar este pago?')
+    }, '¿Estás seguro de eliminar este registro?')
 }
 
 function save() {
     if (isNew.value) {
-        form.post(route('dashboard.expenditures.store'), {
+        form.post(route(`dashboard.${queryParams.type}.store`), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Pago creado correctamente!')
+                toast.success('Registro creado correctamente!')
                 resetValues()
             },
         });
     } else {
-        form.put(route('dashboard.expenditures.update', form.id), {
+        form.put(route(`dashboard.${queryParams.type}.update`, form.id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Pago actualizado correctamente!')
+                toast.success('Registro actualizado correctamente!')
                 resetValues()
             },
         });
@@ -187,5 +205,21 @@ function resetValues() {
     isNew.value = true;
     openModal.value = false;
 }
+
+
+watch(() => queryParams, () => {
+    let params = { ...route().params, ...queryParams };
+
+    for (const key in params) {
+        if (!params[key] || params.concept ) delete params[key];
+    }
+
+    router.get(route('dashboard.concepts.show', props.concept.id), params, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['records', 'type'],
+        replace: true,
+    });
+}, { deep: true });
 
 </script>
