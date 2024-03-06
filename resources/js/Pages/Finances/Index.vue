@@ -104,7 +104,7 @@ import UserInformation from '@/Components/UserInformation.vue';
 import ConceptInformation from '@/Components/ConceptInformation.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import { watch, computed, reactive } from 'vue';
+import { watch, reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import { IconTrash } from '@tabler/icons-vue';
@@ -121,6 +121,9 @@ const props = defineProps({
     type: {
         type: String, required: true
     },
+    total: {
+        type: Number, required: true
+    }
 })
 
 const searchParams = new URLSearchParams(window.location.search);
@@ -129,10 +132,6 @@ const queryParams = reactive({
     from: searchParams.get("from") ?? Carbon.today(),
     to: searchParams.get("to") ?? Carbon.today(),
     search: searchParams.get("search") ?? '',
-})
-
-const total = computed(() => {
-    return props.finances.data.reduce((acc, finance) => acc + finance.value * finance.quantity, 0)
 })
 
 const debouncedSearch = debounce(() => {
@@ -144,7 +143,7 @@ const debouncedSearch = debounce(() => {
     router.get(route('dashboard.finances.index', props.type), queryParams, {
         preserveState: true,
         preserveScroll: true,
-        only: ['finances'],
+        only: ['finances', 'total'],
     })
 }, 500)
 

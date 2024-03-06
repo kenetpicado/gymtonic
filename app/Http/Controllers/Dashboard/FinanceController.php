@@ -25,6 +25,13 @@ class FinanceController extends Controller
                 ->whereBetween('created_at', [$from, $to])
                 ->with('incomeable:id,name')
                 ->paginate();
+            $total = Income::query()
+                ->when($request->search, function ($query) use ($request) {
+                    $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
+                })
+                ->selectRaw('sum(value * quantity) as amount')
+                ->whereBetween('created_at', [$from, $to])
+                ->first()?->amount ?? 0;
         } else {
             $finances = Expenditure::orderBy('id', 'desc')
                 ->when($request->search, function ($query) use ($request) {
@@ -33,10 +40,18 @@ class FinanceController extends Controller
                 ->whereBetween('created_at', [$from, $to])
                 ->with('expenditureable:id,name')
                 ->paginate();
+            $total = Expenditure::query()
+                ->when($request->search, function ($query) use ($request) {
+                    $query->whereHas('expenditureable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
+                })
+                ->selectRaw('sum(value * quantity) as amount')
+                ->whereBetween('created_at', [$from, $to])
+                ->first()?->amount ?? 0;
         }
 
         return inertia('Finances/Index', [
             'type' => $type,
+            'total' => $total,
             'finances' => $finances,
         ]);
     }
