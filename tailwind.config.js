@@ -13,7 +13,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['OpenSans', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 'primary': '#0b3875',
