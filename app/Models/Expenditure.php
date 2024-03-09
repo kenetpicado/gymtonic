@@ -23,4 +23,11 @@ class Expenditure extends Model
     {
         return $this->morphTo();
     }
+
+    public function scopeSearch($query, $search = null)
+    {
+        return $query->when($search, function ($query) use ($search) {
+            $query->whereHas('expenditureable', fn ($query) => $query->where('name', 'like', "%{$search}%"));
+        });
+    }
 }

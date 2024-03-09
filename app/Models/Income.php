@@ -24,10 +24,10 @@ class Income extends Model
         return $this->morphTo();
     }
 
-    public function scopeSearchIncomeable($query, $request)
+    public function scopeSearch($query, $search = null)
     {
-        return $query->when($request->search, function ($query) use ($request) {
-            $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$request->search}%"));
+        return $query->when($search, function ($query) use ($search) {
+            $query->whereHas('incomeable', fn ($query) => $query->where('name', 'like', "%{$search}%"));
         });
     }
 }

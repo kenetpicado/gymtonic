@@ -35,6 +35,7 @@
 import { Link, router } from '@inertiajs/vue3';
 import { IconHome, IconLogout, IconUser, IconUsersGroup, IconRun, IconStack, IconActivity, IconMoneybag, IconCurrencyDollarOff, IconBellZ, IconLayoutList } from '@tabler/icons-vue';
 import { IconNote } from '@tabler/icons-vue';
+import {Carbon} from "../Classes/Carbon";
 
 const DEFAULT_ICON = IconUser;
 
@@ -99,12 +100,12 @@ const items = [
     },
     {
         name: 'Ingresos',
-        route: route('dashboard.finances.index', 'incomes'),
+        route: route('dashboard.finances.index', { type: 'incomes', from: Carbon.today(), to: Carbon.today() }),
         icon: IconMoneybag
     },
     {
         name: 'Egresos',
-        route: route('dashboard.finances.index', 'expenditures'),
+        route: route('dashboard.finances.index', { type: 'expenditures', from: Carbon.today(), to: Carbon.today() }),
         icon: IconCurrencyDollarOff
     },
     {

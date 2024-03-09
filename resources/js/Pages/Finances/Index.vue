@@ -1,10 +1,10 @@
 <template>
-    <AppLayout :title="spanishType[props.type]" :breads="breads">
+    <AppLayout :title="types[props.type]" :breads="breads">
 
         <TableSection>
             <template #topbar>
                 <h1 class="text-2xl font-extrabold text-gray-600">
-                    {{ spanishType[props.type] }}
+                    {{ types[props.type] }}
                 </h1>
                 <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.finances.create', type))">
                     Nuevo
@@ -36,7 +36,7 @@
             </template>
 
             <template #body>
-                <tr v-for="(finance, index) in finances.data" class="hover:bg-gray-50">
+                <tr v-for="(finance, index) in data.data" class="hover:bg-gray-50">
                     <td>
                         #{{ finance.id }}
                     </td>
@@ -87,13 +87,13 @@
                         </span>
                     </td>
                 </tr>
-                <tr v-if="finances.data.length == 0">
+                <tr v-if="data.data.length == 0">
                     <td colspan="7" class="text-center">No data to display</td>
                 </tr>
             </template>
 
             <template #paginator>
-                <ThePaginator :links="finances.links" />
+                <ThePaginator :links="data.links" />
             </template>
         </TableSection>
     </AppLayout>
@@ -114,13 +114,10 @@ import { debounce } from 'lodash';
 import { IconTrash } from '@tabler/icons-vue';
 import { toast } from "@/Use/toast.js";
 import useNotify from '@/Use/notify.js';
-import { Carbon } from "@/Classes/Carbon";
-import { defineProps } from 'vue';
 import CardInfo from '@/Components/CardInfo.vue';
-import { isElement } from 'lodash';
 
 const props = defineProps({
-    finances: {
+    data: {
         type: Object, required: true
     },
     type: {
@@ -129,7 +126,7 @@ const props = defineProps({
     total: {
         type: Number, required: true
     },
-    plans_total: {
+    plans: {
         type: Number, required: false
     },
     concepts: {
@@ -140,34 +137,36 @@ const props = defineProps({
 const searchParams = new URLSearchParams(window.location.search);
 
 const queryParams = reactive({
-    from: searchParams.get("from") ?? Carbon.today(),
-    to: searchParams.get("to") ?? Carbon.today(),
+    from: searchParams.get("from") ?? null,
+    to: searchParams.get("to") ?? null,
     search: searchParams.get("search") ?? '',
+    type: props.type
 })
 
 const debouncedSearch = debounce(() => {
-    for (const key in queryParams) {
-        if (!queryParams[key])
-            delete queryParams[key]
+    let params = { ...route().params, ...queryParams };
+
+    for (const key in params) {
+        if (!params[key]) delete params[key];
     }
 
-    router.get(route('dashboard.finances.index', props.type), queryParams, {
+    router.get(route('dashboard.finances.index'), params, {
         preserveState: true,
         preserveScroll: true,
-        only: ['finances', 'total', 'plans_total', 'concepts'],
+        only: ['data', 'total', 'plans', 'concepts'],
     })
 }, 500)
 
 watch(() => queryParams, debouncedSearch, { deep: true })
 
-const spanishType = {
+const types = {
     incomes: "Ingresos",
     expenditures: "Egresos"
 }
 
 const breads = [
     { name: 'Inicio', route: 'dashboard.index' },
-    { name: spanishType[props.type], route: 'dashboard.finances.index', params: props.type },
+    { name: types[props.type], route: 'dashboard.finances.index', params: { type: props.type } },
 ]
 
 function confirmDestroy(id) {
@@ -190,11 +189,11 @@ const stats = computed(() => {
         },
         {
             title: 'Registros',
-            value: `${props.finances.total}`
+            value: `${props.data.total}`
         },
         {
             title: "Planes",
-            value: `${props.plans_total}`
+            value: `${props.plans}`
         }
     ]
 })
