@@ -171,7 +171,7 @@ const breads = [
 
 function confirmDestroy(id) {
     useNotify().confirm(() => {
-        router.delete(route('dashboard.finances.destroy', [props.type, id]), {
+        router.delete(route(`dashboard.${props.type}.destroy`, id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {

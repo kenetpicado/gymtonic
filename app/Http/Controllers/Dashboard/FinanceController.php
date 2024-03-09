@@ -52,11 +52,4 @@ class FinanceController extends Controller
             'concepts' => $concepts,
         ]);
     }
-
-    public function destroy(Request $request, $type)
-    {
-        DB::table($type)->where('id', $request->id)->delete();
-
-        return back();
-    }
 }
