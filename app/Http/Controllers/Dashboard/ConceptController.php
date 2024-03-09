@@ -20,7 +20,7 @@ class ConceptController extends Controller
     public function index()
     {
         return inertia('Concepts/Index', [
-            'concepts' => $this->conceptService->getConcepts(),
+            'concepts' => $this->conceptService->getConceptsWithLastExpenditure(),
         ]);
     }
 

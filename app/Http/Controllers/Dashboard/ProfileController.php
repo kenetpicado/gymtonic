@@ -16,7 +16,7 @@ class ProfileController extends Controller
 
     public function store(ProfileRequest $request)
     {
-        User::where('id', auth()->id())->update($request->validated());
+        auth()->user()->update($request->validated());
 
         return back();
     }

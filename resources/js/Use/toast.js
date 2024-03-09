@@ -5,3 +5,7 @@ export const toast = createToaster({
 	duration: 2000,
 	maxToasts: 2,
 });
+
+export function created() {
+    toast.success("Registro creado correctamente")
+}

@@ -3,15 +3,16 @@
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="save">
                 <template #title>
-                    Informacion del {{ types[type] }}
+                    {{ types[type] }}
                 </template>
 
                 <template #description>
-                    Ingrese los datos del nuevo {{ types[type] }}
+                    Ingrese los datos del nuevo registro
                 </template>
 
                 <template #form>
                     <SelectForm text="Concepto" v-model="form.model_id" name="model_id" required>
+                        <option value="">Seleccionar concepto</option>
                         <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
                     </SelectForm>
 
@@ -30,7 +31,7 @@
                 </template>
 
                 <template #actions>
-                    <SecondaryButton @click="$inertia.visit(route('dashboard.incomes.index'))">
+                    <SecondaryButton @click="$inertia.visit(route('dashboard.finances.index', { type: type }))">
                         Cancelar
                     </SecondaryButton>
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
@@ -51,6 +52,8 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import SelectForm from "@/Components/Form/SelectForm.vue"
+import { toast} from "@/Use/toast.js";
+import {Carbon} from "../../Classes/Carbon";
 
 const props = defineProps({
     concepts: {
@@ -87,7 +90,9 @@ const total = computed(() => {
 function save() {
     form.post(route(`dashboard.${props.type}.store`), {
         onSuccess: () => {
-            router.visit(route('dashboard.finances.index', props.type))
+            form.reset()
+            toast.success('Registro creado correctamente')
+            router.visit(route('dashboard.finances.index', { type: props.type, from: Carbon.today(), to: Carbon.today() }))
         }
     })
 }

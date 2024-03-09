@@ -73,7 +73,7 @@ import { useForm } from '@inertiajs/vue3';
 import UserInformation from '@/Components/UserInformation.vue';
 import TableSection from '@/Components/TableSection.vue';
 import { IconPencil} from '@tabler/icons-vue';
-import { toast } from "@/Use/toast.js";
+import { toast, created } from "@/Use/toast.js";
 import SelectForm from '@/Components/Form/SelectForm.vue';
 
 const props = defineProps({
@@ -115,7 +115,7 @@ function save() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Usuario creado correctamente!')
+                created()
                 resetValues()
             },
         });

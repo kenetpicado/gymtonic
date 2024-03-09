@@ -6,7 +6,7 @@ use App\Models\Concept;
 
 class ConceptService
 {
-    public function getConcepts()
+    public function getConceptsWithLastExpenditure()
     {
         return Concept::query()
             ->with('lastExpenditure')
@@ -19,5 +19,10 @@ class ConceptService
         return $type == 'incomes'
             ? $concept->incomes()->latest()->paginate(20)
             : $concept->expenditures()->latest()->paginate(20);
+    }
+
+    public function getConceptNames()
+    {
+        return Concept::orderby('name')->get(['id', 'name']);
     }
 }

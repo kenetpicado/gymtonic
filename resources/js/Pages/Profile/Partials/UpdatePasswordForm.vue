@@ -19,9 +19,6 @@ const updatePassword = () => {
             form.reset()
             toast.success('Contraseña actualizada correctamente');
         },
-        onError: (err) => {
-            console.log(err)
-        },
     });
 };
 </script>

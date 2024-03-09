@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Concept;
 use App\Services\FinanceService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
@@ -20,14 +18,6 @@ class FinanceController extends Controller
 
     public function index(Request $request)
     {
-        if (!$request->get('type')) {
-            return redirect()->route('dashboard.finances.index', [
-                'type' => 'incomes',
-                'from' => Carbon::today()->format('Y-m-d'),
-                'to' => Carbon::today()->format('Y-m-d'),
-            ]);
-        }
-
         $data = $this->financeService->getFinanceInformation($request->toArray());
 
         return inertia('Finances/Index', [
@@ -39,17 +29,16 @@ class FinanceController extends Controller
         ]);
     }
 
-    public function create($type)
+    public function create(Request $request)
     {
-        if ($type == 'incomes') {
-            $concepts = Concept::where('has_income', true)->get(['id', 'name']);
-        } else {
-            $concepts = Concept::where('has_expenditure', true)->get(['id', 'name']);
-        }
-
         return inertia('Finances/Create', [
-            'type' => $type,
-            'concepts' => $concepts,
+            'type' => $request->get('type'),
+            'concepts' =>Concept::query()
+                ->when($request->get('type') == 'incomes',
+                    fn($query) => $query->where('has_income', true),
+                    fn($query) => $query->where('has_expenditure', true),
+                )
+                ->get(['id', 'name']),
         ]);
     }
 }

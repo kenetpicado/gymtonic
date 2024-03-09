@@ -5,6 +5,7 @@
                 Nuevo
             </template>
             <template #content>
+                <InputForm text="Concepto" name="concept" v-model="form.concept"></InputForm>
                 <InputForm text="Descripcion (opcional)" name="description" v-model="form.description"></InputForm>
                 <InputForm text="Monto" name="value" v-model="form.value" type="number"></InputForm>
                 <InputForm text="Fecha" name="created_at" v-model="form.created_at" type="date"></InputForm>

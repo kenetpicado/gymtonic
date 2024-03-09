@@ -20,8 +20,8 @@ class IncomeRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-           'incomeable_id' => $this->model_id,
-           'incomeable_type' => Concept::class
+           'incomeable_id' => $this->incomeable_id ?? $this->model_id,
+           'incomeable_type' => $this->incomeable_type ?? Concept::class
         ]);
     }
 

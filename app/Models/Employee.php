@@ -17,6 +17,6 @@ class Employee extends Model
 
     public function payments()
     {
-        return $this->morphMany(Expenditure::class, 'expenditureable')->latest();
+        return $this->morphMany(Expenditure::class, 'expenditureable')->latest('id');
     }
 }

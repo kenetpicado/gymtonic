@@ -39,7 +39,7 @@
             <template #body>
                 <tr v-for="(employee, index) in employees" class="hover:bg-gray-50">
                     <td>
-                        {{ employee.id }}
+                        {{ index + 1 }}
                     </td>
                     <th>
                         <UserInformation :user="employee" />

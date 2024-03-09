@@ -11,7 +11,7 @@ class EmployeeController extends Controller
     public function index()
     {
         return inertia('Employees/Index', [
-            'employees' => Employee::all(['id', 'name', 'phone', 'schedule']),
+            'employees' => Employee::orderBy('name')->get(['id', 'name', 'phone', 'schedule']),
         ]);
     }
 
@@ -19,7 +19,7 @@ class EmployeeController extends Controller
     {
         return inertia('Employees/Show', [
             'employee' => $employee,
-            'payments' => $employee->payments()->paginate(10),
+            'payments' => $employee->payments()->paginate(),
         ]);
     }
 
@@ -27,13 +27,13 @@ class EmployeeController extends Controller
     {
         Employee::create($request->validated());
 
-        return redirect()->route('dashboard.employees.index');
+        return back();
     }
 
     public function update(EmployeeRequest $request, $employee)
     {
         Employee::where('id', $employee)->update($request->validated());
 
-        return redirect()->route('dashboard.employees.index');
+        return back();
     }
 }

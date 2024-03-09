@@ -20,8 +20,8 @@ class ExpenditureRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'expenditureable_id' => $this->model_id,
-            'expenditureable_type' => Concept::class
+            'expenditureable_id' => $this->expenditureable_id ?? $this->model_id,
+            'expenditureable_type' => $this->expenditureable_type ?? Concept::class
         ]);
     }
 

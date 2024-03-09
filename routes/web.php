@@ -65,11 +65,9 @@ Route::middleware(['auth'])
         Route::resource('employees', EmployeeController::class)
             ->except(['destroy', 'create', 'edit']);
 
-        Route::get('finances', [FinanceController::class, 'index'])
-            ->name('finances.index');
-
-        Route::get('finances/{type}/create', [FinanceController::class, 'create'])
-            ->name('finances.create');
+        Route::resource('finances', FinanceController::class)
+            ->middleware('check.type.parameter')
+            ->only(['index', 'create']);
 
         Route::resource('incomes', IncomeController::class)
             ->only(['store', 'update', 'destroy']);

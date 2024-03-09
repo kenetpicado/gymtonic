@@ -6,7 +6,7 @@
                 <h1 class="text-2xl font-extrabold text-gray-600">
                     {{ types[props.type] }}
                 </h1>
-                <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.finances.create', type))">
+                <PrimaryButton type="button" @click="$inertia.visit(route('dashboard.finances.create', {type: props.type}))">
                     Nuevo
                 </PrimaryButton>
             </template>
