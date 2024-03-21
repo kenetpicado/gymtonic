@@ -12,7 +12,12 @@
                 <div class="grid grid-cols-4 mb-6 gap-4">
                     <SelectForm v-model="queryParams.model_id" text="Concepto">
                         <option selected value="">Todos</option>
-                        <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
+                        <optgroup label="Conceptos">
+                            <option v-for="concept in concepts" :value="concept.id">{{ concept.name }}</option>
+                        </optgroup>
+                        <optgroup label="Otros">
+                            <option value="plans">Planes</option>
+                        </optgroup>
                     </SelectForm>
                     <SelectForm v-model="queryParams.year" text="Año">
                         <option value="">Año en curso</option>
@@ -149,13 +154,13 @@ const totalExpenditure = computed(() => props.expenditures.reduce((acc, expendit
 watch(queryParams, getFilteredSummary, { deep: true })
 
 function getFilteredSummary() {
-    for (const key in queryParams) {
-        if (queryParams[key] === '') {
-            delete queryParams[key]
-        }
+    let params = { ...queryParams }
+
+    for (const key in params) {
+        if (!params[key]) delete params[key]
     }
 
-    router.get(route('dashboard.summary.index'), queryParams, {
+    router.get(route('dashboard.summary.index'), params, {
         preserveState: true,
         preserveScroll: true,
         only: ['incomes', 'expenditures', 'clients', 'plans'],
