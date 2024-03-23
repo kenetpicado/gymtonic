@@ -3,7 +3,7 @@
         <TableSection>
             <template #topbar>
                 <div class="flex items-center gap-4">
-                    <SearchComponent :url="route('dashboard.plans.expired')" :only="['plans']"/>
+                    <SearchComponent :url="route('dashboard.plans.expired')" :only="['plans']" />
                 </div>
             </template>
 
@@ -26,12 +26,14 @@
                     </td>
                     <td>
                         <span class="badge-danger">
-                            Expirado {{ Carbon.create(plan.end_date).diffForHumans() }}
+                            Expirado {{ Carbon.create(plan.end_date).format("d de F") }}
                         </span>
                     </td>
                     <td>
-                        <Link :href="route('dashboard.customers.plans.create', plan.customer_id)" class="badge-blue">
-                            Renovar plan
+                        <Link :href="route('dashboard.customers.plans.create', plan.customer_id)">
+                        <PrimaryButton>
+                            Renovar
+                        </PrimaryButton>
                         </Link>
                     </td>
                 </tr>
@@ -56,6 +58,7 @@ import { Carbon } from '@/Classes/Carbon.js';
 import TableSection from '@/Components/TableSection.vue';
 import UserInformation from '@/Components/UserInformation.vue';
 import { Link } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps({
     plans: {

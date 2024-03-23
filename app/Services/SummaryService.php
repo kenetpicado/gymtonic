@@ -21,7 +21,10 @@ class SummaryService
             ->when(isset($request['model_id']), function ($query) use ($request) {
                 $query->when(
                     $request['model_id'] == 'plans',
-                    fn ($query) => $query->where('incomeable_type', Customer::class),
+                    fn ($query) => $query->where('incomeable_type', Customer::class)
+                        ->orWhere(function ($query) {
+                            $query->where('incomeable_type', Concept::class)->where('incomeable_id', 14)->whereYear('created_at', Carbon::now()->year);
+                        }),
                     fn ($query) => $query->where('incomeable_type', Concept::class)->where('incomeable_id', $request['model_id'])
                 );
             })
@@ -39,7 +42,10 @@ class SummaryService
             ->when(isset($request['model_id']), function ($query) use ($request) {
                 $query->when(
                     $request['model_id'] == 'plans',
-                    fn ($query) => $query->where('expenditureable_type', Customer::class),
+                    fn ($query) => $query->where('expenditureable_type', Customer::class)
+                        ->orWhere(function ($query) {
+                            $query->where('expenditureable_type', Concept::class)->where('expenditureable_id', 14)->whereYear('created_at', Carbon::now()->year);
+                        }),
                     fn ($query) => $query->where('expenditureable_type', Concept::class)->where('expenditureable_id', $request['model_id'])
                 );
             })

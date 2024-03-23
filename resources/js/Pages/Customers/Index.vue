@@ -39,10 +39,10 @@
                     </td>
                     <td>
                         <span v-if="customer.active_plans > 0" class="badge-success">
-                            Active
+                            Activo
                         </span>
                         <span v-else class="badge-gray">
-                            Inactive
+                            Inactivo
                         </span>
                     </td>
                     <td>

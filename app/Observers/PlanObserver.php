@@ -2,20 +2,18 @@
 
 namespace App\Observers;
 
-use App\Models\Income;
 use App\Models\Plan;
+use Carbon\Carbon;
 
 class PlanObserver
 {
     public function created(Plan $plan)
     {
-        Income::create([
+        $plan->customer->incomes()->create([
             'value' => $plan->price,
             'discount' => $plan->discount,
-            'concept' => 'Pago de plan',
-            'description' => $plan->service()->value('name').', '.$plan->period.' dia(s)',
-            'incomeable_id' => $plan->customer_id,
-            'incomeable_type' => 'App\Models\Customer',
+            'concept' => "Pago de plan: " . $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+            'description' => "Periodo: " . Carbon::parse($plan->start_date)->format('d/m/Y') . ' al ' . Carbon::parse($plan->end_date)->format('d/m/Y'),
         ]);
     }
 }

@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <FormSection @submitted="saveCustomer">
                 <template #title>
-                    Informacion del Cliente
+                    Informacion del cliente
                 </template>
 
                 <template #description>
@@ -12,10 +12,10 @@
 
                 <template #form>
                     <div class="grid grid-cols-2 gap-6">
-                        <InputForm text="Name" v-model="form.name"></InputForm>
-                        <InputForm text="Phone" v-model="form.phone" type="number"></InputForm>
-                        <InputForm text="Birth Date" v-model="form.birth_date" type="date"></InputForm>
-                        <SelectForm v-model="form.gender" text="Gender">
+                        <InputForm text="Nombre completo" name="name" required v-model="form.name"></InputForm>
+                        <InputForm text="Celular" v-model="form.phone" type="number"></InputForm>
+                        <InputForm text="Fecha de nacimiento" v-model="form.birth_date" type="date"></InputForm>
+                        <SelectForm v-model="form.gender" text="Genero" required>
                             <option value="F">Femenino</option>
                             <option value="M">Masculino</option>
                         </SelectForm>
@@ -64,21 +64,26 @@
                 </template>
 
                 <template #form>
-                    <SelectForm v-model="form.service_id" text="Service" name="service_id">
-                        <option v-for="service in services" :value="service.id">{{ service.name }}</option>
-                    </SelectForm>
-                    <SelectForm v-model="form.period" text="Period">
-                        <option value="" disabled selected>Select a option</option>
-                        <option v-for="price in prices" :value="price.period">
-                            {{ periodLabel[price.period] }} - C$ {{ price.value }}
-                        </option>
-                    </SelectForm>
-                    <InputForm text="Start Date" v-model="form.start_date" type="date"></InputForm>
-                    <InputForm text="End Date" v-model="end_date" type="date" disabled></InputForm>
-                    <InputForm text="Discount" v-model="form.discount" type="number"></InputForm>
-                    <InputForm text="Note" v-model="form.note"></InputForm>
+                    <div class="grid grid-cols-2 gap-4">
+                        <SelectForm v-model="form.service_id" text="Servicio" required name="service_id">
+                            <option v-for="service in services" :value="service.id">{{ service.name }}</option>
+                        </SelectForm>
+                        <SelectForm v-model="form.period" text="Periodo" required>
+                            <option value="" selected disabled>Seleccionar periodo</option>
+                            <option v-for="price in prices" :value="price.period">
+                                {{ periodLabel[price.period] }} - C$ {{ price.value }}
+                            </option>
+                        </SelectForm>
+                    </div>
 
-                    <div class="block col-span-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <InputForm text="Inicio del plan" v-model="form.start_date" type="date"></InputForm>
+                        <InputForm text="Fin del plan" v-model="end_date" type="date" disabled></InputForm>
+                    </div>
+                    <InputForm text="Descuento C$ (Beca)" v-model="form.discount" type="number"></InputForm>
+                    <InputForm text="Nota" v-model="form.note"></InputForm>
+
+                    <div class="block col-span-4 mb-4">
                         <Checkbox v-model:checked="form.save_note" text="Guardar en notas" />
                     </div>
 
@@ -109,11 +114,10 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
-import { ref, computed } from 'vue';
+import { computed, watch } from 'vue';
 import { Carbon } from '@/Classes/Carbon.js';
 import { toast } from '@/Use/toast.js';
 import { Link } from '@inertiajs/vue3';
-import { calculateTotal, watchForPrices } from '@/Use/helpers.js';
 import { Plan } from '@/Classes/Plan';
 import { periodLabel } from '@/Use/periodLabel';
 import Checkbox from '@/Components/Checkbox.vue';
@@ -130,8 +134,6 @@ const props = defineProps({
     }
 })
 
-const prices = ref([])
-
 const form = useForm({
     id: props.customer?.id ?? null,
     name: props.customer?.name ?? '',
@@ -147,12 +149,24 @@ const breads = [
     { name: props.isNew ? 'Crear' : 'Editar', route: 'dashboard.customers.create' },
 ]
 
-const total = computed(() => {
-    return calculateTotal({ period: form.period, discount: form.discount }, prices.value);
+//Obtener los precios del servicio seleccionado
+const prices = computed(() => {
+    return props.services.find(service => service.id == form.service_id)?.prices ?? [];
 });
 
-watchForPrices(form, props.services, prices);
+//Calcular el total del plan
+const total = computed(() => {
+    if (!form.period) return 0;
+    return prices.value.find(price => price.period == form.period)?.value - form.discount;
+});
 
+watch(() => form.service_id, () => {
+    if (!prices.value.find(price => price.period == form.period)) {
+        form.period = prices.value[prices.value.length - 1].period;
+    }
+}, { immediate: true });
+
+//Calcular la fecha de fin del plan
 const end_date = computed(() => {
     return Carbon.create(form.start_date).addPeriod(parseInt(form.period)).addDays(-1).format();
 });
@@ -168,7 +182,10 @@ function saveCustomer() {
             onSuccess: () => {
                 toast.success('Cliente creado correctamente!');
                 router.get(route('dashboard.customers.index'));
-            }
+            },
+            onError: (err) => {
+                toast.error(Object.values(err).flat().join(', '));
+            },
         });
     } else {
         form.put(route('dashboard.customers.update', form.id), {

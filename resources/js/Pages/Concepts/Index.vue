@@ -6,7 +6,7 @@
             </template>
             <template #content>
                 <InputForm text="Nombre" name="name" v-model="form.name" />
-                <Checkbox v-model:checked="form.has_expenditure" text="Egresos" />
+                <Checkbox class="mb-4" v-model:checked="form.has_expenditure" text="Egresos" />
                 <Checkbox v-model:checked="form.has_income" text="Ingresos" />
             </template>
             <template #footer>

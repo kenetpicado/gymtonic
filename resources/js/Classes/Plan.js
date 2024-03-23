@@ -13,7 +13,7 @@ export class Plan {
 
     TODAY;
 
-    constructor(plan = null, service_id, isCurrentActive = null) {
+    constructor(plan = null, service_id, isCurrentActive = false) {
 
         this.TODAY = new Carbon().format("Y-m-d");
 
@@ -21,10 +21,10 @@ export class Plan {
         this.price = plan?.price ?? 0;
         this.period = plan?.period;
 
-        if (isCurrentActive === null) {
+        if (!isCurrentActive) {
             this.start_date = plan?.start_date ?? this.TODAY;
         } else {
-            this.start_date = isCurrentActive ? plan?.start_date : this.TODAY;
+            this.start_date = plan?.end_date;
         }
 
         this.end_date = plan?.end_date;

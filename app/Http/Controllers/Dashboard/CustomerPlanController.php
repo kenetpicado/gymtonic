@@ -7,7 +7,7 @@ use App\Http\Requests\PlanRequest;
 use App\Models\Customer;
 use App\Models\Service;
 use App\Services\PlanService;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CustomerPlanController extends Controller
 {
@@ -16,16 +16,14 @@ class CustomerPlanController extends Controller
         $plan = $customer->plan;
 
         if ($plan) {
-            $isCurrentActive = $plan->end_date >= now()->format('Y-m-d');
-        } else {
-            $isCurrentActive = false;
+            $isCurrentActive = $plan->end_date >= Carbon::now()->format('Y-m-d');
         }
 
         return inertia('Customers/Plans/Create', [
             'customer' => $customer,
             'plan' => $plan,
             'services' => Service::with('prices')->get(['id', 'name']),
-            'isCurrentActive' => $isCurrentActive,
+            'isCurrentActive' => $isCurrentActive ?? false,
         ]);
     }
 

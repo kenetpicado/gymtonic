@@ -54,7 +54,7 @@
             <template #header>
                 <th>Cliente</th>
                 <th>Servicio</th>
-                <th>Expira</th>
+                <th>Periodo</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </template>
@@ -62,7 +62,7 @@
             <template #body>
                 <tr v-for="(plan, index) in  plans.data " class="hover:bg-gray-50">
                     <td>
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2">
                             <Checkbox v-model:checked="plan.selected" name="status" />
                             <UserInformation :user="{ name: plan.customer_name }" />
                         </div>
@@ -71,14 +71,15 @@
                         {{ plan.service_name }} ({{ plan.period }} dias)
                     </td>
                     <td>
-                        <span class="badge-blue" :tooltip="Carbon.create(plan.end_date + ' 23:59:00').diffForHumans()">
+                        <div class="badge-blue">
+                            {{ Carbon.create(plan.start_date).format("d de F") }} -
                             {{ Carbon.create(plan.end_date).format("d de F") }}
-                        </span>
+                        </div>
                     </td>
                     <td>
                         <div class="flex items-center">
                             <span v-if="plan.end_date == TODAY" class="badge-danger">
-                                ULTIMO DIA!
+                                Último día!
                             </span>
                             <span v-else class="badge-success">
                                 Activo
@@ -86,13 +87,15 @@
                         </div>
                     </td>
                     <td>
-                        <Link :href="route('dashboard.customers.plans.create', plan.customer_id)" class="badge-blue">
+                        <Link :href="route('dashboard.customers.plans.create', plan.customer_id)">
+                        <PrimaryButton>
                             Pagar
+                        </PrimaryButton>
                         </Link>
                     </td>
                 </tr>
                 <tr v-if="plans.data.length == 0">
-                    <td colspan="7" class="text-center">No data to display</td>
+                    <td colspan="5" class="text-center">No data to display</td>
                 </tr>
             </template>
 

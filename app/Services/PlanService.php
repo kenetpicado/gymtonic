@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Models\Customer;
-use App\Models\Income;
 use App\Models\Note;
 use App\Models\Plan;
 use App\Models\Service;
+use Carbon\Carbon;
 
 class PlanService
 {
@@ -37,26 +37,24 @@ class PlanService
 
     public function update(array $request, Customer $customer): void
     {
-        $plan = Plan::where('customer_id', $customer->id)->first();
+        $plan = $customer->plan;
 
         if ($plan) {
             $plan->update($request);
 
-            Income::create([
+            $customer->incomes()->create([
                 'value' => $plan->price,
                 'discount' => $plan->discount,
-                'concept' => 'Pago de plan',
-                'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
-                'incomeable_id' => $plan->customer_id,
-                'incomeable_type' => 'App\Models\Customer',
+                'concept' => "Pago de plan: " . $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+                'description' => "Periodo: " . Carbon::parse($plan->start_date)->format('d/m/Y') . ' al ' . Carbon::parse($plan->end_date)->format('d/m/Y'),
             ]);
         } else {
-            Plan::create($request + ['customer_id' => $customer->id]);
+            $customer->plan()->create($request);
         }
 
         if ($request['note'] && $request['save_note']) {
             Note::create([
-                'text' => Customer::find($plan->customer_id)->value('name') . ': ' . $request['note'],
+                'text' => $customer->name . ': ' . $request['note'],
             ]);
         }
     }
@@ -70,7 +68,7 @@ class PlanService
             'start_date' => $request['start_date'],
             'end_date' => $request['end_date'],
             'price' => $request['price'],
-            'discount' => $request['discount'],
+            'discount' => $request['discount'] ?? 0,
             'note' => $request['note'],
             'service_id' => $request['service_id'],
         ]);

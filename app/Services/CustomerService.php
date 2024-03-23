@@ -83,7 +83,8 @@ class CustomerService
             $income->update([
                 'value' => $plan->price,
                 'discount' => $plan->discount,
-                'description' => $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+                'concept' => "Pago de plan: " . $plan->service()->value('name') . ', ' . $plan->period . ' dia(s)',
+                'description' => "Periodo: " . Carbon::parse($plan->start_date)->format('d/m/Y') . ' al ' . Carbon::parse($plan->end_date)->format('d/m/Y'),
             ]);
         }
     }
