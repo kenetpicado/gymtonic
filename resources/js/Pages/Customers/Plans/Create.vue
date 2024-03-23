@@ -18,6 +18,49 @@
                     <div>
                         Estado del plan: <span class="uppercase"> {{ isCurrentActive ? 'Activo' : 'Expirado' }}</span>
                     </div>
+                    <div class="bg-white shadow-lg min-w-full text-xs font-mono py-4 px-3 text-gray-500">
+                        <img src="/img/logo-ag.png" alt="" class="w-14 h-14 mb-2 mx-auto">
+                        <div class="text-center mb-2">
+                            <h1>{{ $page.props.appName }}</h1>
+                            <div class="text-center my-2">
+                                -------------------------
+                            </div>
+                            <div>RUC: 0000000</div>
+                            <div>C4WC+G6V, León</div>
+                            <div>Tel: 2310-0000</div>
+                        </div>
+                        <div>Fecha: {{ Carbon.create().format('d/m/Y') }}</div>
+                        <div>
+                            Cajero: {{ $page.props.user.name }}
+                        </div>
+                        <div class="text-center my-2">
+                            -------------------------
+                        </div>
+                        <div>Servicio: {{ services.find(s => form.service_id === s.id)?.name }}</div>
+                        <div>Periodo: {{ form.period }} dia(s)</div>
+                        <div>
+                            Inicio: {{ Carbon.create(form.start_date).format('d/m/Y') }}
+                        </div>
+                        <div>
+                            Fin: {{ Carbon.create(form.end_date).format('d/m/Y') }}
+                        </div>
+                        <div>
+                            Descuento: C$ {{ form.discount }}
+                        </div>
+                        <!-- total -->
+                        <div class="text-center my-2">
+                            -------------------------
+                        </div>
+                        <div class="text-center font-bold">
+                            Total: C$ {{ total }}
+                        </div>
+                        <div class="text-center my-2">
+                            -------------------------
+                        </div>
+                        <div class="text-center text-xs">
+                            Gracias por su preferencia
+                        </div>
+                    </div>
                 </template>
 
                 <template #form>
