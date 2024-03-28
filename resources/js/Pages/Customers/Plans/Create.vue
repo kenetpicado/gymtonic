@@ -29,10 +29,10 @@
                             <div>C4WC+G6V, León</div>
                             <div>Tel: 2310-0000</div>
                         </div>
-                        <div>Fecha: {{ Carbon.create().format('d/m/Y') }}</div>
-                        <div>
-                            Cajero: {{ $page.props.user.name }}
-                        </div>
+                        <div class="mb-1">{{ Carbon.create().format('d/m/Y H:i') }}</div>
+                        <p style="max-width: 10rem;">
+                            Cajero: {{ $page.props.user.name }} amor mio
+                        </p>
                         <div class="text-center my-2">
                             -------------------------
                         </div>
@@ -42,7 +42,10 @@
                             Inicio: {{ Carbon.create(form.start_date).format('d/m/Y') }}
                         </div>
                         <div>
-                            Fin: {{ Carbon.create(form.end_date).format('d/m/Y') }}
+                            Fin: {{ Carbon.create(end_date).format('d/m/Y') }}
+                        </div>
+                        <div>
+                            Precio: C$ {{ prices.find(p => p.period == form.period).value }}
                         </div>
                         <div>
                             Descuento: C$ {{ form.discount }}
@@ -58,7 +61,7 @@
                             -------------------------
                         </div>
                         <div class="text-center text-xs">
-                            Gracias por su preferencia
+                            Gracias por su preferencia!
                         </div>
                     </div>
                 </template>
